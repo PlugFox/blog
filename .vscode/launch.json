@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Start an ephemeral server [debug]",
+      "type": "dart",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/backend",
+      "program": "bin/server.dart",
+      "args": [
+        "--environment=development",
+        "--host=0.0.0.0",
+        "--port=8080",
+        "--workers=2",
+        "--database=:memory:",
+        "--interval=0",
+      ],
+      "env": {},
+    }
+  ]
+}

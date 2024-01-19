@@ -1,0 +1,57 @@
+name: backend
+description: A server app using the shelf package and Docker.
+version: 0.0.1
+homepage: https://github.com/PlugFox/blog
+repository: https://github.com/PlugFox/blog
+issue_tracker: https://github.com/PlugFox/blog/issues
+
+publish_to: none
+
+funding:
+  - https://www.buymeacoffee.com/plugfox
+  - https://www.patreon.com/plugfox
+  - https://boosty.to/plugfox
+
+topics:
+  - medium
+  - blog
+  - parser
+  - selfhosted
+  - sqlite
+
+platforms:
+  linux:
+  macos:
+  windows:
+
+environment:
+  sdk: ^3.2.5
+
+dependencies:
+  # Server
+  shelf: ^1.4.0
+  shelf_router: ^1.1.0
+
+  # Utils
+  meta: ^1.11.0
+  args: ^2.4.0
+  stack_trace: ^1.11.1
+
+  # Logger
+  l: ^4.1.0-pre.1
+
+  # Database
+  drift: ^2.15.0
+
+  # Shared
+  shared:
+    path: ../shared
+
+dev_dependencies:
+  analyzer: ^6.3.0
+  build_runner: ^2.4.8
+  pubspec_generator: ^4.1.0-pre.1
+  drift_dev: ^2.15.0
+  http: ^1.1.0
+  lints: ^3.0.0
+  test: ^1.25.1

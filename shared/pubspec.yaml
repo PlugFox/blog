@@ -1,0 +1,38 @@
+name: shared
+description: Shared code between frontend and backend.
+version: 0.0.1
+homepage: https://github.com/PlugFox/blog
+repository: https://github.com/PlugFox/blog
+issue_tracker: https://github.com/PlugFox/blog/issues
+
+publish_to: none
+
+funding:
+  - https://www.buymeacoffee.com/plugfox
+  - https://www.patreon.com/plugfox
+  - https://boosty.to/plugfox
+
+topics:
+  - medium
+  - blog
+  - parser
+  - selfhosted
+  - sqlite
+
+platforms:
+  linux:
+  macos:
+  windows:
+  web:
+
+environment:
+  sdk: ^3.2.5
+
+dependencies:
+  meta: ^1.11.0
+
+dev_dependencies:
+  analyzer: ^6.3.0
+  build_runner: ^2.4.8
+  lints: ^3.0.0
+  test: ^1.25.1

@@ -1,0 +1,38 @@
+name: frontend
+description: An absolute bare-bones web app.
+version: 0.0.1
+homepage: https://github.com/PlugFox/blog
+repository: https://github.com/PlugFox/blog
+issue_tracker: https://github.com/PlugFox/blog/issues
+
+publish_to: none
+
+funding:
+  - https://www.buymeacoffee.com/plugfox
+  - https://www.patreon.com/plugfox
+  - https://boosty.to/plugfox
+
+topics:
+  - medium
+  - blog
+  - parser
+  - selfhosted
+  - sqlite
+
+platforms:
+  web:
+
+environment:
+  sdk: ^3.2.5
+
+dependencies:
+  meta: ^1.11.0
+
+  shared:
+    path: ../shared
+
+dev_dependencies:
+  build_runner: ^2.4.0
+  build_web_compilers: ^4.0.0
+  lints: ^2.1.0
+  test: ^1.25.1
