@@ -1,5 +1,6 @@
 import 'dart:io' as io;
 
+import 'package:args/args.dart';
 import 'package:meta/meta.dart';
 
 /// {@template config}
@@ -16,6 +17,57 @@ final class Config {
     required this.interval,
     required this.workers,
   });
+
+  /// Create a [ArgParser] for the [Config].
+  static ArgParser argParser() => ArgParser()
+    ..addOption(
+      'environment',
+      abbr: 'e',
+      aliases: ['env', 'flavor', 'mode'],
+      help: 'The environment to run in.',
+      defaultsTo: const bool.fromEnvironment('dart.vm.product') ? 'production' : 'development',
+    )
+    ..addOption(
+      'host',
+      abbr: 'a',
+      aliases: ['address', 'addr', 'ip', 'interface', 'if'],
+      help: 'The host/address to listen on.',
+      defaultsTo: '0.0.0.0',
+    )
+    ..addOption(
+      'port',
+      abbr: 'p',
+      help: 'The port to listen on.',
+      defaultsTo: '8080',
+    )
+    ..addOption(
+      'database',
+      abbr: 'd',
+      aliases: ['db', 'file', 'path', 'location', 'sqlite', 'sqlite3', 'cache', 'storage'],
+      help: 'The SQLite database file path.',
+      defaultsTo: 'db.sqlite',
+    )
+    ..addOption(
+      'interval',
+      abbr: 'i',
+      aliases: ['timer', 'check', 'refresh', 'update', 'fetch', 'refetch', 'fetching', 'medium', 'cron'],
+      help: 'The number of seconds between each medium articles check.',
+      defaultsTo: '3600',
+    )
+    ..addOption(
+      'workers',
+      abbr: 'w',
+      aliases: ['threads', 'cores', 'processors', 'cpus', 'cpu', 'parallel', 'concurrent', 'isolates', 'concurrency'],
+      help: 'The number of workers to spawn.',
+      defaultsTo: '${io.Platform.numberOfProcessors * 2}',
+    )
+    ..addFlag(
+      'help',
+      abbr: 'h',
+      aliases: <String>['?', 'usage', 'info', 'man', 'manual', 'guide', 'reference'],
+      help: 'Print this usage information.',
+      negatable: false,
+    );
 
   /// The environment to run in.
   final EnvironmentFlavor environment;
