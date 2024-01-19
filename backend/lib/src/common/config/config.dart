@@ -16,6 +16,7 @@ final class Config {
     required this.database,
     required this.interval,
     required this.workers,
+    required this.token,
   });
 
   /// Create a [ArgParser] for the [Config].
@@ -61,6 +62,15 @@ final class Config {
       help: 'The number of workers to spawn.',
       defaultsTo: '${io.Platform.numberOfProcessors * 2}',
     )
+    ..addOption(
+      'token',
+      abbr: 't',
+      aliases: ['token', 'admin', 'secret', 'key', 'password', 'pass', 'auth', 'authentication', 'authorization'],
+      help: 'The secret token to use for authentication. '
+          'If not provided, authentication will be disabled. '
+          'Should be at least 6 characters long.',
+      defaultsTo: '',
+    )
     ..addFlag(
       'help',
       abbr: 'h',
@@ -92,6 +102,9 @@ final class Config {
   /// The number of workers to spawn.
   /// Default value is equal to the number of processors * 2.
   final int workers;
+
+  /// The secret token to use for authentication.
+  final String? token;
 }
 
 /// Environment flavor.

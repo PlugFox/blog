@@ -68,6 +68,7 @@ Config _$initializeServer$Config(List<String>? arguments) {
     'database': String.fromEnvironment('database', defaultValue: 'db.sqlite'),
     'interval': String.fromEnvironment('interval', defaultValue: '3600'),
     'workers': String.fromEnvironment('workers'),
+    'token': String.fromEnvironment('token'),
   };
 
   // Create a table of --dart-define arguments.
@@ -154,6 +155,11 @@ Config _$initializeServer$Config(List<String>? arguments) {
       ),
       1,
     ),
+    token: switch (env('token', (value) => value, () => '').trim()) {
+      String token when token.isEmpty => null,
+      String token when token.length < 6 => null,
+      String token => token,
+    },
   );
 }
 
