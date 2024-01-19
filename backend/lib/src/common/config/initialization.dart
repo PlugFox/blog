@@ -232,6 +232,14 @@ Future<Map<String, Object?>> _$initializeServer$Steps({
 typedef _InitializationStep = FutureOr<void> Function(Config config, Map<String, Object?> context);
 final Map<String, _InitializationStep> _initializationSteps = <String, _InitializationStep>{
   'Creating app metadata': (config, context) => AppMetadata(),
+  'igint: Ctrl + C': (config, context) {
+    void signalHandler(io.ProcessSignal signal) => io.exit(0);
+    // SIGTERM is not supported on Windows.
+    // Attempting to register a SIGTERM handler raises an exception.
+    if (!io.Platform.isWindows) io.ProcessSignal.sigterm.watch().listen(signalHandler, cancelOnError: false);
+    io.ProcessSignal.sigint.watch().listen(signalHandler, cancelOnError: false);
+    l.i('Press [Ctrl] + [C] to exit');
+  },
   'Connect to database': (config, context) async {
     final database = config.database == ':memory:' ? Database.memory() : Database.lazy(file: io.File(config.database));
     await database.refresh();
