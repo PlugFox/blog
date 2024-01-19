@@ -11,7 +11,7 @@ final class Config {
   /// {@macro config}
   const Config({
     required this.environment,
-    required this.host,
+    required this.address,
     required this.port,
     required this.database,
     required this.interval,
@@ -72,8 +72,8 @@ final class Config {
   /// The environment to run in.
   final EnvironmentFlavor environment;
 
-  /// The host to listen on.
-  final io.InternetAddress host;
+  /// The address to listen on.
+  final io.InternetAddress address;
 
   /// The port to listen on.
   final int port;

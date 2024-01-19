@@ -118,7 +118,7 @@ Config _$initializeServer$Config(List<String>? arguments) {
       () =>
           const bool.fromEnvironment('dart.vm.product') ? EnvironmentFlavor.production : EnvironmentFlavor.development,
     ),
-    host: env<io.InternetAddress>(
+    address: env<io.InternetAddress>(
       'host',
       io.InternetAddress.tryParse,
       () => io.InternetAddress.anyIPv4,

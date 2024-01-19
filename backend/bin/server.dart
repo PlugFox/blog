@@ -11,7 +11,7 @@ import 'package:l/l.dart';
 /// dart run bin/server.dart -p 80 -e dev -d :memory: -i 0
 void main([List<String>? arguments]) => Future<void>.sync(() async {
       final (:Config config, :Map<String, Object?> context) = await $initializeServer(arguments: arguments);
-      l.i('Starting server at ${config.host.host}:${config.port} in ${config.environment.name} mode');
+      l.i('Starting server at ${config.address.host}:${config.port} in ${config.environment.name} mode');
 
       // ignore: unused_local_variable
       final database = context['database'] as Database;
