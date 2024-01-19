@@ -28,9 +28,9 @@ final class Config {
       defaultsTo: const bool.fromEnvironment('dart.vm.product') ? 'production' : 'development',
     )
     ..addOption(
-      'host',
+      'address',
       abbr: 'a',
-      aliases: ['address', 'addr', 'ip', 'interface', 'if'],
+      aliases: ['host', 'addr', 'ip', 'interface', 'if'],
       help: 'The host/address to listen on.',
       defaultsTo: '0.0.0.0',
     )
