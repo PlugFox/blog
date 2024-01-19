@@ -4,91 +4,68 @@ import 'package:backend/src/common/config/pubspec.yaml.g.dart';
 import 'package:meta/meta.dart';
 
 /// {@template app_metadata}
-/// App metadata
+/// App metadata singleton.
 /// {@endtemplate}
 @immutable
 final class AppMetadata {
   static final AppMetadata _internalSingleton = AppMetadata._internal(
-    isRelease: const bool.fromEnvironment('dart.vm.product'),
-    appVersion: Pubspec.version.representation,
-    appVersionMajor: Pubspec.version.major,
-    appVersionMinor: Pubspec.version.minor,
-    appVersionPatch: Pubspec.version.patch,
-    appBuildTimestamp: Pubspec.timestamp.toUtc(),
-    appName: Pubspec.name,
-    operatingSystem: io.Platform.operatingSystem,
-    processorsCount: io.Platform.numberOfProcessors,
+    debug: !const bool.fromEnvironment('dart.vm.product'),
+    version: Pubspec.version,
+    timestamp: Pubspec.timestamp.toUtc(),
+    name: Pubspec.name,
+    os: io.Platform.operatingSystem,
+    cpus: io.Platform.numberOfProcessors,
     locale: io.Platform.localeName,
-    deviceVersion: io.Platform.operatingSystemVersion,
-    appLaunchedTimestamp: DateTime.now(),
+    launched: DateTime.now(),
   );
-  factory AppMetadata() => _internalSingleton;
 
   /// {@macro app_metadata}
+  factory AppMetadata() => _internalSingleton;
+
   const AppMetadata._internal({
-    required this.isRelease,
-    required this.appVersion,
-    required this.appVersionMajor,
-    required this.appVersionMinor,
-    required this.appVersionPatch,
-    required this.appBuildTimestamp,
-    required this.appName,
-    required this.operatingSystem,
-    required this.processorsCount,
+    required this.debug,
+    required this.version,
+    required this.timestamp,
+    required this.name,
+    required this.os,
+    required this.cpus,
     required this.locale,
-    required this.deviceVersion,
-    required this.appLaunchedTimestamp,
+    required this.launched,
   });
 
-  /// Is release build
-  final bool isRelease;
-
-  /// App version
-  final String appVersion;
-
-  /// App version major
-  final int appVersionMajor;
-
-  /// App version minor
-  final int appVersionMinor;
-
-  /// App version patch
-  final int appVersionPatch;
-
-  /// App build timestamp
-  final DateTime appBuildTimestamp;
+  /// Is debug mode
+  final bool debug;
 
   /// App name
-  final String appName;
+  final String name;
+
+  /// App version
+  final PubspecVersion version;
+
+  /// App timestamp
+  final DateTime timestamp;
 
   /// Operating system
-  final String operatingSystem;
+  final String os;
 
   /// Processors count
-  final int processorsCount;
+  final int cpus;
 
   /// Locale
   final String locale;
 
-  /// Device representation
-  final String deviceVersion;
-
   /// App launched timestamp
-  final DateTime appLaunchedTimestamp;
+  final DateTime launched;
 
   /// Convert to headers
   Map<String, String> toHeaders() => <String, String>{
-        'X-Meta-Is-Release': isRelease ? 'true' : 'false',
-        'X-Meta-App-Version': appVersion,
-        'X-Meta-App-Version-Major': appVersionMajor.toString(),
-        'X-Meta-App-Version-Minor': appVersionMinor.toString(),
-        'X-Meta-App-Version-Patch': appVersionPatch.toString(),
-        'X-Meta-App-Build-Timestamp': appBuildTimestamp.toString(),
-        'X-Meta-App-Name': appName,
-        'X-Meta-Operating-System': operatingSystem,
-        'X-Meta-Processors-Count': processorsCount.toString(),
+        'X-Meta-Debug': debug ? 'true' : 'false',
+        'X-Meta-Name': name,
+        'X-Meta-Version': version.representation,
+        'X-Meta-Timestamp': timestamp.toUtc().toIso8601String(),
+        'X-Meta-Operating-System': os,
+        'X-Meta-Processors-Count': cpus.toString(),
         'X-Meta-Locale': locale,
-        'X-Meta-Device-Version': deviceVersion,
-        'X-Meta-App-Launched-Timestamp': appLaunchedTimestamp.millisecondsSinceEpoch.toString(),
+        'X-Meta-Launched': launched.toUtc().toIso8601String(),
       };
 }
