@@ -131,8 +131,10 @@ final class Config {
   final int verbose;
 }
 
+/// {@template environment_flavor}
 /// Environment flavor.
 /// e.g. development, staging, production
+/// {@endtemplate}
 enum EnvironmentFlavor {
   /// Development
   development('development'),
@@ -143,10 +145,10 @@ enum EnvironmentFlavor {
   /// Production
   production('production');
 
-  /// {@nodoc}
+  /// {@macro environment_flavor}
   const EnvironmentFlavor(this.name);
 
-  /// {@nodoc}
+  /// {@macro environment_flavor}
   factory EnvironmentFlavor.from(String? name) => switch (name?.trim().toLowerCase()) {
         'development' || 'debug' || 'local' || 'develop' || 'dev' || 'lcl' => development,
         'staging' || 'profile' || 'preview' || 'stage' || 'stg' => staging,
