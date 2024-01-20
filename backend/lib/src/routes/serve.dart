@@ -13,6 +13,8 @@ import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart';
 
+/// Serves the application.
+/// Provides the middleware and the routes.
 Future<void> serve({
   required Config config,
   required Database database,
@@ -33,15 +35,17 @@ Future<void> serve({
     config.port,
     poweredByHeader: 'Dart',
     shared: config.workers > 1,
-    backlog: config.workers * 2, // 2x workers for backlog, it's pretty cheap and low value.
+    backlog: config.workers * 4, // 4x workers for backlog, it's pretty cheap and low value.
   );
 }
 
+/// The router for the application.
 shelf.Handler get _$router => (Router(notFoundHandler: $notFound)
-      /* ..get('/stat', $stat) */
-      //..get('/authenticate/<subject>', $authenticate)
-      ..get('/health', $healthCheck)
-      ..get('/logs', $logs)
-      ..get('/config', $config)
+      ..get('/meta/health', $healthCheck)
+      ..get('/meta/logs', $logs)
+      ..get('/meta/config', $config)
+      /* ..get('/meta/stat', $stat) */
+      /* ..get('/meta/echo', $echo) */
+      /* ..get('/authenticate/<subject>', $authenticate) */
       ..all('/<ignored|.*>', $notFound))
     .call;
