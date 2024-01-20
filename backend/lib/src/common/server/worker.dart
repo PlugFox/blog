@@ -123,7 +123,7 @@ final class SharedWorker {
         () async {
           final receivePort = ReceivePort()
             ..listen(
-              (message) {/* ... */},
+              (message) {/* Message from main isolate */},
               cancelOnError: false,
             );
           final database = await Database.connect(args.db);

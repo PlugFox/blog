@@ -46,7 +46,8 @@ final class Config {
       'database',
       abbr: 'd',
       aliases: ['db', 'file', 'path', 'location', 'sqlite', 'sqlite3', 'cache', 'storage'],
-      help: 'The SQLite database file path.',
+      help: 'The SQLite database file path.\n'
+          'Provide ":memory:" to use an in-memory database.',
       defaultsTo: 'db.sqlite',
     )
     ..addOption(

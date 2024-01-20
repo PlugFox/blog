@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:backend/src/common/config/config.dart';
 import 'package:backend/src/common/config/initialization.dart';
 import 'package:backend/src/common/database/database.dart';
-import 'package:backend/src/common/server/shared_worker.dart';
+import 'package:backend/src/common/server/worker.dart';
 import 'package:l/l.dart';
 
 /// Starts the server.
@@ -28,6 +29,7 @@ void main([List<String>? arguments]) => Future<void>.sync(() async {
       // Start the server with multiple workers
       await l.capture(
         () async {
+          // Start workers and wait for them to be ready
           final database = context['database'] as Database;
           final workers = <SharedWorker>[];
           for (var i = 1; i <= config.workers; i++) {
@@ -35,10 +37,16 @@ void main([List<String>? arguments]) => Future<void>.sync(() async {
               config: config,
               database: database,
               label: 'Worker#${i.toString().padLeft(config.workers.toString().length, '0')}',
-              onMessage: (message) {/* */},
+              onMessage: (message) {/* Message from worker */},
             );
             workers.add(worker);
           }
+
+          // Periodic tasks
+          Timer.periodic(
+            Duration(seconds: config.interval),
+            (_) {},
+          );
 
           l.i('Started ${workers.length} worker(s) at '
               '${config.address.host}:${config.port} in '
