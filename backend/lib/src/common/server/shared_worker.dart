@@ -4,7 +4,7 @@ import 'dart:isolate';
 
 import 'package:backend/src/common/config/config.dart';
 import 'package:backend/src/common/database/database.dart';
-import 'package:backend/src/common/server/serve.dart';
+import 'package:backend/src/routes/serve.dart';
 import 'package:l/l.dart';
 import 'package:meta/meta.dart';
 

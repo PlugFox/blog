@@ -55,23 +55,19 @@ jobs:
 
       - name: 👷 Install Dependencies
         timeout-minutes: 1
-        working-directory: ${{ env.working-directory }}
         run: |
           dart pub get
 
       - name: 🔎 Check format
-        working-directory: ${{ env.working-directory }}
         timeout-minutes: 1
         run: dart format --set-exit-if-changed -l 120 -o none lib/
 
       - name: 📈 Check analyzer
-        working-directory: ${{ env.working-directory }}
         timeout-minutes: 1
         run: dart analyze --fatal-infos --fatal-warnings lib/
 
       #- name: 🧪 Run tests
       #  timeout-minutes: 2
-      #  working-directory: ${{ env.working-directory }}
       #  run: |
       #    dart run coverage:test_with_coverage -fb -o coverage -- \
       #      --concurrency=6 --platform vm --coverage=./coverage --reporter=expanded test/unit_test.dart
