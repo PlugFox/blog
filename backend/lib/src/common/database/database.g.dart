@@ -14,8 +14,8 @@ class LogTbl extends Table with TableInfo<LogTbl, LogTblData> {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL PRIMARY KEY AUTOINCREMENT');
-  static const VerificationMeta _timeMeta = VerificationMeta('time');
-  late final GeneratedColumn<int> time = GeneratedColumn<int>('time', aliasedName, false,
+  static const VerificationMeta _timestampMeta = VerificationMeta('timestamp');
+  late final GeneratedColumn<int> timestamp = GeneratedColumn<int>('timestamp', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       $customConstraints: 'NOT NULL DEFAULT (strftime(\'%s\', \'now\'))',
@@ -26,11 +26,11 @@ class LogTbl extends Table with TableInfo<LogTbl, LogTblData> {
   static const VerificationMeta _messageMeta = VerificationMeta('message');
   late final GeneratedColumn<String> message = GeneratedColumn<String>('message', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
-  static const VerificationMeta _stackMeta = VerificationMeta('stack');
-  late final GeneratedColumn<String> stack = GeneratedColumn<String>('stack', aliasedName, true,
+  static const VerificationMeta _stacktraceMeta = VerificationMeta('stacktrace');
+  late final GeneratedColumn<String> stacktrace = GeneratedColumn<String>('stacktrace', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false, $customConstraints: '');
   @override
-  List<GeneratedColumn> get $columns => [id, time, level, message, stack];
+  List<GeneratedColumn> get $columns => [id, timestamp, level, message, stacktrace];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -43,8 +43,8 @@ class LogTbl extends Table with TableInfo<LogTbl, LogTblData> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('time')) {
-      context.handle(_timeMeta, time.isAcceptableOrUnknown(data['time']!, _timeMeta));
+    if (data.containsKey('timestamp')) {
+      context.handle(_timestampMeta, timestamp.isAcceptableOrUnknown(data['timestamp']!, _timestampMeta));
     }
     if (data.containsKey('level')) {
       context.handle(_levelMeta, level.isAcceptableOrUnknown(data['level']!, _levelMeta));
@@ -56,8 +56,8 @@ class LogTbl extends Table with TableInfo<LogTbl, LogTblData> {
     } else if (isInserting) {
       context.missing(_messageMeta);
     }
-    if (data.containsKey('stack')) {
-      context.handle(_stackMeta, stack.isAcceptableOrUnknown(data['stack']!, _stackMeta));
+    if (data.containsKey('stacktrace')) {
+      context.handle(_stacktraceMeta, stacktrace.isAcceptableOrUnknown(data['stacktrace']!, _stacktraceMeta));
     }
     return context;
   }
@@ -69,10 +69,10 @@ class LogTbl extends Table with TableInfo<LogTbl, LogTblData> {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return LogTblData(
       id: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      time: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}time'])!,
+      timestamp: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}timestamp'])!,
       level: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}level'])!,
       message: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}message'])!,
-      stack: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}stack']),
+      stacktrace: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}stacktrace']),
     );
   }
 
@@ -92,7 +92,7 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
   final int id;
 
   /// Time is the timestamp (in seconds) of the log message
-  final int time;
+  final int timestamp;
 
   /// Level is the severity level (a value between 0 and 6)
   final int level;
@@ -101,17 +101,18 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
   final String message;
 
   /// StackTrace a stack trace associated with this log event
-  final String? stack;
-  const LogTblData({required this.id, required this.time, required this.level, required this.message, this.stack});
+  final String? stacktrace;
+  const LogTblData(
+      {required this.id, required this.timestamp, required this.level, required this.message, this.stacktrace});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['time'] = Variable<int>(time);
+    map['timestamp'] = Variable<int>(timestamp);
     map['level'] = Variable<int>(level);
     map['message'] = Variable<String>(message);
-    if (!nullToAbsent || stack != null) {
-      map['stack'] = Variable<String>(stack);
+    if (!nullToAbsent || stacktrace != null) {
+      map['stacktrace'] = Variable<String>(stacktrace);
     }
     return map;
   }
@@ -119,10 +120,10 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
   LogTblCompanion toCompanion(bool nullToAbsent) {
     return LogTblCompanion(
       id: Value(id),
-      time: Value(time),
+      timestamp: Value(timestamp),
       level: Value(level),
       message: Value(message),
-      stack: stack == null && nullToAbsent ? const Value.absent() : Value(stack),
+      stacktrace: stacktrace == null && nullToAbsent ? const Value.absent() : Value(stacktrace),
     );
   }
 
@@ -130,10 +131,10 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return LogTblData(
       id: serializer.fromJson<int>(json['id']),
-      time: serializer.fromJson<int>(json['time']),
+      timestamp: serializer.fromJson<int>(json['timestamp']),
       level: serializer.fromJson<int>(json['level']),
       message: serializer.fromJson<String>(json['message']),
-      stack: serializer.fromJson<String?>(json['stack']),
+      stacktrace: serializer.fromJson<String?>(json['stacktrace']),
     );
   }
   @override
@@ -141,91 +142,92 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'time': serializer.toJson<int>(time),
+      'timestamp': serializer.toJson<int>(timestamp),
       'level': serializer.toJson<int>(level),
       'message': serializer.toJson<String>(message),
-      'stack': serializer.toJson<String?>(stack),
+      'stacktrace': serializer.toJson<String?>(stacktrace),
     };
   }
 
-  LogTblData copyWith({int? id, int? time, int? level, String? message, Value<String?> stack = const Value.absent()}) =>
+  LogTblData copyWith(
+          {int? id, int? timestamp, int? level, String? message, Value<String?> stacktrace = const Value.absent()}) =>
       LogTblData(
         id: id ?? this.id,
-        time: time ?? this.time,
+        timestamp: timestamp ?? this.timestamp,
         level: level ?? this.level,
         message: message ?? this.message,
-        stack: stack.present ? stack.value : this.stack,
+        stacktrace: stacktrace.present ? stacktrace.value : this.stacktrace,
       );
   @override
   String toString() {
     return (StringBuffer('LogTblData(')
           ..write('id: $id, ')
-          ..write('time: $time, ')
+          ..write('timestamp: $timestamp, ')
           ..write('level: $level, ')
           ..write('message: $message, ')
-          ..write('stack: $stack')
+          ..write('stacktrace: $stacktrace')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, time, level, message, stack);
+  int get hashCode => Object.hash(id, timestamp, level, message, stacktrace);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is LogTblData &&
           other.id == this.id &&
-          other.time == this.time &&
+          other.timestamp == this.timestamp &&
           other.level == this.level &&
           other.message == this.message &&
-          other.stack == this.stack);
+          other.stacktrace == this.stacktrace);
 }
 
 class LogTblCompanion extends UpdateCompanion<LogTblData> {
   final Value<int> id;
-  final Value<int> time;
+  final Value<int> timestamp;
   final Value<int> level;
   final Value<String> message;
-  final Value<String?> stack;
+  final Value<String?> stacktrace;
   const LogTblCompanion({
     this.id = const Value.absent(),
-    this.time = const Value.absent(),
+    this.timestamp = const Value.absent(),
     this.level = const Value.absent(),
     this.message = const Value.absent(),
-    this.stack = const Value.absent(),
+    this.stacktrace = const Value.absent(),
   });
   LogTblCompanion.insert({
     this.id = const Value.absent(),
-    this.time = const Value.absent(),
+    this.timestamp = const Value.absent(),
     required int level,
     required String message,
-    this.stack = const Value.absent(),
+    this.stacktrace = const Value.absent(),
   })  : level = Value(level),
         message = Value(message);
   static Insertable<LogTblData> custom({
     Expression<int>? id,
-    Expression<int>? time,
+    Expression<int>? timestamp,
     Expression<int>? level,
     Expression<String>? message,
-    Expression<String>? stack,
+    Expression<String>? stacktrace,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (time != null) 'time': time,
+      if (timestamp != null) 'timestamp': timestamp,
       if (level != null) 'level': level,
       if (message != null) 'message': message,
-      if (stack != null) 'stack': stack,
+      if (stacktrace != null) 'stacktrace': stacktrace,
     });
   }
 
   LogTblCompanion copyWith(
-      {Value<int>? id, Value<int>? time, Value<int>? level, Value<String>? message, Value<String?>? stack}) {
+      {Value<int>? id, Value<int>? timestamp, Value<int>? level, Value<String>? message, Value<String?>? stacktrace}) {
     return LogTblCompanion(
       id: id ?? this.id,
-      time: time ?? this.time,
+      timestamp: timestamp ?? this.timestamp,
       level: level ?? this.level,
       message: message ?? this.message,
-      stack: stack ?? this.stack,
+      stacktrace: stacktrace ?? this.stacktrace,
     );
   }
 
@@ -235,8 +237,8 @@ class LogTblCompanion extends UpdateCompanion<LogTblData> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (time.present) {
-      map['time'] = Variable<int>(time.value);
+    if (timestamp.present) {
+      map['timestamp'] = Variable<int>(timestamp.value);
     }
     if (level.present) {
       map['level'] = Variable<int>(level.value);
@@ -244,8 +246,8 @@ class LogTblCompanion extends UpdateCompanion<LogTblData> {
     if (message.present) {
       map['message'] = Variable<String>(message.value);
     }
-    if (stack.present) {
-      map['stack'] = Variable<String>(stack.value);
+    if (stacktrace.present) {
+      map['stacktrace'] = Variable<String>(stacktrace.value);
     }
     return map;
   }
@@ -254,10 +256,10 @@ class LogTblCompanion extends UpdateCompanion<LogTblData> {
   String toString() {
     return (StringBuffer('LogTblCompanion(')
           ..write('id: $id, ')
-          ..write('time: $time, ')
+          ..write('timestamp: $timestamp, ')
           ..write('level: $level, ')
           ..write('message: $message, ')
-          ..write('stack: $stack')
+          ..write('stacktrace: $stacktrace')
           ..write(')'))
         .toString();
   }
@@ -1153,7 +1155,8 @@ class KvTblCompanion extends UpdateCompanion<KvTblData> {
 abstract class _$Database extends GeneratedDatabase {
   _$Database(QueryExecutor e) : super(e);
   late final LogTbl logTbl = LogTbl(this);
-  late final Index logTimeIdx = Index('log_time_idx', 'CREATE INDEX IF NOT EXISTS log_time_idx ON log_tbl (time)');
+  late final Index logTimestampIdx =
+      Index('log_timestamp_idx', 'CREATE INDEX IF NOT EXISTS log_timestamp_idx ON log_tbl (timestamp)');
   late final Index logLevelIdx = Index('log_level_idx', 'CREATE INDEX IF NOT EXISTS log_level_idx ON log_tbl (level)');
   late final LogPrefixTbl logPrefixTbl = LogPrefixTbl(this);
   late final Index logPrefixPrefixIdx =
@@ -1183,7 +1186,7 @@ abstract class _$Database extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         logTbl,
-        logTimeIdx,
+        logTimestampIdx,
         logLevelIdx,
         logPrefixTbl,
         logPrefixPrefixIdx,

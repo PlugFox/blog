@@ -7,11 +7,11 @@
 
 - ✅ Frontend with Dart
 - ✅ Backend with Dart
-- ❌ Echo server
-- ❌ API metadata
-- ❌ Routing & Middleware
+- ✅ Echo server
+- ✅ API metadata
+- ✅ Routing & Middleware
+- ✅ SQLite database with ORM
 - ❌ Medium RSS parsing by authors
-- ❌ SQLite database
 - ❌ Pagination
 - ❌ Search by tags, authors, titles.
 - ❌ POST callbacks

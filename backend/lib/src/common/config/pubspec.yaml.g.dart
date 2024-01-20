@@ -125,12 +125,12 @@ sealed class Pubspec {
   static final DateTime timestamp = DateTime.utc(
     2024,
     1,
+    20,
+    1,
+    8,
     19,
-    17,
-    51,
-    36,
-    872,
-    410,
+    824,
+    842,
   );
 
   /// Name
@@ -426,8 +426,9 @@ sealed class Pubspec {
     'shelf_router': r'^1.1.0',
     'meta': r'^1.11.0',
     'args': r'^2.4.0',
+    'crypto': r'^3.0.3',
     'stack_trace': r'^1.11.1',
-    'l': r'^4.1.0-pre.1',
+    'l': r'5.0.0-pre.2',
     'drift': r'^2.15.0',
     'shared': <String, Object>{
       'path': r'../shared',

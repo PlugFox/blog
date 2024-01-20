@@ -1,10 +1,13 @@
 // ignore_for_file: prefer_foreach, prefer_expression_function_bodies
 
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io' as io;
 
 import 'package:backend/src/common/database/queries.dart';
 import 'package:drift/drift.dart';
+import 'package:drift/isolate.dart' as drift_isolate;
+import 'package:drift/isolate.dart';
 import 'package:drift/native.dart' as ffi;
 import 'package:meta/meta.dart';
 
@@ -35,6 +38,14 @@ abstract interface class IKeyValueStorage {
 
   /// Remove all values
   void removeAll([Set<String>? keys]);
+}
+
+/// Transfers a database connection to another isolate.
+@immutable
+final class TransferableDatabaseConnection {
+  const TransferableDatabaseConnection._(this._driftIsolate);
+
+  final drift_isolate.DriftIsolate _driftIsolate;
 }
 
 @DriftDatabase(
@@ -75,8 +86,15 @@ class Database extends _$Database
           ),
         );
 
-  /// Creates a database from an existing [executor].
-  Database.connect(super.connection);
+  /// Creates a database from an existing [TransferableDatabaseConnection].
+  static Future<Database> connect(TransferableDatabaseConnection connection) => connection._driftIsolate
+      .connect(isolateDebugLog: false, singleClientMode: false)
+      .then<Database>(Database._connect);
+  Database._connect(super.connection);
+
+  //FutureOr<TransferableDatabaseConnection>? _$transferableDatabaseConnection;
+  FutureOr<TransferableDatabaseConnection> get transferableDatabaseConnection =>
+      /* _$transferableDatabaseConnection ??= */ serializableConnection().then(TransferableDatabaseConnection._);
 
   static Future<QueryExecutor> _opener({
     required io.File file,
@@ -130,6 +148,13 @@ class Database extends _$Database
   MigrationStrategy get migration => DatabaseMigrationStrategy(
         database: this,
       );
+
+  /// Do not use this method directly outside of main isolate.
+  @override
+  Future<void> close() {
+    //_$transferableDatabaseConnection = null;
+    return super.close();
+  }
 }
 
 /// Handles database migrations by delegating work to [OnCreate] and [OnUpgrade]

@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS log_tbl (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 
     -- Time is the timestamp (in seconds) of the log message
-    time INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    timestamp INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
 
     -- Level is the severity level (a value between 0 and 6)
     level INTEGER NOT NULL,
@@ -13,11 +13,11 @@ CREATE TABLE IF NOT EXISTS log_tbl (
     message TEXT NOT NULL,
 
     -- StackTrace a stack trace associated with this log event
-    stack TEXT
+    stacktrace TEXT
 ) STRICT;
 
 -- Indexes
-CREATE INDEX IF NOT EXISTS log_time_idx ON log_tbl (time);
+CREATE INDEX IF NOT EXISTS log_timestamp_idx ON log_tbl (timestamp);
 CREATE INDEX IF NOT EXISTS log_level_idx ON log_tbl (level);
 
 -- Search table

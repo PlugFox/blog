@@ -17,6 +17,7 @@ final class Config {
     required this.interval,
     required this.workers,
     required this.token,
+    required this.verbose,
   });
 
   /// Create a [ArgParser] for the [Config].
@@ -71,6 +72,19 @@ final class Config {
           'Should be at least 6 characters long.',
       defaultsTo: '',
     )
+    ..addOption(
+      'verbose',
+      abbr: 'v',
+      aliases: ['verbosity', 'log', 'logging', 'debug'],
+      help: 'The verbose level. Set to 0 to disable logging. '
+          'Set to 1 to log only errors. '
+          'Set to 2 to log errors and warnings. '
+          'Set to 3 to log errors, warnings and info. '
+          'Set to 4 to log errors, warnings, info and debug. '
+          'Set to 5 to log all minor details. '
+          'Set to 6 to log everything.',
+      defaultsTo: '3',
+    )
     ..addFlag(
       'help',
       abbr: 'h',
@@ -105,6 +119,16 @@ final class Config {
 
   /// The secret token to use for authentication.
   final String? token;
+
+  /// The verbose level.
+  /// The verbose level. Set to 0 to disable logging.
+  /// Set to 1 to log only errors and major messages.
+  /// Set to 2 to log errors and warnings.
+  /// Set to 3 to log errors, warnings and info.
+  /// Set to 4 to log errors, warnings, info and debug.
+  /// Set to 5 to log all minor details.
+  /// Set to 6 to log everything.
+  final int verbose;
 }
 
 /// Environment flavor.

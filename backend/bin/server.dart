@@ -1,8 +1,9 @@
-import 'dart:io' as io;
+import 'dart:convert';
 
 import 'package:backend/src/common/config/config.dart';
 import 'package:backend/src/common/config/initialization.dart';
 import 'package:backend/src/common/database/database.dart';
+import 'package:backend/src/common/server/shared_worker.dart';
 import 'package:l/l.dart';
 
 /// Starts the server.
@@ -10,17 +11,70 @@ import 'package:l/l.dart';
 ///
 /// dart run bin/server.dart -p 80 -e dev -d :memory: -i 0
 void main([List<String>? arguments]) => Future<void>.sync(() async {
-      final (:Config config, :Map<String, Object?> context) = await $initializeServer(arguments: arguments);
-      l.i('Starting server at ${config.address.host}:${config.port} in ${config.environment.name} mode');
+      // Log options by default
+      final logOption = LogOptions(
+        handlePrint: true,
+        outputInRelease: true,
+        printColors: false,
+        overrideOutput: (_) => null, // Disable default output
+      );
 
-      // ignore: unused_local_variable
-      final database = context['database'] as Database;
+      // Initialize the server
+      final (:Config config, :Map<String, Object?> context) = await l.capture(
+        () => $initializeServer(arguments: arguments),
+        logOption,
+      );
 
-      await Future<void>.delayed(const Duration(seconds: 10));
-      l.s('Fine');
-      io.exit(0);
+      // Start the server with multiple workers
+      await l.capture(
+        () async {
+          final database = context['database'] as Database;
+          final workers = <SharedWorker>[];
+          for (var i = 1; i <= config.workers; i++) {
+            final worker = await SharedWorker.spawn(
+              config: config,
+              database: database,
+              label: 'Worker#$i',
+              onMessage: (message) {/* */},
+            );
+            workers.add(worker);
+          }
 
-      // TODO(plugfox): collect logs
-
-      //print('Serving at http://${server.address.host}:${server.port}');
+          l.i('Started ${workers.length} worker(s) at '
+              '${config.address.host}:${config.port} in '
+              '${config.environment.name} mode');
+        },
+        LogOptions(
+          handlePrint: logOption.handlePrint,
+          outputInRelease: logOption.outputInRelease,
+          printColors: logOption.printColors,
+          messageFormatting: logOption.messageFormatting,
+          overrideOutput: _logPrinter(config),
+        ),
+      );
     });
+
+final Converter<Map<String, Object?>, String> _jsonEncoder = const JsonEncoder().cast<Map<String, Object?>, String>();
+String? Function(LogMessage) _logPrinter(Config config) => switch (config.environment) {
+      // Production JSON log printer
+      EnvironmentFlavor.production => (event) => event.level.level > config.verbose
+          ? null
+          : _jsonEncoder.convert(<String, Object?>{
+              'timestamp': event.timestamp.millisecondsSinceEpoch,
+              'level': event.level.toString(),
+              'message': event.message.toString(),
+              if (event case LogMessageError(:StackTrace stackTrace)) 'stacktrace': stackTrace.toString(),
+              if (event.context.isNotEmpty) 'context': event.context,
+            }),
+      // Development pretty log printer
+      _ => (event) => event.level.level > config.verbose
+          ? null
+          : '[${event.level.prefix}] '
+              '${event.timestamp.hour.toString().padLeft(2, '0')}:'
+              '${event.timestamp.minute.toString().padLeft(2, '0')}:'
+              '${event.timestamp.second.toString().padLeft(2, '0')} | '
+              '${switch (event.message.toString()) {
+              String msg when msg.length > 100 => '${msg.substring(0, 100 - 4)} ...',
+              String msg => msg,
+            }}',
+    };

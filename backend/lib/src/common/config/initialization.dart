@@ -63,12 +63,13 @@ Config _$initializeServer$Config(List<String>? arguments) {
   // Create a table of --dart-define arguments.
   const defaultConfig = <String, String>{
     'environment': String.fromEnvironment('environment'),
-    'host': String.fromEnvironment('host', defaultValue: '0.0.0.0'),
+    'address': String.fromEnvironment('address', defaultValue: '0.0.0.0'),
     'port': String.fromEnvironment('port', defaultValue: '8080'),
     'database': String.fromEnvironment('database', defaultValue: 'db.sqlite'),
     'interval': String.fromEnvironment('interval', defaultValue: '3600'),
     'workers': String.fromEnvironment('workers'),
     'token': String.fromEnvironment('token'),
+    'verbose': String.fromEnvironment('verbose'),
   };
 
   // Create a table of --dart-define arguments.
@@ -120,8 +121,14 @@ Config _$initializeServer$Config(List<String>? arguments) {
           const bool.fromEnvironment('dart.vm.product') ? EnvironmentFlavor.production : EnvironmentFlavor.development,
     ),
     address: env<io.InternetAddress>(
-      'host',
-      io.InternetAddress.tryParse,
+      'address',
+      (s) => switch (s.trim().toLowerCase()) {
+        '127.0.0.1' || 'loopback' || 'localhost' || 'loopbackipv4' || 'loopback4' => io.InternetAddress.loopbackIPv4,
+        'loopbackipv6' || 'loopback6' || 'localhost6' => io.InternetAddress.loopbackIPv6,
+        '0.0.0.0' || 'anyipv4' || 'ipv4' || 'ip4' || 'any' || '4' || '' => io.InternetAddress.anyIPv4,
+        'anyipv6' || 'ipv6' || 'ip6' || '6' => io.InternetAddress.anyIPv6,
+        String address => io.InternetAddress.tryParse(address),
+      },
       () => io.InternetAddress.anyIPv4,
     ),
     port: env<int>(
@@ -160,6 +167,11 @@ Config _$initializeServer$Config(List<String>? arguments) {
       String token when token.length < 6 => null,
       String token => token,
     },
+    verbose: env<int>(
+      'verbose',
+      int.tryParse,
+      () => 3,
+    ).clamp(0, 6),
   );
 }
 
@@ -211,7 +223,8 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
             ..limit(1, offset: 1000))
           .getSingleOrNull();
       if (log != null) {
-        await (database.delete(database.logTbl)..where((tbl) => tbl.time.isSmallerOrEqualValue(log.time))).go();
+        await (database.delete(database.logTbl)..where((tbl) => tbl.timestamp.isSmallerOrEqualValue(log.timestamp)))
+            .go();
       }
     });
     if (DateTime.now().second % 10 == 0) await database.customStatement('VACUUM;');
@@ -224,21 +237,22 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'Collect logs': (config, context) async {
     final database = context['database'] as Database;
     await (database.select<LogTbl, LogTblData>(database.logTbl)
-          ..orderBy([(tbl) => OrderingTerm(expression: tbl.time, mode: OrderingMode.desc)])
+          ..orderBy([(tbl) => OrderingTerm(expression: tbl.timestamp, mode: OrderingMode.desc)])
           ..limit(LogBuffer.bufferLimit))
         .get()
         .then<List<LogMessage>>((logs) => logs
-            .map((l) => l.stack != null
-                ? LogMessageWithStackTrace(
-                    date: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-                    level: LogLevel.fromValue(l.level),
-                    message: l.message,
-                    stackTrace: StackTrace.fromString(l.stack!))
-                : LogMessage(
-                    date: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-                    level: LogLevel.fromValue(l.level),
-                    message: l.message,
-                  ))
+            .map((l) => switch (l.stacktrace) {
+                  String stacktrace => LogMessage.error(
+                      timestamp: DateTime.fromMillisecondsSinceEpoch(l.timestamp * 1000),
+                      level: LogLevel.fromValue(l.level),
+                      message: l.message,
+                      stackTrace: StackTrace.fromString(stacktrace)),
+                  null => LogMessage.verbose(
+                      timestamp: DateTime.fromMillisecondsSinceEpoch(l.timestamp * 1000),
+                      level: LogLevel.fromValue(l.level),
+                      message: l.message,
+                    )
+                })
             .toList())
         .then<void>(LogBuffer.instance.addAll);
 
@@ -252,15 +266,14 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       cancelOnError: false,
     );
 
-    final timer = Timer.periodic(const Duration(seconds: 15), (_) {
+    final timer = Timer.periodic(const Duration(seconds: 5), (_) {
       if (logsCache.isEmpty) return;
       final logs = logsCache
           .map<LogTblCompanion>((log) => LogTblCompanion.insert(
                 level: log.level.level,
                 message: log.message.toString(),
-                time: Value<int>(log.date.millisecondsSinceEpoch ~/ 1000),
-                stack:
-                    Value<String?>(switch (log) { LogMessageWithStackTrace l => l.stackTrace.toString(), _ => null }),
+                timestamp: Value<int>(log.timestamp.millisecondsSinceEpoch ~/ 1000),
+                stacktrace: Value<String?>(switch (log) { LogMessageError l => l.stackTrace.toString(), _ => null }),
               ))
           .toList(growable: false);
       logsCache.clear();
