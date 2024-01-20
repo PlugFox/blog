@@ -1,6 +1,8 @@
 # Blog
 
-[![Actions Status](https://github.com/PlugFox/blog/actions/workflows/checkout.yml/badge.svg)](https://github.com/PlugFox/blog/actions)
+[![Backend checkout](https://github.com/PlugFox/blog/actions/workflows/backend-checkout.yml/badge.svg)](https://github.com/PlugFox/blog/actions/workflows/backend-checkout.yml)
+[![Frontend checkout](https://github.com/PlugFox/blog/actions/workflows/frontend-checkout.yml/badge.svg)](https://github.com/PlugFox/blog/actions/workflows/frontend-checkout.yml)
+[![Shared checkout](https://github.com/PlugFox/blog/actions/workflows/shared-checkout.yml/badge.svg)](https://github.com/PlugFox/blog/actions/workflows/shared-checkout.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 
 ## Features and Roadmap
