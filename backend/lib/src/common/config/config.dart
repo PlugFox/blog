@@ -67,8 +67,8 @@ final class Config {
       'token',
       abbr: 't',
       aliases: ['token', 'admin', 'secret', 'key', 'password', 'pass', 'auth', 'authentication', 'authorization'],
-      help: 'The secret token to use for authentication. '
-          'If not provided, authentication will be disabled. '
+      help: 'The secret token to use for authentication.\n'
+          'If not provided, authentication will be disabled.\n'
           'Should be at least 6 characters long.',
       defaultsTo: '',
     )
@@ -76,13 +76,14 @@ final class Config {
       'verbose',
       abbr: 'v',
       aliases: ['verbosity', 'log', 'logging', 'debug'],
-      help: 'The verbose level. Set to 0 to disable logging. '
-          'Set to 1 to log only errors. '
-          'Set to 2 to log errors and warnings. '
-          'Set to 3 to log errors, warnings and info. '
-          'Set to 4 to log errors, warnings, info and debug. '
-          'Set to 5 to log all minor details. '
-          'Set to 6 to log everything.',
+      help: 'The verbose level.\n'
+          ' Set to 0 to disable logging.\n'
+          ' Set to 1 to log only errors.\n'
+          ' Set to 2 to log errors and warnings.\n'
+          ' Set to 3 to log errors, warnings and info.\n'
+          ' Set to 4 to log errors, warnings, info and debug.\n'
+          ' Set to 5 to log all minor details.\n'
+          ' Set to 6 to log everything.',
       defaultsTo: '3',
     )
     ..addFlag(
