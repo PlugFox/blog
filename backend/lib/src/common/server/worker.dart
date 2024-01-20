@@ -129,7 +129,7 @@ final class SharedWorker {
           final database = await Database.connect(args.db);
           await serve(config: args.config, database: database);
           send(receivePort.sendPort); // send port to main isolate from current isolate
-          l.i('Started worker "${args.label}"');
+          l.d('Started worker "${args.label}"');
         },
         (error, stackTrace) => send([error.toString(), stackTrace]),
       ),

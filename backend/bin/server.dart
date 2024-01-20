@@ -48,10 +48,11 @@ void main([List<String>? arguments]) => Future<void>.sync(() async {
             (_) {},
           );
 
-          l.i('Started ${workers.length} worker(s) at '
-              '${config.address.host}:${config.port} in '
-              '${config.environment.name} mode\n'
-              'Press [Ctrl] + [C] to exit');
+          l
+            ..i('Started ${workers.length} worker(s) at '
+                '${config.address.host}:${config.port} in '
+                '${config.environment.name} mode')
+            ..i('Press [Ctrl] + [C] to exit');
         },
         LogOptions(
           handlePrint: logOption.handlePrint,
