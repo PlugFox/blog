@@ -20,9 +20,10 @@ Future<void> serve({
   required Database database,
 }) async {
   final pipeline = const shelf.Pipeline()
+      // TODO(plugfox): add middleware for meta headers
+      .addMiddleware(cors())
       .addMiddleware(handleErrors(showStackTrace: config.environment.isDevelopment))
       .addMiddleware(logPipeline())
-      .addMiddleware(cors())
       .addMiddleware(authorization())
       .addMiddleware(injector(<String, Object>{
         'DATABASE': database,
