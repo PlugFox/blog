@@ -207,7 +207,6 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     // Attempting to register a SIGTERM handler raises an exception.
     if (!io.Platform.isWindows) io.ProcessSignal.sigterm.watch().listen(signalHandler, cancelOnError: false);
     io.ProcessSignal.sigint.watch().listen(signalHandler, cancelOnError: false);
-    l.i('Press [Ctrl] + [C] to exit');
   },
   'Connect to database': (config, context) async {
     final database = config.database == ':memory:' ? Database.memory() : Database.lazy(file: io.File(config.database));
