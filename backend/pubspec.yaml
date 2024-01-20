@@ -35,10 +35,11 @@ dependencies:
   # Utils
   meta: ^1.11.0
   args: ^2.4.0
+  crypto: ^3.0.3
   stack_trace: ^1.11.1
 
   # Logger
-  l: ^4.1.0-pre.1
+  l: 5.0.0-pre.2
 
   # Database
   drift: ^2.15.0

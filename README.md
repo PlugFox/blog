@@ -7,14 +7,37 @@
 
 - ✅ Frontend with Dart
 - ✅ Backend with Dart
+- ✅ Echo server
+- ✅ API metadata
+- ✅ Routing & Middleware
+- ✅ SQLite database with ORM
+- ❌ Protocol Buffer's schema for API
 - ❌ Medium RSS parsing by authors
-- ❌ SQLite database
 - ❌ Pagination
 - ❌ Search by tags, authors, titles.
 - ❌ POST callbacks
 - ❌ Dockerfiles
 - ❌ Docker Compose & Stack
 - ❌ CI/CD deployment with GitHub Actions
+- ❌ Shaders for frontend
+- ❌ Favicons
+- ❌ Progressive Web App
+- ❌ Dark Mode
+- ❌ i18n
+- ❌ SEO
+- ❌ Google Analytics
+- ❌ Web Performance Monitoring
+- ❌ Sentry
+- ❌ Bookmarks with LocalStorage
+- ❌ Comment system
+- ❌ Social media sharing
+- ❌ Preview with meta tags
+- ❌ RSS feed
+- ❌ Sitemap
+- ❌ Robots.txt
+- ❌ Caching
+- ❌ Offline mode
+- ❌ Push notifications
 
 ## Maintainers
 

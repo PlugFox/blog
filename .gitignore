@@ -13,3 +13,6 @@ coverage/
 
 .local-chromium/
 data/
+
+# SQLite database file
+*.sqlite3
