@@ -55,7 +55,7 @@ Config _$initializeServer$Config(List<String>? arguments) {
   ]);
 
   if (result.wasParsed('help')) {
-    l.v(parser.usage);
+    l.s(parser.usage);
     io.sleep(const Duration(milliseconds: 250));
     io.exit(0); // Exit with success on help.
   }

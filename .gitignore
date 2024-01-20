@@ -16,3 +16,4 @@ data/
 
 # SQLite database file
 *.sqlite3
+*.sqlite

@@ -16,7 +16,7 @@ void main([List<String>? arguments]) => Future<void>.sync(() async {
         handlePrint: true,
         outputInRelease: true,
         printColors: false,
-        overrideOutput: (_) => null, // Disable default output
+        overrideOutput: (event) => event.level.level > 1 ? null : event.message.toString(), // Disable default output
       );
 
       // Initialize the server
@@ -34,7 +34,7 @@ void main([List<String>? arguments]) => Future<void>.sync(() async {
             final worker = await SharedWorker.spawn(
               config: config,
               database: database,
-              label: 'Worker#$i',
+              label: 'Worker#${i.toString().padLeft(config.workers.toString().length, '0')}',
               onMessage: (message) {/* */},
             );
             workers.add(worker);
