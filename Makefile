@@ -7,7 +7,10 @@ get:
 	@dart pub get --directory shared
 
 # Codegeneration
+# brew install protobuf
 codegen:
+	@dart pub global activate protoc_plugin
+	@protoc --proto_path=shared/protobuf --dart_out=shared/lib/src/api/protobuf shared/protobuf/api.proto
 	@dart pub get --directory shared
 	@(cd shared && dart run build_runner build --delete-conflicting-outputs)
 	@dart pub get --directory backend

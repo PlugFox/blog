@@ -26,9 +26,11 @@ sealed class Responses {
     Object? data, {
     Map<String, String>? headers,
   }) {
+    String contnetType;
     List<int> body;
     switch (data) {
       case Map<String, Object?> data:
+        contnetType = io.ContentType.json.value;
         body = _responseEncoder.convert(
           <String, Object>{
             'status': _kStatus.ok,
@@ -36,21 +38,24 @@ sealed class Responses {
           },
         );
       case null:
+        contnetType = io.ContentType.json.value;
         body = utf8.encode('{"status":"${_kStatus.ok}"}');
       case List<int> data:
+        contnetType = io.ContentType.binary.value;
         body = data;
+      case String data:
+        contnetType = io.ContentType.text.value;
+        body = utf8.encode(data);
       case DateTime data:
         return ok({'value': data.toUtc().toIso8601String()}, headers: headers);
       case num data:
-        return ok({'value': data}, headers: headers);
-      case String data:
         return ok({'value': data}, headers: headers);
       case List<Object?> data:
         return ok({'value': data}, headers: headers);
       default:
         return error(
           const HttpException(
-            statusCode: io.HttpStatus.internalServerError,
+            status: io.HttpStatus.internalServerError,
             code: 'internal',
             message: 'Internal Server Error',
             data: <String, Object?>{
@@ -65,6 +70,7 @@ sealed class Responses {
         ..._headers,
         ...?headers,
         'Content-Length': body.length.toString(),
+        'Content-Type': contnetType,
       },
     );
   }
@@ -76,7 +82,7 @@ sealed class Responses {
   }) {
     final body = _responseEncoder.convert(exception.toJson());
     return shelf.Response(
-      exception.statusCode,
+      exception.status,
       body: body,
       headers: <String, String>{
         ..._headers,
@@ -93,24 +99,24 @@ sealed class Responses {
 /// the response body.
 class HttpException implements Exception {
   const HttpException({
-    this.statusCode = io.HttpStatus.internalServerError,
+    this.status = io.HttpStatus.internalServerError,
     this.code = 'internal',
     this.message = 'Internal Server Error',
     this.data,
   });
 
-  final int statusCode;
+  final int status;
   final String code;
   final String message;
   final Map<String, Object?>? data;
 
   HttpException copyWith({
-    int? statusCode,
+    int? status,
     String? message,
     Map<String, Object?>? data,
   }) =>
       HttpException(
-        statusCode: statusCode ?? this.statusCode,
+        status: status ?? this.status,
         message: message ?? this.message,
         data: data ?? this.data,
       );
@@ -118,7 +124,7 @@ class HttpException implements Exception {
   Map<String, Object?> toJson() => <String, Object?>{
         'status': _kStatus.error,
         'error': <String, Object?>{
-          'statusCode': statusCode,
+          'status': status,
           'code': code,
           'message': message,
           if (data != null) 'details': data,
@@ -126,14 +132,14 @@ class HttpException implements Exception {
       };
 
   @override
-  String toString() => 'HttpException ${statusCode.toString()}: $message';
+  String toString() => 'HttpException ${status.toString()}: $message';
 }
 
 // 400 Bad Request
 class BadRequestException extends HttpException {
   const BadRequestException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.badRequest,
+            status: io.HttpStatus.badRequest,
             code: 'bad_request',
             message: "Bad Request${detail != '' ? ': ' : ''}$detail");
 }
@@ -142,7 +148,7 @@ class BadRequestException extends HttpException {
 class UnauthorizedException extends HttpException {
   const UnauthorizedException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.unauthorized,
+            status: io.HttpStatus.unauthorized,
             code: 'unauthorized',
             message: "Unauthorized${detail != '' ? ': ' : ''}$detail");
 }
@@ -151,7 +157,7 @@ class UnauthorizedException extends HttpException {
 class PaymentRequiredException extends HttpException {
   const PaymentRequiredException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.paymentRequired,
+            status: io.HttpStatus.paymentRequired,
             code: 'payment_required',
             message: "Payment Required${detail != '' ? ': ' : ''}$detail");
 }
@@ -160,25 +166,21 @@ class PaymentRequiredException extends HttpException {
 class ForbiddenException extends HttpException {
   const ForbiddenException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.forbidden,
-            code: 'forbidden',
-            message: "Forbidden${detail != '' ? ': ' : ''}$detail");
+            status: io.HttpStatus.forbidden, code: 'forbidden', message: "Forbidden${detail != '' ? ': ' : ''}$detail");
 }
 
 // 404 Not Found
 class NotFoundException extends HttpException {
   const NotFoundException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.notFound,
-            code: 'not_found',
-            message: "Not Found${detail != '' ? ': ' : ''}$detail");
+            status: io.HttpStatus.notFound, code: 'not_found', message: "Not Found${detail != '' ? ': ' : ''}$detail");
 }
 
 // 405 Method Not Allowed
 class MethodNotAllowed extends HttpException {
   const MethodNotAllowed({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.methodNotAllowed,
+            status: io.HttpStatus.methodNotAllowed,
             code: 'method_not_allowed',
             message: "Method Not Allowed${detail != '' ? ': ' : ''}$detail");
 }
@@ -187,7 +189,7 @@ class MethodNotAllowed extends HttpException {
 class NotAcceptableException extends HttpException {
   const NotAcceptableException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.notAcceptable,
+            status: io.HttpStatus.notAcceptable,
             code: 'not_acceptable',
             message: "Not Acceptable${detail != '' ? ': ' : ''}$detail");
 }
@@ -195,23 +197,20 @@ class NotAcceptableException extends HttpException {
 // 409 Conflict
 class ConflictException extends HttpException {
   const ConflictException({super.data, String detail = ''})
-      : super(
-            statusCode: io.HttpStatus.conflict,
-            code: 'conflict',
-            message: "Conflict${detail != '' ? ': ' : ''}$detail");
+      : super(status: io.HttpStatus.conflict, code: 'conflict', message: "Conflict${detail != '' ? ': ' : ''}$detail");
 }
 
 // 410 Gone
 class GoneException extends HttpException {
   const GoneException({super.data, String detail = ''})
-      : super(statusCode: io.HttpStatus.gone, code: 'gone', message: "Gone${detail != '' ? ': ' : ''}$detail");
+      : super(status: io.HttpStatus.gone, code: 'gone', message: "Gone${detail != '' ? ': ' : ''}$detail");
 }
 
 // 412 Precondition Failed
 class PreconditionFailedException extends HttpException {
   const PreconditionFailedException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.preconditionFailed,
+            status: io.HttpStatus.preconditionFailed,
             code: 'precondition_failed',
             message: "Precondition Failed${detail != '' ? ': ' : ''}$detail");
 }
@@ -220,7 +219,7 @@ class PreconditionFailedException extends HttpException {
 class UnsupportedMediaTypeException extends HttpException {
   const UnsupportedMediaTypeException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.unsupportedMediaType,
+            status: io.HttpStatus.unsupportedMediaType,
             code: 'unsupported_media_type',
             message: "Unsupported Media Type${detail != '' ? ': ' : ''}$detail");
 }
@@ -229,7 +228,7 @@ class UnsupportedMediaTypeException extends HttpException {
 class TooManyRequestsException extends HttpException {
   const TooManyRequestsException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.tooManyRequests,
+            status: io.HttpStatus.tooManyRequests,
             code: 'too_many_requests',
             message: "Too Many Requests${detail != '' ? ': ' : ''}$detail");
 }
@@ -238,7 +237,7 @@ class TooManyRequestsException extends HttpException {
 class InternalServerError extends HttpException {
   const InternalServerError({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.internalServerError,
+            status: io.HttpStatus.internalServerError,
             code: 'internal_server_error',
             message: "Internal Server Error${detail != '' ? ': ' : ''}$detail");
 }
@@ -247,7 +246,7 @@ class InternalServerError extends HttpException {
 class NotimplementedException extends HttpException {
   const NotimplementedException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.notImplemented,
+            status: io.HttpStatus.notImplemented,
             code: 'not_implemented',
             message: "Not Implemented${detail != '' ? ': ' : ''}$detail");
 }
@@ -256,7 +255,7 @@ class NotimplementedException extends HttpException {
 class ServiceUnavailableException extends HttpException {
   const ServiceUnavailableException({super.data, String detail = ''})
       : super(
-            statusCode: io.HttpStatus.serviceUnavailable,
+            status: io.HttpStatus.serviceUnavailable,
             code: 'service_unavailable',
             message: "Service Unavailable${detail != '' ? ': ' : ''}$detail");
 }

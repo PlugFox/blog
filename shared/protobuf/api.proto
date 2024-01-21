@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package blog.api;
+
+// Response represents a response from API.
+message Response {
+  string status = 1;
+  string error = 2;
+  oneof data {
+    string string = 3;
+    bytes bytes = 4;
+    Article article = 5;
+    Articles articles = 6;
+  }
+  reserved 7 to 999;
+  map<string, string> meta = 1000;
+}
+
+// Error represents an error returned by API.
+message Error {
+  uint32 status = 1;
+  string code = 2;
+  string message = 3;
+  map<string, string> details = 4;
+}
+
+// Article represents a blog article.
+message Article {
+  uint32 id = 1;
+  string title = 2;
+  string link = 3;
+  string guid = 4;
+  string author = 5;
+  repeated string tags = 6;
+  uint32 createdAt = 7; // Unix timestamp in seconds.
+  uint32 updatedAt = 8; // Unix timestamp in seconds.
+  string excerpt = 9;
+  string content = 10;
+
+  reserved 11 to 999;
+  map<string, string> meta = 1000;
+}
+
+// Articles represents a list of blog articles.
+message Articles {
+  repeated Article articles = 1;
+  uint32 limit = 2;
+  uint32 offset = 3;
+}
+
+// Log message.
+message LogMessage {
+  uint32 timestamp = 1; // Unix timestamp in seconds.
+  uint32 level = 2; // 0..6
+  string prefix = 3;
+  string message = 4;
+  string stacktrace = 5;
+  map<string, string> context = 6;
+  bool error = 7;
+}

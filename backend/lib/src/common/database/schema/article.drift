@@ -1,0 +1,84 @@
+
+/* ARTICLE TABLE */
+
+-- Article table
+CREATE TABLE IF NOT EXISTS article_tbl (
+    -- req Unique identifier of the article in the database
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+
+    -- Time is the timestamp (in seconds)
+    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+
+    -- Time is the timestamp (in seconds)
+    updated_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+
+    -- req Title is the title of the article
+    title TEXT NOT NULL,
+
+    -- req Data is the article data
+    -- shared.Article is a protobuf message
+    data BLOB NOT NULL
+) STRICT;
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS article_tbl_created_at_idx ON article_tbl (created_at);
+CREATE INDEX IF NOT EXISTS article_tbl_updated_at_idx ON article_tbl (updated_at);
+
+
+
+/* TAGS TABLE */
+
+-- Tags table
+CREATE TABLE IF NOT EXISTS article_tag_tbl (
+    -- req Unique identifier of the tag in the database
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+
+    -- req Unique identifier of the article in the database
+    article_id INTEGER NOT NULL,
+
+    -- req Tag is the tag of the article
+    tag TEXT NOT NULL,
+
+    -- Foreign keys
+    FOREIGN KEY (article_id)
+        REFERENCES article_tbl (id)
+            ON UPDATE CASCADE
+            ON DELETE CASCADE
+) STRICT;
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS article_tag_article_id_idx ON article_tag_tbl (article_id);
+CREATE INDEX IF NOT EXISTS article_tag_tag_idx ON article_tag_tbl (tag);
+
+
+
+/* SEARCH TABLE */
+
+-- Search table
+CREATE TABLE IF NOT EXISTS article_prefix_tbl (
+    -- req Prefix (first 3 chars of word, lowercased)
+    prefix TEXT NOT NULL, -- CHECK(length(prefix) = 3)
+
+    -- req Unique identifier
+    article_id INTEGER NOT NULL,
+
+    -- req Word (3 or more chars, lowercased)
+    word TEXT NOT NULL,
+
+    -- req Word's length
+    len INTEGER NOT NULL,
+
+    -- Composite primary key
+    PRIMARY KEY (prefix, article_id, word),
+
+    -- Foreign keys
+    FOREIGN KEY (article_id)
+        REFERENCES article_tbl (id)
+            ON UPDATE CASCADE
+            ON DELETE CASCADE
+) STRICT;
+
+-- Indexes
+CREATE INDEX IF NOT EXISTS article_prefix_prefix_idx ON article_prefix_tbl (prefix);
+CREATE INDEX IF NOT EXISTS article_prefix_article_id_idx ON article_prefix_tbl (article_id);
+CREATE INDEX IF NOT EXISTS article_prefix_len_idx ON article_prefix_tbl (len);

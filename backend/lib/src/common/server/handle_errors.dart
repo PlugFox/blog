@@ -19,7 +19,7 @@ Middleware handleErrors({bool showStackTrace = false}) =>
             final result = error is HttpException
                 ? error
                 : HttpException(
-                    statusCode: io.HttpStatus.internalServerError,
+                    status: io.HttpStatus.internalServerError,
                     code: 'internal',
                     message: 'Internal Server Error',
                     data: <String, Object?>{
@@ -32,7 +32,7 @@ Middleware handleErrors({bool showStackTrace = false}) =>
                     },
                   );
             return Response(
-              result.statusCode,
+              result.status,
               body: _responseEncoder.convert(result.toJson()),
               headers: <String, String>{
                 'Content-Type': io.ContentType.json.value,

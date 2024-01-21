@@ -48,11 +48,13 @@ final class TransferableDatabaseConnection {
   final drift_isolate.DriftIsolate _driftIsolate;
 }
 
+/// A main database class that extends codegenerated _$Database
 @DriftDatabase(
   include: <String>{
     'schema/kv.drift',
     'schema/characteristic.drift',
     'schema/log.drift',
+    'schema/article.drift',
   },
   tables: <Type>[],
   daos: <Type>[],
