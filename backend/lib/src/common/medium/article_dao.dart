@@ -1,6 +1,7 @@
 import 'dart:typed_data' as td;
 
 import 'package:backend/src/common/database/database.dart' as db;
+import 'package:drift/drift.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:shared/shared.dart' as shared;
 
@@ -74,7 +75,13 @@ final class ArticleDAO {
           if (content.isEmpty) continue;
           final text = dom.Document.html('<html><body>$content</body></html>').body?.text.toLowerCase();
           if (text == null || text.isEmpty) continue;
-          words.addAll(text.split(' ').where((w) => w.length > 2));
+          var sanitized = text.trim().toLowerCase();
+          while (sanitized.contains('  ')) sanitized = sanitized.replaceAll('  ', ' ');
+          words.addAll(_$searchWordRegExp
+              .allMatches(sanitized)
+              .map<String?>((m) => m.group(0))
+              .whereType<String>()
+              .where((w) => w.length > 2));
         }
         batch
           // Delete prefixes
@@ -132,5 +139,74 @@ final class ArticleDAO {
   /// Search articles in the database.
   ///
   /// Search performing by tags and words
-  Future<List<shared.Article>> searchInDatabase(String search) => Future.value(<shared.Article>[]);
+  Future<List<shared.Article>> searchInDatabase(String search, {int limit = 100}) async {
+    if (search.isEmpty) return const <shared.Article>[];
+    var sanitized = search.trim().toLowerCase();
+    while (sanitized.contains('  ')) sanitized = sanitized.replaceAll('  ', ' ');
+    if (sanitized.length > 100) sanitized = sanitized.substring(0, 100);
+    final words = _$searchWordRegExp
+        .allMatches(sanitized)
+        .map<String?>((m) => m.group(0))
+        .whereType<String>()
+        .where((w) => w.isNotEmpty)
+        .toSet();
+    if (words.isEmpty) return const <shared.Article>[];
+    final query = _$constructSearchQuery(words, limit: limit.clamp(1, 1000));
+    final rows = await _database.customSelect(query).get();
+    if (rows.isEmpty) return const <shared.Article>[];
+    return rows
+        .map<td.Uint8List>((r) => r.read<td.Uint8List>('data'))
+        .map<shared.Article>(shared.Article.fromBuffer)
+        .toList(growable: false);
+  }
 }
+
+final RegExp _$searchWordRegExp = RegExp('[a-za-яё0-9]+');
+String _$constructSearchQuery(Set<String> words, {int limit = 1000}) => '''
+WITH _input (value) AS (
+  VALUES ${words.map<String>((e) => "('$e')").join(', ')}
+),
+_prefixes (prefix, len, word) AS (
+  SELECT DISTINCT
+    substr(value, 1, 3) AS prefix,
+    length(value)       AS len,
+    value               AS word
+  FROM _input
+  WHERE length(value) >= 3
+),
+_ids (id, relevance) AS (
+  SELECT
+    a.article_id                   AS id,
+    SUM(p.len + p.len * 2 / a.len) AS relevance
+  FROM article_prefix_tbl AS a
+    INNER JOIN _prefixes AS p
+    ON p.prefix = a.prefix
+    AND p.len <= a.len
+    AND p.word = substr(a.word, 1, p.len)
+  GROUP BY a.article_id
+),
+_tags (id, relevance) AS (
+  SELECT
+    t.article_id AS id,
+    SUM(1000)    AS relevance
+  FROM article_tag_tbl AS t
+    INNER JOIN _prefixes AS p
+    ON p.word = t.tag
+  GROUP BY t.article_id
+)
+SELECT
+  a.id          AS id,
+  a.data        AS data,
+  i.relevance   AS relevance
+FROM article_tbl AS a
+  INNER JOIN (
+    SELECT id, relevance FROM _tags
+    UNION ALL
+    SELECT id, relevance FROM _ids
+    ORDER BY relevance DESC
+    LIMIT ${limit.clamp(1, 1000)}
+  ) AS i
+    ON a.id = i.id
+ORDER BY i.relevance DESC
+LIMIT ${limit.clamp(1, 1000)}
+''';

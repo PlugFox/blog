@@ -44,6 +44,12 @@
 - ❌ Offline mode
 - ❌ Push notifications
 
+## Codegeneration
+
+```bash
+make gen
+```
+
 ## Maintainers
 
 [Mikhail Matiunin aka Plague Fox](https://plugfox.dev)
