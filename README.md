@@ -16,6 +16,7 @@
 - ✅ Protocol Buffer's schema for API
 - ✅ Medium RSS parsing by authors
 - ✅ Pagination
+- ✅ Admin endpoints
 - ❌ Search by tags, authors, titles.
 - ❌ POST callbacks
 - ❌ Basic UI
