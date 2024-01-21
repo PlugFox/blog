@@ -11,6 +11,7 @@ import 'package:backend/src/common/server/log.dart';
 import 'package:backend/src/common/server/responses.dart';
 import 'package:backend/src/routes/admin/check_articles.dart';
 import 'package:backend/src/routes/admin/config.dart';
+import 'package:backend/src/routes/admin/exit.dart';
 import 'package:backend/src/routes/admin/logs.dart';
 import 'package:backend/src/routes/article/get_article.dart';
 import 'package:backend/src/routes/article/get_articles.dart';
@@ -54,6 +55,7 @@ shelf.Handler get _$router => (Router(notFoundHandler: _$notFound)
       ..get('/status', _$healthCheck)
       ..get('/admin/logs', $logs)
       ..get('/admin/config', $config)
+      ..get('/admin/exit', $exit)
       ..get('/admin/articles/check', $checkArticles)
       /* ..patch('/admin/articles', $upsertArticlesByURLs) */
       /* ..put('/admin/articles', $upsertArticles) */
