@@ -10,7 +10,7 @@ import 'package:meta/meta.dart';
 import 'package:shared/shared.dart';
 
 final class ArticlesComponent extends Component {
-  ArticlesComponent();
+  ArticlesComponent() : super(key: 'articles');
 
   late final ArticlesController _controller;
   List<Article> _articles = <Article>[];
@@ -24,37 +24,27 @@ final class ArticlesComponent extends Component {
         baseUrl: 'http://localhost:8080',
       ),
     )
-      ..addListener(_rebuild)
+      ..addListener(rebuild)
       ..fetch();
-    _rebuild();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller.removeListener(_rebuild);
+    _controller.removeListener(rebuild);
   }
 
   @override
-  html.Element build() => html.DivElement()..id = 'articles';
-
   @protected
-  FutureOr<void> _rebuild() async {
+  Future<void> build(html.Element context) async {
     final articles = _controller.state.data;
     if (identical(_articles, articles)) return; // No changes, no need to rebuild
     _articles = articles;
     final stopwatch = Stopwatch()..start();
     try {
       // Get the container of the list
-      final container = html.document.getElementById('articles');
-      if (container is! html.DivElement) {
-        assert(false, 'The element with id "articles" is not a <div> element');
-        return;
-      }
 
-      // Index existing elements by id
-      final existingElements = <String, html.Element>{for (final item in container.children) item.id: item};
-
+      final existingElements = <String, html.Element>{for (final item in context.children) item.id: item};
       // Remove elements that are no longer in the list
       existingElements.keys
           .where((id) => !articles.any((article) => article.id == id))
@@ -65,16 +55,16 @@ final class ArticlesComponent extends Component {
       });
 
       // Add new elements
-      final newElements = html.DocumentFragment();
+      final fragment = html.DocumentFragment();
       for (final article in articles) {
         if (stopwatch.elapsedMilliseconds > 8) await Future<void>.delayed(Duration.zero);
         if (!existingElements.containsKey(article.id)) {
-          var newElement = ArticleCard(article).build();
-          newElements.append(newElement);
-          existingElements[article.id] = newElement;
+          final card = ArticleCard(article);
+          fragment.append(card.element);
+          existingElements[article.id] = card.element;
         }
       }
-      container.append(newElements);
+      context.append(fragment);
     } finally {
       stopwatch.stop();
     }

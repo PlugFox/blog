@@ -4,13 +4,13 @@ import 'package:frontend/src/common/view/component.dart';
 import 'package:shared/shared.dart';
 
 final class ArticleCard extends Component {
-  ArticleCard(this.article);
+  ArticleCard(this.article) : super(key: article.id);
 
   final Article article;
 
   @override
-  html.Element build() {
-    var card = html.DivElement()..className = 'article-card';
+  void build(html.DivElement context) {
+    context.className = 'article-card';
     var titleElement = html.HeadingElement.h2()
       ..className = 'article-title'
       ..text = article.title;
@@ -32,6 +32,12 @@ final class ArticleCard extends Component {
       tagsElement.children.add(tagSpan);
     }
 
-    return card..children.addAll([titleElement, authorElement, dateElement, tagsElement, excerptElement]);
+    context.children.addAll([
+      titleElement,
+      authorElement,
+      dateElement,
+      tagsElement,
+      excerptElement,
+    ]);
   }
 }

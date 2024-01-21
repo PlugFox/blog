@@ -3,9 +3,13 @@ import 'dart:html' as html;
 import 'package:meta/meta.dart';
 
 abstract base class Component {
-  Component() {
+  Component({String? key}) : element = html.DivElement() {
+    if (key != null) element.id = key;
     initState();
+    build(element);
   }
+
+  final html.DivElement element;
 
   @protected
   @mustCallSuper
@@ -15,5 +19,10 @@ abstract base class Component {
   @mustCallSuper
   void dispose() {}
 
-  html.Element build();
+  @protected
+  void rebuild() => build(element);
+
+  @protected
+  @mustBeOverridden
+  void build(html.DivElement context);
 }
