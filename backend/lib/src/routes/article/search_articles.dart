@@ -6,21 +6,26 @@ import 'package:backend/src/common/server/responses.dart';
 import 'package:shared/shared.dart' as shared;
 import 'package:shelf/shelf.dart' as shelf;
 
-/// Returns the last articles from the database.
+/// Search articles in the database.
 ///
-/// E.g. `http://127.0.0.1:8080/articles?format=json`
-FutureOr<shelf.Response> $getArticles(shelf.Request request) async {
+/// E.g. `http://127.0.0.1:8080/articles/search?q=text&limit=100&format=json`
+FutureOr<shelf.Response> $searchArticles(shelf.Request request) async {
   final dao = request.context['ARTICLE_DAO'] as ArticleDAO;
 
   int? parseQueryInt(String? name) => switch (request.requestedUri.queryParameters[name]?.trim()) {
         String value when value.isNotEmpty => int.tryParse(value),
         _ => null,
       };
-  final from = parseQueryInt('from');
-  final to = parseQueryInt('to');
+
+  String? getQueryParameters(Iterable<String> names) => names
+      .map<String?>((name) => request.requestedUri.queryParameters[name])
+      .firstWhere((value) => value != null && value.isNotEmpty, orElse: () => null);
+
+  final search = getQueryParameters(['q', 'query', 's', 'search']);
+  if (search == null || search.isEmpty)
+    return Responses.error(const BadRequestException(detail: 'Missing search query'));
   final limit = parseQueryInt('limit');
-  final offset = parseQueryInt('offset');
-  final articles = await dao.getArticlesFromDatabase(from: from, to: to, limit: limit, offset: offset);
+  final articles = await dao.searchInDatabase(search, limit: limit ?? 100);
   for (final article in articles) article.content = '';
   switch (request.requestedUri.queryParameters['format']?.trim().toLowerCase()) {
     case 'json':
@@ -47,10 +52,10 @@ FutureOr<shelf.Response> $getArticles(shelf.Request request) async {
       final buffer = StringBuffer()
         ..writeln('<html>')
         ..writeln(' <head>')
-        ..writeln('  <title>Articles</title>')
+        ..writeln('  <title>Search results for "$search"</title>')
         ..writeln(' </head>')
         ..writeln(' <body>')
-        ..writeln('  <h1>Articles</h1>')
+        ..writeln('  <h1>Search results for "$search"</h1>')
         ..writeln('  <ul>');
       for (final article in articles) buffer.writeln('   <li><p>${article.title}</p></li>');
       buffer

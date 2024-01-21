@@ -17,9 +17,10 @@
 - ✅ Medium RSS parsing by authors
 - ✅ Pagination
 - ✅ Admin endpoints
-- ❌ Search by tags, authors, titles.
+- ✅ Search by tags, authors, titles.
 - ❌ POST callbacks
 - ❌ Basic UI
+- ❌ Material Design
 - ❌ Dockerfiles
 - ❌ Docker Compose & Stack
 - ❌ Admin menu based on local storage entry

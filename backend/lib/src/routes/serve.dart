@@ -14,6 +14,7 @@ import 'package:backend/src/routes/admin/config.dart';
 import 'package:backend/src/routes/admin/logs.dart';
 import 'package:backend/src/routes/article/get_article.dart';
 import 'package:backend/src/routes/article/get_articles.dart';
+import 'package:backend/src/routes/article/search_articles.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart';
@@ -63,6 +64,7 @@ shelf.Handler get _$router => (Router(notFoundHandler: _$notFound)
       /* ..get('/admin/schema', $schema) */
       /* ..get('/admin/<subject>', $...) */
       ..get('/articles', $getArticles)
+      ..get('/articles/search', $searchArticles)
       ..get('/articles/<id>', $getArticle)
       ..all('/<ignored|.*>', _$notFound)) // Redirect to site
     .call;
