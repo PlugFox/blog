@@ -170,3 +170,17 @@ final $typed_data.Uint8List logMessageDescriptor =
         'Jsb2cuYXBpLkxvZ01lc3NhZ2UuQ29udGV4dEVudHJ5Ugdjb250ZXh0EhQKBWVycm9yGAcgASgI'
         'UgVlcnJvcho6CgxDb250ZXh0RW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKA'
         'lSBXZhbHVlOgI4AQ==');
+
+@$core.Deprecated('Use logMessagesDescriptor instead')
+const LogMessages$json = {
+  '1': 'LogMessages',
+  '2': [
+    {'1': 'logs', '3': 1, '4': 3, '5': 11, '6': '.blog.api.LogMessage', '10': 'logs'},
+    {'1': 'count', '3': 2, '4': 1, '5': 13, '10': 'count'},
+  ],
+};
+
+/// Descriptor for `LogMessages`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List logMessagesDescriptor =
+    $convert.base64Decode('CgtMb2dNZXNzYWdlcxIoCgRsb2dzGAEgAygLMhQuYmxvZy5hcGkuTG9nTWVzc2FnZVIEbG9ncx'
+        'IUCgVjb3VudBgCIAEoDVIFY291bnQ=');

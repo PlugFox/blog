@@ -691,5 +691,68 @@ class LogMessage extends $pb.GeneratedMessage {
   void clearError() => clearField(7);
 }
 
+/// Log messages represents a list of log messages.
+class LogMessages extends $pb.GeneratedMessage {
+  factory LogMessages({
+    $core.Iterable<LogMessage>? logs,
+    $core.int? count,
+  }) {
+    final $result = create();
+    if (logs != null) {
+      $result.logs.addAll(logs);
+    }
+    if (count != null) {
+      $result.count = count;
+    }
+    return $result;
+  }
+  LogMessages._() : super();
+  factory LogMessages.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(i, r);
+  factory LogMessages.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LogMessages',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
+    ..pc<LogMessage>(1, _omitFieldNames ? '' : 'logs', $pb.PbFieldType.PM, subBuilder: LogMessage.create)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'count', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+      'Will be removed in next major version')
+  LogMessages clone() => LogMessages()..mergeFromMessage(this);
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+      'Will be removed in next major version')
+  LogMessages copyWith(void Function(LogMessages) updates) =>
+      super.copyWith((message) => updates(message as LogMessages)) as LogMessages;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LogMessages create() => LogMessages._();
+  LogMessages createEmptyInstance() => create();
+  static $pb.PbList<LogMessages> createRepeated() => $pb.PbList<LogMessages>();
+  @$core.pragma('dart2js:noInline')
+  static LogMessages getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LogMessages>(create);
+  static LogMessages? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<LogMessage> get logs => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.int get count => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set count($core.int v) {
+    $_setUnsignedInt32(1, v);
+  }
+
+  @$pb.TagNumber(2)
+  $core.bool hasCount() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCount() => clearField(2);
+}
+
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');

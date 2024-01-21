@@ -112,7 +112,7 @@ final class Medium {
     if (to != null) select.where((tbl) => tbl.createdAt.isSmallerOrEqualValue(to));
     select
       ..limit(limit ?? 1000, offset: offset ?? 0)
-      ..orderBy([(tbl) => db.OrderingTerm.desc(tbl.createdAt)]);
+      ..orderBy([(tbl) => db.OrderingTerm.asc(tbl.createdAt)]);
     return await select.get().then((rows) =>
         rows.map<td.Uint8List>((e) => e.data).map<shared.Article>(shared.Article.fromBuffer).toList(growable: false));
   }

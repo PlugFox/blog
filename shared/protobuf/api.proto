@@ -56,3 +56,9 @@ message LogMessage {
   map<string, string> context = 6;
   bool error = 7;
 }
+
+// Log messages represents a list of log messages.
+message LogMessages {
+  repeated LogMessage logs = 1;
+  uint32 count = 2;
+}
