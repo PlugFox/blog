@@ -71,7 +71,6 @@ jobs:
         run: |
           uname -a
           apt-get -y update
-          apt-get -y upgrade
           apt-get install -y sqlite3 libsqlite3-dev
           dart test --coverage=.coverage --timeout=120s --concurrency=12 \
             --reporter=github --platform=vm --file-reporter=json:.coverage/tests.json
