@@ -26,7 +26,15 @@ environment:
   sdk: ^3.2.5
 
 dependencies:
+  # Utils
   meta: ^1.11.0
+  intl: ^0.19.0
+
+  # HTTP Client
+  http: ^1.2.0
+
+  # Logger
+  l: 5.0.0-pre.2
 
   shared:
     path: ../shared

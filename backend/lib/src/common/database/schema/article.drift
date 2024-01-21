@@ -26,6 +26,19 @@ CREATE INDEX IF NOT EXISTS article_tbl_updated_at_idx ON article_tbl (updated_at
 
 
 
+/* ARTICLE CONTENT TABLE */
+
+-- Article table
+CREATE TABLE IF NOT EXISTS article_content_tbl (
+    -- req Unique GUID identifier of the article in the database
+    article_id TEXT NOT NULL PRIMARY KEY,
+
+    -- Time is the timestamp (in seconds)
+    content BLOB NOT NULL
+) STRICT;
+
+
+
 /* TAGS TABLE */
 
 -- Tags table
@@ -59,14 +72,14 @@ CREATE TABLE IF NOT EXISTS article_prefix_tbl (
     -- req Prefix (first 3 chars of word, lowercased)
     prefix TEXT NOT NULL CHECK(length(prefix) = 3),
 
-    -- req Unique identifier
-    article_id TEXT NOT NULL,
+    -- req Unique identifier of the article
+    article_id TEXT NOT NULL CHECK(article_id != ''),
+
+    -- req Word's length
+    len INTEGER NOT NULL CHECK(len >= 3),
 
     -- req Word (3 or more chars, lowercased)
     word TEXT NOT NULL,
-
-    -- req Word's length
-    len INTEGER NOT NULL,
 
     -- Composite primary key
     PRIMARY KEY (prefix, article_id, word),

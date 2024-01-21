@@ -14,18 +14,18 @@ on:
       - "backend/lib/**.dart"
       - "backend/test/**.dart"
       - "backend/pubspec.lock"
-  pull_request:
-    branches:
-      - "master"
-      - "develop"
-      - "feature/**"
-      - "bugfix/**"
-      - "hotfix/**"
-      - "support/**"
-    paths:
-      - "backend/lib/**.dart"
-      - "backend/test/**.dart"
-      - "backend/pubspec.lock"
+  #pull_request:
+  #  branches:
+  #    - "master"
+  #    - "develop"
+  #    - "feature/**"
+  #    - "bugfix/**"
+  #    - "hotfix/**"
+  #    - "support/**"
+  #  paths:
+  #    - "backend/lib/**.dart"
+  #    - "backend/test/**.dart"
+  #    - "backend/pubspec.lock"
 
 jobs:
   checkout:
@@ -66,11 +66,13 @@ jobs:
         timeout-minutes: 1
         run: dart analyze --fatal-infos --fatal-warnings lib/
 
-      #- name: 🧪 Run tests
-      #  timeout-minutes: 2
-      #  run: |
-      #    dart run coverage:test_with_coverage -fb -o coverage -- \
-      #      --concurrency=6 --platform vm --coverage=./coverage --reporter=expanded test/unit_test.dart
+      - name: 🧪 Run tests
+        timeout-minutes: 2
+        run: |
+          apt-get -y update
+          apt-get install -y sqlite3 libsqlite3-dev
+          dart test --coverage=.coverage --timeout=120s --concurrency=12 \
+            --reporter=github --platform=vm --file-reporter=json:.coverage/tests.json
 
       #- name: 📥 Upload coverage to Codecov
       #  timeout-minutes: 1

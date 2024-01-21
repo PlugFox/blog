@@ -126,11 +126,11 @@ sealed class Pubspec {
     2024,
     1,
     21,
-    6,
-    54,
-    1,
-    559,
-    540,
+    15,
+    7,
+    14,
+    391,
+    928,
   );
 
   /// Name
@@ -429,6 +429,7 @@ sealed class Pubspec {
     'crypto': r'^3.0.3',
     'stack_trace': r'^1.11.1',
     'xml': r'^6.5.0',
+    'html': r'^0.15.4',
     'intl': r'^0.19.0',
     'http': r'^1.2.0',
     'l': r'5.0.0-pre.2',
@@ -446,6 +447,7 @@ sealed class Pubspec {
     'drift_dev': r'^2.15.0',
     'lints': r'^3.0.0',
     'test': r'^1.25.1',
+    'mockito': r'^5.4.4',
   };
 
   /// Dependency overrides

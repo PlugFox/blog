@@ -281,6 +281,185 @@ class ArticleTblCompanion extends UpdateCompanion<ArticleTblData> {
   }
 }
 
+class ArticleContentTbl extends Table with TableInfo<ArticleContentTbl, ArticleContentTblData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  ArticleContentTbl(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _articleIdMeta = VerificationMeta('articleId');
+  late final GeneratedColumn<String> articleId = GeneratedColumn<String>('article_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL PRIMARY KEY');
+  static const VerificationMeta _contentMeta = VerificationMeta('content');
+  late final GeneratedColumn<Uint8List> content = GeneratedColumn<Uint8List>('content', aliasedName, false,
+      type: DriftSqlType.blob, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns => [articleId, content];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'article_content_tbl';
+  @override
+  VerificationContext validateIntegrity(Insertable<ArticleContentTblData> instance, {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('article_id')) {
+      context.handle(_articleIdMeta, articleId.isAcceptableOrUnknown(data['article_id']!, _articleIdMeta));
+    } else if (isInserting) {
+      context.missing(_articleIdMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta, content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {articleId};
+  @override
+  ArticleContentTblData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ArticleContentTblData(
+      articleId: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}article_id'])!,
+      content: attachedDatabase.typeMapping.read(DriftSqlType.blob, data['${effectivePrefix}content'])!,
+    );
+  }
+
+  @override
+  ArticleContentTbl createAlias(String alias) {
+    return ArticleContentTbl(attachedDatabase, alias);
+  }
+
+  @override
+  bool get isStrict => true;
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class ArticleContentTblData extends DataClass implements Insertable<ArticleContentTblData> {
+  /// req Unique GUID identifier of the article in the database
+  final String articleId;
+
+  /// Time is the timestamp (in seconds)
+  final Uint8List content;
+  const ArticleContentTblData({required this.articleId, required this.content});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['article_id'] = Variable<String>(articleId);
+    map['content'] = Variable<Uint8List>(content);
+    return map;
+  }
+
+  ArticleContentTblCompanion toCompanion(bool nullToAbsent) {
+    return ArticleContentTblCompanion(
+      articleId: Value(articleId),
+      content: Value(content),
+    );
+  }
+
+  factory ArticleContentTblData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ArticleContentTblData(
+      articleId: serializer.fromJson<String>(json['article_id']),
+      content: serializer.fromJson<Uint8List>(json['content']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'article_id': serializer.toJson<String>(articleId),
+      'content': serializer.toJson<Uint8List>(content),
+    };
+  }
+
+  ArticleContentTblData copyWith({String? articleId, Uint8List? content}) => ArticleContentTblData(
+        articleId: articleId ?? this.articleId,
+        content: content ?? this.content,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ArticleContentTblData(')
+          ..write('articleId: $articleId, ')
+          ..write('content: $content')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(articleId, $driftBlobEquality.hash(content));
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ArticleContentTblData &&
+          other.articleId == this.articleId &&
+          $driftBlobEquality.equals(other.content, this.content));
+}
+
+class ArticleContentTblCompanion extends UpdateCompanion<ArticleContentTblData> {
+  final Value<String> articleId;
+  final Value<Uint8List> content;
+  final Value<int> rowid;
+  const ArticleContentTblCompanion({
+    this.articleId = const Value.absent(),
+    this.content = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ArticleContentTblCompanion.insert({
+    required String articleId,
+    required Uint8List content,
+    this.rowid = const Value.absent(),
+  })  : articleId = Value(articleId),
+        content = Value(content);
+  static Insertable<ArticleContentTblData> custom({
+    Expression<String>? articleId,
+    Expression<Uint8List>? content,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (articleId != null) 'article_id': articleId,
+      if (content != null) 'content': content,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ArticleContentTblCompanion copyWith({Value<String>? articleId, Value<Uint8List>? content, Value<int>? rowid}) {
+    return ArticleContentTblCompanion(
+      articleId: articleId ?? this.articleId,
+      content: content ?? this.content,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (articleId.present) {
+      map['article_id'] = Variable<String>(articleId.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<Uint8List>(content.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ArticleContentTblCompanion(')
+          ..write('articleId: $articleId, ')
+          ..write('content: $content, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class ArticleTagTbl extends Table with TableInfo<ArticleTagTbl, ArticleTagTblData> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -490,15 +669,15 @@ class ArticlePrefixTbl extends Table with TableInfo<ArticlePrefixTbl, ArticlePre
       type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL CHECK (length(prefix) = 3)');
   static const VerificationMeta _articleIdMeta = VerificationMeta('articleId');
   late final GeneratedColumn<String> articleId = GeneratedColumn<String>('article_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
+      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL CHECK (article_id != \'\')');
+  static const VerificationMeta _lenMeta = VerificationMeta('len');
+  late final GeneratedColumn<int> len = GeneratedColumn<int>('len', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true, $customConstraints: 'NOT NULL CHECK (len >= 3)');
   static const VerificationMeta _wordMeta = VerificationMeta('word');
   late final GeneratedColumn<String> word = GeneratedColumn<String>('word', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
-  static const VerificationMeta _lenMeta = VerificationMeta('len');
-  late final GeneratedColumn<int> len = GeneratedColumn<int>('len', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
   @override
-  List<GeneratedColumn> get $columns => [prefix, articleId, word, len];
+  List<GeneratedColumn> get $columns => [prefix, articleId, len, word];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -518,15 +697,15 @@ class ArticlePrefixTbl extends Table with TableInfo<ArticlePrefixTbl, ArticlePre
     } else if (isInserting) {
       context.missing(_articleIdMeta);
     }
-    if (data.containsKey('word')) {
-      context.handle(_wordMeta, word.isAcceptableOrUnknown(data['word']!, _wordMeta));
-    } else if (isInserting) {
-      context.missing(_wordMeta);
-    }
     if (data.containsKey('len')) {
       context.handle(_lenMeta, len.isAcceptableOrUnknown(data['len']!, _lenMeta));
     } else if (isInserting) {
       context.missing(_lenMeta);
+    }
+    if (data.containsKey('word')) {
+      context.handle(_wordMeta, word.isAcceptableOrUnknown(data['word']!, _wordMeta));
+    } else if (isInserting) {
+      context.missing(_wordMeta);
     }
     return context;
   }
@@ -539,8 +718,8 @@ class ArticlePrefixTbl extends Table with TableInfo<ArticlePrefixTbl, ArticlePre
     return ArticlePrefixTblData(
       prefix: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}prefix'])!,
       articleId: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}article_id'])!,
-      word: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}word'])!,
       len: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}len'])!,
+      word: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}word'])!,
     );
   }
 
@@ -564,22 +743,22 @@ class ArticlePrefixTblData extends DataClass implements Insertable<ArticlePrefix
   /// req Prefix (first 3 chars of word, lowercased)
   final String prefix;
 
-  /// req Unique identifier
+  /// req Unique identifier of the article
   final String articleId;
-
-  /// req Word (3 or more chars, lowercased)
-  final String word;
 
   /// req Word's length
   final int len;
-  const ArticlePrefixTblData({required this.prefix, required this.articleId, required this.word, required this.len});
+
+  /// req Word (3 or more chars, lowercased)
+  final String word;
+  const ArticlePrefixTblData({required this.prefix, required this.articleId, required this.len, required this.word});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['prefix'] = Variable<String>(prefix);
     map['article_id'] = Variable<String>(articleId);
-    map['word'] = Variable<String>(word);
     map['len'] = Variable<int>(len);
+    map['word'] = Variable<String>(word);
     return map;
   }
 
@@ -587,8 +766,8 @@ class ArticlePrefixTblData extends DataClass implements Insertable<ArticlePrefix
     return ArticlePrefixTblCompanion(
       prefix: Value(prefix),
       articleId: Value(articleId),
-      word: Value(word),
       len: Value(len),
+      word: Value(word),
     );
   }
 
@@ -597,8 +776,8 @@ class ArticlePrefixTblData extends DataClass implements Insertable<ArticlePrefix
     return ArticlePrefixTblData(
       prefix: serializer.fromJson<String>(json['prefix']),
       articleId: serializer.fromJson<String>(json['article_id']),
-      word: serializer.fromJson<String>(json['word']),
       len: serializer.fromJson<int>(json['len']),
+      word: serializer.fromJson<String>(json['word']),
     );
   }
   @override
@@ -607,86 +786,86 @@ class ArticlePrefixTblData extends DataClass implements Insertable<ArticlePrefix
     return <String, dynamic>{
       'prefix': serializer.toJson<String>(prefix),
       'article_id': serializer.toJson<String>(articleId),
-      'word': serializer.toJson<String>(word),
       'len': serializer.toJson<int>(len),
+      'word': serializer.toJson<String>(word),
     };
   }
 
-  ArticlePrefixTblData copyWith({String? prefix, String? articleId, String? word, int? len}) => ArticlePrefixTblData(
+  ArticlePrefixTblData copyWith({String? prefix, String? articleId, int? len, String? word}) => ArticlePrefixTblData(
         prefix: prefix ?? this.prefix,
         articleId: articleId ?? this.articleId,
-        word: word ?? this.word,
         len: len ?? this.len,
+        word: word ?? this.word,
       );
   @override
   String toString() {
     return (StringBuffer('ArticlePrefixTblData(')
           ..write('prefix: $prefix, ')
           ..write('articleId: $articleId, ')
-          ..write('word: $word, ')
-          ..write('len: $len')
+          ..write('len: $len, ')
+          ..write('word: $word')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(prefix, articleId, word, len);
+  int get hashCode => Object.hash(prefix, articleId, len, word);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ArticlePrefixTblData &&
           other.prefix == this.prefix &&
           other.articleId == this.articleId &&
-          other.word == this.word &&
-          other.len == this.len);
+          other.len == this.len &&
+          other.word == this.word);
 }
 
 class ArticlePrefixTblCompanion extends UpdateCompanion<ArticlePrefixTblData> {
   final Value<String> prefix;
   final Value<String> articleId;
-  final Value<String> word;
   final Value<int> len;
+  final Value<String> word;
   final Value<int> rowid;
   const ArticlePrefixTblCompanion({
     this.prefix = const Value.absent(),
     this.articleId = const Value.absent(),
-    this.word = const Value.absent(),
     this.len = const Value.absent(),
+    this.word = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   ArticlePrefixTblCompanion.insert({
     required String prefix,
     required String articleId,
-    required String word,
     required int len,
+    required String word,
     this.rowid = const Value.absent(),
   })  : prefix = Value(prefix),
         articleId = Value(articleId),
-        word = Value(word),
-        len = Value(len);
+        len = Value(len),
+        word = Value(word);
   static Insertable<ArticlePrefixTblData> custom({
     Expression<String>? prefix,
     Expression<String>? articleId,
-    Expression<String>? word,
     Expression<int>? len,
+    Expression<String>? word,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (prefix != null) 'prefix': prefix,
       if (articleId != null) 'article_id': articleId,
-      if (word != null) 'word': word,
       if (len != null) 'len': len,
+      if (word != null) 'word': word,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
   ArticlePrefixTblCompanion copyWith(
-      {Value<String>? prefix, Value<String>? articleId, Value<String>? word, Value<int>? len, Value<int>? rowid}) {
+      {Value<String>? prefix, Value<String>? articleId, Value<int>? len, Value<String>? word, Value<int>? rowid}) {
     return ArticlePrefixTblCompanion(
       prefix: prefix ?? this.prefix,
       articleId: articleId ?? this.articleId,
-      word: word ?? this.word,
       len: len ?? this.len,
+      word: word ?? this.word,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -700,11 +879,11 @@ class ArticlePrefixTblCompanion extends UpdateCompanion<ArticlePrefixTblData> {
     if (articleId.present) {
       map['article_id'] = Variable<String>(articleId.value);
     }
-    if (word.present) {
-      map['word'] = Variable<String>(word.value);
-    }
     if (len.present) {
       map['len'] = Variable<int>(len.value);
+    }
+    if (word.present) {
+      map['word'] = Variable<String>(word.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -717,8 +896,8 @@ class ArticlePrefixTblCompanion extends UpdateCompanion<ArticlePrefixTblData> {
     return (StringBuffer('ArticlePrefixTblCompanion(')
           ..write('prefix: $prefix, ')
           ..write('articleId: $articleId, ')
-          ..write('word: $word, ')
           ..write('len: $len, ')
+          ..write('word: $word, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1603,6 +1782,7 @@ abstract class _$Database extends GeneratedDatabase {
       'CREATE INDEX IF NOT EXISTS article_tbl_created_at_idx ON article_tbl (created_at)');
   late final Index articleTblUpdatedAtIdx = Index('article_tbl_updated_at_idx',
       'CREATE INDEX IF NOT EXISTS article_tbl_updated_at_idx ON article_tbl (updated_at)');
+  late final ArticleContentTbl articleContentTbl = ArticleContentTbl(this);
   late final ArticleTagTbl articleTagTbl = ArticleTagTbl(this);
   late final Index articleTagArticleIdIdx = Index('article_tag_article_id_idx',
       'CREATE INDEX IF NOT EXISTS article_tag_article_id_idx ON article_tag_tbl (article_id)');
@@ -1642,6 +1822,7 @@ abstract class _$Database extends GeneratedDatabase {
         articleTbl,
         articleTblCreatedAtIdx,
         articleTblUpdatedAtIdx,
+        articleContentTbl,
         articleTagTbl,
         articleTagArticleIdIdx,
         articleTagTagIdx,

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:backend/src/common/database/database.dart';
+import 'package:backend/src/common/server/injector.dart';
 import 'package:backend/src/common/server/responses.dart';
 import 'package:shared/shared.dart' as shared;
 import 'package:shelf/shelf.dart' as shelf;
@@ -14,7 +15,8 @@ import 'package:shelf/shelf.dart' as shelf;
 ///
 /// E.g. `http://127.0.0.1:8080/admin/logs?verbose=3&format=pretty`
 FutureOr<shelf.Response> $logs(shelf.Request request) async {
-  final database = request.context['DATABASE'] as Database;
+  final Dependencies(:database) = Dependencies.from(request);
+
   final verbose = switch (request.requestedUri.queryParameters['verbose']?.trim()) {
     String v when v.isNotEmpty => int.tryParse(v)?.clamp(0, 6),
     _ => null,
@@ -43,7 +45,7 @@ FutureOr<shelf.Response> $logs(shelf.Request request) async {
         },
       );
     case 'pretty' || 'csv' || 'tsv' || 'human':
-      final buffer = StringBuffer();
+      final buffer = StringBuffer('');
       const separator = ',';
       for (final log in logsList) {
         buffer

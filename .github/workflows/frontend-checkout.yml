@@ -14,18 +14,18 @@ on:
       - "frontend/lib/**.dart"
       - "frontend/test/**.dart"
       - "frontend/pubspec.lock"
-  pull_request:
-    branches:
-      - "master"
-      - "develop"
-      - "feature/**"
-      - "bugfix/**"
-      - "hotfix/**"
-      - "support/**"
-    paths:
-      - "frontend/lib/**.dart"
-      - "frontend/test/**.dart"
-      - "frontend/pubspec.lock"
+  #pull_request:
+  #  branches:
+  #    - "master"
+  #    - "develop"
+  #    - "feature/**"
+  #    - "bugfix/**"
+  #    - "hotfix/**"
+  #    - "support/**"
+  #  paths:
+  #    - "frontend/lib/**.dart"
+  #    - "frontend/test/**.dart"
+  #    - "frontend/pubspec.lock"
 
 jobs:
   checkout:

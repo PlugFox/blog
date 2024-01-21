@@ -38,6 +38,7 @@ dependencies:
   crypto: ^3.0.3
   stack_trace: ^1.11.1
   xml: ^6.5.0
+  html: ^0.15.4
   intl: ^0.19.0
 
   # HTTP Client
@@ -60,3 +61,4 @@ dev_dependencies:
   drift_dev: ^2.15.0
   lints: ^3.0.0
   test: ^1.25.1
+  mockito: ^5.4.4

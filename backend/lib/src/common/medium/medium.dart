@@ -1,6 +1,4 @@
-import 'dart:typed_data' as td;
-
-import 'package:backend/src/common/database/database.dart' as db;
+import 'package:html/dom.dart' as dom;
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared/shared.dart' as shared;
@@ -9,16 +7,13 @@ import 'package:xml/xml.dart' as xml;
 /// {@template medium}
 /// Medium service.
 /// {@endtemplate}
-final class Medium {
+class Medium {
   /// {@macro medium}
   Medium({
     required http.Client client,
-    required db.Database database,
-  })  : _client = client,
-        _database = database;
+  }) : _client = client;
 
   final http.Client _client;
-  final db.Database _database;
 
   /// Fetch and parse https://medium.com/feed/@username
   Future<List<shared.Article>> fetchArticlesRSS(String username) async {
@@ -28,7 +23,6 @@ final class Medium {
     final document = xml.XmlDocument.parse(xmlString);
     final items = document.findAllElements('item');
     final dateFormat = DateFormat('EEE, dd MMM yyyy HH:mm:ss \'GMT\'');
-    final excerptRegExp = RegExp(r'<p>(?<text>.+)<\/p>');
     Iterable<String> extractAll(xml.XmlElement node, List<String> names, {bool recursive = false}) => names
         .expand<xml.XmlElement>(recursive ? node.findAllElements : node.findElements)
         .map<String>((e) => e.innerText)
@@ -47,14 +41,8 @@ final class Medium {
     return items
         .map<shared.Article?>((node) {
           final content = extractFirst(node, ['content:encoded', 'content']) ?? '';
-          var excerpt = content.isNotEmpty
-              ? excerptRegExp
-                  .allMatches(content)
-                  .map<String?>((e) => e.namedGroup('text'))
-                  .whereType<String>()
-                  .join(' ')
-              : '';
-          excerpt = excerpt.replaceAll(RegExp('<[^>]*>'), '');
+          var excerpt = content.isNotEmpty ? dom.Document.html('<html><body>$content</body></html>').body?.text : null;
+          excerpt ??= '';
           if (excerpt.length > 140) excerpt = '${excerpt.substring(0, 140 - 3)}...';
           final link = extractFirst(node, ['link', 'url', 'dc:link', 'og:url', 'al:url']) ?? '';
           final guid = extractFirst(node, ['guid', 'dc:guid', 'identifier'])?.split('/').lastOrNull ??
@@ -85,38 +73,4 @@ final class Medium {
         .whereType<shared.Article>()
         .toList(growable: false);
   }
-
-  /// Upsert articles into the database.
-  Future<void> upsertArticlesIntoDatabase(List<shared.Article> articles) => _database.batch((batch) async {
-        batch.insertAllOnConflictUpdate(
-          _database.articleTbl,
-          articles
-              .where((e) => e.hasId() && e.id.isNotEmpty)
-              .map<db.Insertable<db.ArticleTblData>>(
-                (e) => db.ArticleTblCompanion(
-                  id: db.Value<String>(e.id),
-                  title: db.Value(e.hasTitle() ? e.title : ''),
-                  createdAt: db.Value(e.hasCreatedAt() ? e.createdAt : 0),
-                  updatedAt: db.Value(e.hasUpdatedAt() ? e.updatedAt : 0),
-                  data: db.Value(e.writeToBuffer()),
-                ),
-              )
-              .toList(growable: false),
-        );
-      });
-
-  /// Get articles from the database.
-  Future<List<shared.Article>> getArticlesFromDatabase({int? from, int? to, int? limit, int? offset}) async {
-    final select = _database.select(_database.articleTbl);
-    if (from != null) select.where((tbl) => tbl.createdAt.isBiggerOrEqualValue(from));
-    if (to != null) select.where((tbl) => tbl.createdAt.isSmallerOrEqualValue(to));
-    select
-      ..limit(limit ?? 1000, offset: offset ?? 0)
-      ..orderBy([(tbl) => db.OrderingTerm.asc(tbl.createdAt)]);
-    return await select.get().then((rows) =>
-        rows.map<td.Uint8List>((e) => e.data).map<shared.Article>(shared.Article.fromBuffer).toList(growable: false));
-  }
-
-  /// Search articles in the database.
-  Future<List<shared.Article>> searchInDatabase(String search) => Future.value(<shared.Article>[]);
 }

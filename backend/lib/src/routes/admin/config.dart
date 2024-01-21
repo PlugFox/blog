@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:backend/src/common/config/app_metadata.dart';
-import 'package:backend/src/common/config/config.dart';
+import 'package:backend/src/common/server/injector.dart';
 import 'package:backend/src/common/server/responses.dart';
 import 'package:shelf/shelf.dart' as shelf;
 
 FutureOr<shelf.Response> $config(shelf.Request request) {
   final metadata = AppMetadata();
-  final config = request.context['CONFIG'] as Config;
+  final Dependencies(:config) = Dependencies.from(request);
   return Responses.ok(
     <String, Object?>{
       'environment': config.environment.name,
