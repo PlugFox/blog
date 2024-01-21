@@ -13,13 +13,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-enum Response_Data {
-  string, 
-  bytes, 
-  article, 
-  articles, 
-  notSet
-}
+enum Response_Data { string, bytes, article, articles, notSet }
 
 /// Response represents a response from API.
 class Response extends $pb.GeneratedMessage {
@@ -57,17 +51,20 @@ class Response extends $pb.GeneratedMessage {
     return $result;
   }
   Response._() : super();
-  factory Response.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Response.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory Response.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(i, r);
+  factory Response.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(i, r);
 
   static const $core.Map<$core.int, Response_Data> _Response_DataByTag = {
-    3 : Response_Data.string,
-    4 : Response_Data.bytes,
-    5 : Response_Data.article,
-    6 : Response_Data.articles,
-    0 : Response_Data.notSet
+    3: Response_Data.string,
+    4: Response_Data.bytes,
+    5: Response_Data.article,
+    6: Response_Data.articles,
+    0: Response_Data.notSet
   };
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Response', package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Response',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
     ..oo(0, [3, 4, 5, 6])
     ..aOS(1, _omitFieldNames ? '' : 'status')
     ..aOS(2, _omitFieldNames ? '' : 'error')
@@ -75,20 +72,22 @@ class Response extends $pb.GeneratedMessage {
     ..a<$core.List<$core.int>>(4, _omitFieldNames ? '' : 'bytes', $pb.PbFieldType.OY)
     ..aOM<Article>(5, _omitFieldNames ? '' : 'article', subBuilder: Article.create)
     ..aOM<Articles>(6, _omitFieldNames ? '' : 'articles', subBuilder: Articles.create)
-    ..m<$core.String, $core.String>(1000, _omitFieldNames ? '' : 'meta', entryClassName: 'Response.MetaEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('blog.api'))
-    ..hasRequiredFields = false
-  ;
+    ..m<$core.String, $core.String>(1000, _omitFieldNames ? '' : 'meta',
+        entryClassName: 'Response.MetaEntry',
+        keyFieldType: $pb.PbFieldType.OS,
+        valueFieldType: $pb.PbFieldType.OS,
+        packageName: const $pb.PackageName('blog.api'))
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+      'Will be removed in next major version')
   Response clone() => Response()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Response copyWith(void Function(Response) updates) => super.copyWith((message) => updates(message as Response)) as Response;
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+      'Will be removed in next major version')
+  Response copyWith(void Function(Response) updates) =>
+      super.copyWith((message) => updates(message as Response)) as Response;
 
   $pb.BuilderInfo get info_ => _i;
 
@@ -106,7 +105,10 @@ class Response extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get status => $_getSZ(0);
   @$pb.TagNumber(1)
-  set status($core.String v) { $_setString(0, v); }
+  set status($core.String v) {
+    $_setString(0, v);
+  }
+
   @$pb.TagNumber(1)
   $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
@@ -115,7 +117,10 @@ class Response extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get error => $_getSZ(1);
   @$pb.TagNumber(2)
-  set error($core.String v) { $_setString(1, v); }
+  set error($core.String v) {
+    $_setString(1, v);
+  }
+
   @$pb.TagNumber(2)
   $core.bool hasError() => $_has(1);
   @$pb.TagNumber(2)
@@ -124,7 +129,10 @@ class Response extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get string => $_getSZ(2);
   @$pb.TagNumber(3)
-  set string($core.String v) { $_setString(2, v); }
+  set string($core.String v) {
+    $_setString(2, v);
+  }
+
   @$pb.TagNumber(3)
   $core.bool hasString() => $_has(2);
   @$pb.TagNumber(3)
@@ -133,7 +141,10 @@ class Response extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.List<$core.int> get bytes => $_getN(3);
   @$pb.TagNumber(4)
-  set bytes($core.List<$core.int> v) { $_setBytes(3, v); }
+  set bytes($core.List<$core.int> v) {
+    $_setBytes(3, v);
+  }
+
   @$pb.TagNumber(4)
   $core.bool hasBytes() => $_has(3);
   @$pb.TagNumber(4)
@@ -142,7 +153,10 @@ class Response extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   Article get article => $_getN(4);
   @$pb.TagNumber(5)
-  set article(Article v) { setField(5, v); }
+  set article(Article v) {
+    setField(5, v);
+  }
+
   @$pb.TagNumber(5)
   $core.bool hasArticle() => $_has(4);
   @$pb.TagNumber(5)
@@ -153,7 +167,10 @@ class Response extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   Articles get articles => $_getN(5);
   @$pb.TagNumber(6)
-  set articles(Articles v) { setField(6, v); }
+  set articles(Articles v) {
+    setField(6, v);
+  }
+
   @$pb.TagNumber(6)
   $core.bool hasArticles() => $_has(5);
   @$pb.TagNumber(6)
@@ -189,26 +206,30 @@ class Error extends $pb.GeneratedMessage {
     return $result;
   }
   Error._() : super();
-  factory Error.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Error.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory Error.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(i, r);
+  factory Error.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Error', package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Error',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'status', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'code')
     ..aOS(3, _omitFieldNames ? '' : 'message')
-    ..m<$core.String, $core.String>(4, _omitFieldNames ? '' : 'details', entryClassName: 'Error.DetailsEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('blog.api'))
-    ..hasRequiredFields = false
-  ;
+    ..m<$core.String, $core.String>(4, _omitFieldNames ? '' : 'details',
+        entryClassName: 'Error.DetailsEntry',
+        keyFieldType: $pb.PbFieldType.OS,
+        valueFieldType: $pb.PbFieldType.OS,
+        packageName: const $pb.PackageName('blog.api'))
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+      'Will be removed in next major version')
   Error clone() => Error()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+      'Will be removed in next major version')
   Error copyWith(void Function(Error) updates) => super.copyWith((message) => updates(message as Error)) as Error;
 
   $pb.BuilderInfo get info_ => _i;
@@ -224,7 +245,10 @@ class Error extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.int get status => $_getIZ(0);
   @$pb.TagNumber(1)
-  set status($core.int v) { $_setUnsignedInt32(0, v); }
+  set status($core.int v) {
+    $_setUnsignedInt32(0, v);
+  }
+
   @$pb.TagNumber(1)
   $core.bool hasStatus() => $_has(0);
   @$pb.TagNumber(1)
@@ -233,7 +257,10 @@ class Error extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get code => $_getSZ(1);
   @$pb.TagNumber(2)
-  set code($core.String v) { $_setString(1, v); }
+  set code($core.String v) {
+    $_setString(1, v);
+  }
+
   @$pb.TagNumber(2)
   $core.bool hasCode() => $_has(1);
   @$pb.TagNumber(2)
@@ -242,7 +269,10 @@ class Error extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get message => $_getSZ(2);
   @$pb.TagNumber(3)
-  set message($core.String v) { $_setString(2, v); }
+  set message($core.String v) {
+    $_setString(2, v);
+  }
+
   @$pb.TagNumber(3)
   $core.bool hasMessage() => $_has(2);
   @$pb.TagNumber(3)
@@ -304,10 +334,13 @@ class Article extends $pb.GeneratedMessage {
     return $result;
   }
   Article._() : super();
-  factory Article.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Article.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory Article.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(i, r);
+  factory Article.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Article', package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Article',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.OU3)
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'link')
@@ -318,20 +351,22 @@ class Article extends $pb.GeneratedMessage {
     ..a<$core.int>(8, _omitFieldNames ? '' : 'updatedAt', $pb.PbFieldType.OU3, protoName: 'updatedAt')
     ..aOS(9, _omitFieldNames ? '' : 'excerpt')
     ..aOS(10, _omitFieldNames ? '' : 'content')
-    ..m<$core.String, $core.String>(1000, _omitFieldNames ? '' : 'meta', entryClassName: 'Article.MetaEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('blog.api'))
-    ..hasRequiredFields = false
-  ;
+    ..m<$core.String, $core.String>(1000, _omitFieldNames ? '' : 'meta',
+        entryClassName: 'Article.MetaEntry',
+        keyFieldType: $pb.PbFieldType.OS,
+        valueFieldType: $pb.PbFieldType.OS,
+        packageName: const $pb.PackageName('blog.api'))
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+      'Will be removed in next major version')
   Article clone() => Article()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Article copyWith(void Function(Article) updates) => super.copyWith((message) => updates(message as Article)) as Article;
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+      'Will be removed in next major version')
+  Article copyWith(void Function(Article) updates) =>
+      super.copyWith((message) => updates(message as Article)) as Article;
 
   $pb.BuilderInfo get info_ => _i;
 
@@ -346,7 +381,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.int get id => $_getIZ(0);
   @$pb.TagNumber(1)
-  set id($core.int v) { $_setUnsignedInt32(0, v); }
+  set id($core.int v) {
+    $_setUnsignedInt32(0, v);
+  }
+
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
@@ -355,7 +393,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get title => $_getSZ(1);
   @$pb.TagNumber(2)
-  set title($core.String v) { $_setString(1, v); }
+  set title($core.String v) {
+    $_setString(1, v);
+  }
+
   @$pb.TagNumber(2)
   $core.bool hasTitle() => $_has(1);
   @$pb.TagNumber(2)
@@ -364,7 +405,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get link => $_getSZ(2);
   @$pb.TagNumber(3)
-  set link($core.String v) { $_setString(2, v); }
+  set link($core.String v) {
+    $_setString(2, v);
+  }
+
   @$pb.TagNumber(3)
   $core.bool hasLink() => $_has(2);
   @$pb.TagNumber(3)
@@ -373,7 +417,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get guid => $_getSZ(3);
   @$pb.TagNumber(4)
-  set guid($core.String v) { $_setString(3, v); }
+  set guid($core.String v) {
+    $_setString(3, v);
+  }
+
   @$pb.TagNumber(4)
   $core.bool hasGuid() => $_has(3);
   @$pb.TagNumber(4)
@@ -382,7 +429,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get author => $_getSZ(4);
   @$pb.TagNumber(5)
-  set author($core.String v) { $_setString(4, v); }
+  set author($core.String v) {
+    $_setString(4, v);
+  }
+
   @$pb.TagNumber(5)
   $core.bool hasAuthor() => $_has(4);
   @$pb.TagNumber(5)
@@ -394,7 +444,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.int get createdAt => $_getIZ(6);
   @$pb.TagNumber(7)
-  set createdAt($core.int v) { $_setUnsignedInt32(6, v); }
+  set createdAt($core.int v) {
+    $_setUnsignedInt32(6, v);
+  }
+
   @$pb.TagNumber(7)
   $core.bool hasCreatedAt() => $_has(6);
   @$pb.TagNumber(7)
@@ -403,7 +456,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.int get updatedAt => $_getIZ(7);
   @$pb.TagNumber(8)
-  set updatedAt($core.int v) { $_setUnsignedInt32(7, v); }
+  set updatedAt($core.int v) {
+    $_setUnsignedInt32(7, v);
+  }
+
   @$pb.TagNumber(8)
   $core.bool hasUpdatedAt() => $_has(7);
   @$pb.TagNumber(8)
@@ -412,7 +468,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $core.String get excerpt => $_getSZ(8);
   @$pb.TagNumber(9)
-  set excerpt($core.String v) { $_setString(8, v); }
+  set excerpt($core.String v) {
+    $_setString(8, v);
+  }
+
   @$pb.TagNumber(9)
   $core.bool hasExcerpt() => $_has(8);
   @$pb.TagNumber(9)
@@ -421,7 +480,10 @@ class Article extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $core.String get content => $_getSZ(9);
   @$pb.TagNumber(10)
-  set content($core.String v) { $_setString(9, v); }
+  set content($core.String v) {
+    $_setString(9, v);
+  }
+
   @$pb.TagNumber(10)
   $core.bool hasContent() => $_has(9);
   @$pb.TagNumber(10)
@@ -451,26 +513,27 @@ class Articles extends $pb.GeneratedMessage {
     return $result;
   }
   Articles._() : super();
-  factory Articles.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Articles.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory Articles.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(i, r);
+  factory Articles.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Articles', package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Articles',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
     ..pc<Article>(1, _omitFieldNames ? '' : 'articles', $pb.PbFieldType.PM, subBuilder: Article.create)
     ..a<$core.int>(2, _omitFieldNames ? '' : 'limit', $pb.PbFieldType.OU3)
     ..a<$core.int>(3, _omitFieldNames ? '' : 'offset', $pb.PbFieldType.OU3)
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+      'Will be removed in next major version')
   Articles clone() => Articles()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  Articles copyWith(void Function(Articles) updates) => super.copyWith((message) => updates(message as Articles)) as Articles;
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+      'Will be removed in next major version')
+  Articles copyWith(void Function(Articles) updates) =>
+      super.copyWith((message) => updates(message as Articles)) as Articles;
 
   $pb.BuilderInfo get info_ => _i;
 
@@ -488,7 +551,10 @@ class Articles extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get limit => $_getIZ(1);
   @$pb.TagNumber(2)
-  set limit($core.int v) { $_setUnsignedInt32(1, v); }
+  set limit($core.int v) {
+    $_setUnsignedInt32(1, v);
+  }
+
   @$pb.TagNumber(2)
   $core.bool hasLimit() => $_has(1);
   @$pb.TagNumber(2)
@@ -497,7 +563,10 @@ class Articles extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get offset => $_getIZ(2);
   @$pb.TagNumber(3)
-  set offset($core.int v) { $_setUnsignedInt32(2, v); }
+  set offset($core.int v) {
+    $_setUnsignedInt32(2, v);
+  }
+
   @$pb.TagNumber(3)
   $core.bool hasOffset() => $_has(2);
   @$pb.TagNumber(3)
@@ -540,30 +609,35 @@ class LogMessage extends $pb.GeneratedMessage {
     return $result;
   }
   LogMessage._() : super();
-  factory LogMessage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory LogMessage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  factory LogMessage.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(i, r);
+  factory LogMessage.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(i, r);
 
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LogMessage', package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LogMessage',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
     ..a<$core.int>(1, _omitFieldNames ? '' : 'timestamp', $pb.PbFieldType.OU3)
     ..a<$core.int>(2, _omitFieldNames ? '' : 'level', $pb.PbFieldType.OU3)
     ..aOS(3, _omitFieldNames ? '' : 'prefix')
     ..aOS(4, _omitFieldNames ? '' : 'message')
     ..aOS(5, _omitFieldNames ? '' : 'stacktrace')
-    ..m<$core.String, $core.String>(6, _omitFieldNames ? '' : 'context', entryClassName: 'LogMessage.ContextEntry', keyFieldType: $pb.PbFieldType.OS, valueFieldType: $pb.PbFieldType.OS, packageName: const $pb.PackageName('blog.api'))
+    ..m<$core.String, $core.String>(6, _omitFieldNames ? '' : 'context',
+        entryClassName: 'LogMessage.ContextEntry',
+        keyFieldType: $pb.PbFieldType.OS,
+        valueFieldType: $pb.PbFieldType.OS,
+        packageName: const $pb.PackageName('blog.api'))
     ..aOB(7, _omitFieldNames ? '' : 'error')
-    ..hasRequiredFields = false
-  ;
+    ..hasRequiredFields = false;
 
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-  'Will be removed in next major version')
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+      'Will be removed in next major version')
   LogMessage clone() => LogMessage()..mergeFromMessage(this);
-  @$core.Deprecated(
-  'Using this can add significant overhead to your binary. '
-  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-  'Will be removed in next major version')
-  LogMessage copyWith(void Function(LogMessage) updates) => super.copyWith((message) => updates(message as LogMessage)) as LogMessage;
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+      'Will be removed in next major version')
+  LogMessage copyWith(void Function(LogMessage) updates) =>
+      super.copyWith((message) => updates(message as LogMessage)) as LogMessage;
 
   $pb.BuilderInfo get info_ => _i;
 
@@ -578,7 +652,10 @@ class LogMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.int get timestamp => $_getIZ(0);
   @$pb.TagNumber(1)
-  set timestamp($core.int v) { $_setUnsignedInt32(0, v); }
+  set timestamp($core.int v) {
+    $_setUnsignedInt32(0, v);
+  }
+
   @$pb.TagNumber(1)
   $core.bool hasTimestamp() => $_has(0);
   @$pb.TagNumber(1)
@@ -587,7 +664,10 @@ class LogMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get level => $_getIZ(1);
   @$pb.TagNumber(2)
-  set level($core.int v) { $_setUnsignedInt32(1, v); }
+  set level($core.int v) {
+    $_setUnsignedInt32(1, v);
+  }
+
   @$pb.TagNumber(2)
   $core.bool hasLevel() => $_has(1);
   @$pb.TagNumber(2)
@@ -596,7 +676,10 @@ class LogMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get prefix => $_getSZ(2);
   @$pb.TagNumber(3)
-  set prefix($core.String v) { $_setString(2, v); }
+  set prefix($core.String v) {
+    $_setString(2, v);
+  }
+
   @$pb.TagNumber(3)
   $core.bool hasPrefix() => $_has(2);
   @$pb.TagNumber(3)
@@ -605,7 +688,10 @@ class LogMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get message => $_getSZ(3);
   @$pb.TagNumber(4)
-  set message($core.String v) { $_setString(3, v); }
+  set message($core.String v) {
+    $_setString(3, v);
+  }
+
   @$pb.TagNumber(4)
   $core.bool hasMessage() => $_has(3);
   @$pb.TagNumber(4)
@@ -614,7 +700,10 @@ class LogMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get stacktrace => $_getSZ(4);
   @$pb.TagNumber(5)
-  set stacktrace($core.String v) { $_setString(4, v); }
+  set stacktrace($core.String v) {
+    $_setString(4, v);
+  }
+
   @$pb.TagNumber(5)
   $core.bool hasStacktrace() => $_has(4);
   @$pb.TagNumber(5)
@@ -626,13 +715,15 @@ class LogMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.bool get error => $_getBF(6);
   @$pb.TagNumber(7)
-  set error($core.bool v) { $_setBool(6, v); }
+  set error($core.bool v) {
+    $_setBool(6, v);
+  }
+
   @$pb.TagNumber(7)
   $core.bool hasError() => $_has(6);
   @$pb.TagNumber(7)
   void clearError() => clearField(7);
 }
-
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
 const _omitMessageNames = $core.bool.fromEnvironment('protobuf.omit_message_names');
