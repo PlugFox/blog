@@ -11,26 +11,23 @@ import 'package:backend/src/common/util/log_buffer.dart';
 import 'package:l/l.dart';
 import 'package:shared/shared.dart' as shared;
 
-typedef InitializationResult = ({Config config, Map<String, Object?> context});
-
 /// Ephemerally initializes the app and prepares it for use.
-FutureOr<InitializationResult>? _$initializeServer;
+FutureOr<InitializationProgress>? _$initializeServer;
 
 /// Initializes the server and prepares it for use.
-FutureOr<InitializationResult> $initializeServer({
+FutureOr<InitializationProgress> $initializeServer({
   List<String>? arguments,
   void Function(int progress, String message)? onProgress,
-  FutureOr<void> Function(InitializationResult result)? onSuccess,
+  FutureOr<void> Function(InitializationProgress result)? onSuccess,
   void Function(Object error, StackTrace stackTrace)? onError,
 }) =>
-    _$initializeServer ??= Future<InitializationResult>.sync(() async {
+    _$initializeServer ??= Future<InitializationProgress>.sync(() async {
       l.v6('Initialization | Start');
       final stopwatch = Stopwatch()..start();
       try {
         final config = _$initializeServer$Config(arguments);
-        final context =
+        final result =
             await _$initializeServer$Steps(config: config, onProgress: onProgress).timeout(const Duration(minutes: 15));
-        final result = (config: config, context: context);
         await onSuccess?.call(result);
         return result;
       } on Object catch (error, stackTrace) {
@@ -182,45 +179,49 @@ Config _$initializeServer$Config(List<String>? arguments) {
 }
 
 /// Initializes the server and returns a [Config] object
-Future<Map<String, Object?>> _$initializeServer$Steps({
+Future<InitializationProgress> _$initializeServer$Steps({
   required Config config,
   void Function(int progress, String message)? onProgress,
 }) async {
-  final totalSteps = _initializationSteps.length;
-  var currentStep = 0;
-  final context = <String, Object?>{};
+  final progress = InitializationProgress()
+    .._totalSteps = _initializationSteps.length
+    .._currentStep = 0
+    ..config = config;
   for (final step in _initializationSteps.entries) {
     try {
-      currentStep++;
-      final percent = (currentStep * 100 ~/ totalSteps).clamp(0, 100);
+      progress._currentStep++;
+      progress._currentStepName = step.key;
+      final percent = (progress._currentStep * 100 ~/ progress._totalSteps).clamp(0, 100);
       onProgress?.call(percent, step.key);
-      l.v6('Initialization | $currentStep/$totalSteps ($percent%) | "${step.key}"');
-      await step.value(config, context);
+      l.v6('Initialization | ${progress._currentStep}/${progress._totalSteps} ($percent%) | "${step.key}"');
+      await step.value(progress);
     } on Object catch (error, stackTrace) {
       l.e('Initialization failed at step "${step.key}": $error', stackTrace);
       Error.throwWithStackTrace('Initialization failed at step "${step.key}": $error', stackTrace);
     }
   }
-  return context;
+  return progress;
 }
 
-typedef _InitializationStep = FutureOr<void> Function(Config config, Map<String, Object?> context);
+typedef _InitializationStep = FutureOr<void> Function(InitializationProgress progress);
 final Map<String, _InitializationStep> _initializationSteps = <String, _InitializationStep>{
-  'Creating app metadata': (config, context) => AppMetadata(),
-  'igint: Ctrl + C': (config, context) {
+  'Creating app metadata': (progress) => AppMetadata(),
+  'igint: Ctrl + C': (progress) {
     void signalHandler(io.ProcessSignal signal) => io.exit(0);
     // SIGTERM is not supported on Windows.
     // Attempting to register a SIGTERM handler raises an exception.
     if (!io.Platform.isWindows) io.ProcessSignal.sigterm.watch().listen(signalHandler, cancelOnError: false);
     io.ProcessSignal.sigint.watch().listen(signalHandler, cancelOnError: false);
   },
-  'Connect to database': (config, context) async {
-    final database = config.database == ':memory:' ? Database.memory() : Database.lazy(file: io.File(config.database));
+  'Connect to database': (progress) async {
+    final database = progress.config.database == ':memory:'
+        ? Database.memory()
+        : Database.lazy(file: io.File(progress.config.database));
     await database.refresh();
-    context['database'] = database;
+    progress.database = database;
   },
-  'Shrink database': (config, context) async {
-    final database = context['database'] as Database;
+  'Shrink database': (progress) async {
+    final database = progress.database;
     await database.customStatement('VACUUM;');
     await database.transaction(() async {
       final log = await (database.select<LogTbl, LogTblData>(database.logTbl)
@@ -234,13 +235,13 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     });
     /* if (DateTime.now().second % 10 == 0) */ await database.customStatement('VACUUM;');
   },
-  'Migrate app from previous version': (config, context) async {
-    final database = context['database'] as Database;
+  'Migrate app from previous version': (progress) async {
+    final database = progress.database;
     await AppMigrator.migrate(database);
   },
   // --- Last step --- //
-  'Collect logs': (config, context) async {
-    final database = context['database'] as Database;
+  'Collect logs': (progress) async {
+    final database = progress.database;
     await (database.select<LogTbl, LogTblData>(database.logTbl)
           ..orderBy([(tbl) => OrderingTerm(expression: tbl.timestamp, mode: OrderingMode.desc)])
           ..limit(LogBuffer.bufferLimit))
@@ -301,7 +302,22 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       database.batch((batch) => batch.insertAll(database.logTbl, logs)).ignore();
     });
 
-    context['log_buffer'] = LogBuffer.instance;
-    context['log_collector'] = timer;
+    progress
+      ..logBuffer = LogBuffer.instance
+      ..logCollector = timer;
   },
 };
+
+final class InitializationProgress {
+  InitializationProgress();
+
+  int _currentStep = 0;
+  int _totalSteps = 0;
+  String _currentStepName = '';
+
+  late final Config config;
+  late final Database database;
+  late final LogBuffer logBuffer;
+  late final Timer logCollector;
+  final Map<String, Object?> context = <String, Object?>{};
+}

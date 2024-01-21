@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:backend/src/common/medium/article_converter.dart';
-import 'package:backend/src/common/medium/article_dao.dart';
+import 'package:backend/src/common/server/injector.dart';
 import 'package:backend/src/common/server/responses.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf_router/shelf_router.dart';
@@ -19,8 +19,7 @@ FutureOr<shelf.Response> $getArticle(shelf.Request request) async {
         },
       ));
   if (id == null || id.isEmpty) return notFound();
-
-  final dao = request.context['ARTICLE_DAO'] as ArticleDAO;
+  final Dependencies(articleDAO: dao) = Dependencies.from(request);
   final article = await dao.getArticleFromDatabase(id);
   if (article == null) return notFound();
   switch (request.requestedUri.queryParameters['format']?.trim().toLowerCase()) {

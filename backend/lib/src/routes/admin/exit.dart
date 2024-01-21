@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io' as io;
 
-import 'package:backend/src/common/database/database.dart';
+import 'package:backend/src/common/server/injector.dart';
 import 'package:backend/src/common/server/responses.dart';
 import 'package:shelf/shelf.dart' as shelf;
 
@@ -9,7 +9,8 @@ import 'package:shelf/shelf.dart' as shelf;
 ///
 /// E.g. `http://127.0.0.1:8080/admin/exit?code=0`
 FutureOr<shelf.Response> $exit(shelf.Request request) async {
-  final database = request.context['DATABASE'] as Database;
+  final Dependencies(:database) = Dependencies.from(request);
+
   final code = switch (request.requestedUri.queryParameters['code']?.trim()) {
     String value when value.isNotEmpty => int.tryParse(value),
     _ => null,

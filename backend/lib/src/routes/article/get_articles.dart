@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:backend/src/common/medium/article_converter.dart';
-import 'package:backend/src/common/medium/article_dao.dart';
+import 'package:backend/src/common/server/injector.dart';
 import 'package:backend/src/common/server/responses.dart';
 import 'package:shared/shared.dart' as shared;
 import 'package:shelf/shelf.dart' as shelf;
@@ -10,7 +10,7 @@ import 'package:shelf/shelf.dart' as shelf;
 ///
 /// E.g. `http://127.0.0.1:8080/articles?format=json`
 FutureOr<shelf.Response> $getArticles(shelf.Request request) async {
-  final dao = request.context['ARTICLE_DAO'] as ArticleDAO;
+  final Dependencies(articleDAO: dao) = Dependencies.from(request);
 
   int? parseQueryInt(String? name) => switch (request.requestedUri.queryParameters[name]?.trim()) {
         String value when value.isNotEmpty => int.tryParse(value),

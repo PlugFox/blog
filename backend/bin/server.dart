@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:backend/src/common/config/config.dart';
 import 'package:backend/src/common/config/initialization.dart';
-import 'package:backend/src/common/database/database.dart';
 import 'package:backend/src/common/medium/article_dao.dart';
 import 'package:backend/src/common/medium/medium.dart';
 import 'package:backend/src/common/server/worker.dart';
@@ -24,16 +23,16 @@ void main([List<String>? arguments]) => Future<void>.sync(() async {
       );
 
       // Initialize the server
-      final (:Config config, :Map<String, Object?> context) = await l.capture(
+      final result = await l.capture(
         () => $initializeServer(arguments: arguments),
         logOption,
       );
+      final InitializationProgress(:config, :database) = result;
 
       // Start the server with multiple workers
       await l.capture(
         () async {
           // Start workers and wait for them to be ready
-          final database = context['database'] as Database;
           final workers = <SharedWorker>[];
           for (var i = 1; i <= config.workers; i++) {
             final worker = await SharedWorker.spawn(

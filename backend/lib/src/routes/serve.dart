@@ -33,11 +33,13 @@ Future<void> serve({
       .addMiddleware(handleErrors(showStackTrace: config.environment.isDevelopment))
       .addMiddleware(logPipeline())
       .addMiddleware(authorization(config.token))
-      .addMiddleware(injector(<String, Object>{
-        'DATABASE': database,
-        'CONFIG': config,
-        'ARTICLE_DAO': articleDao,
-      }))
+      .addMiddleware(
+        injector(
+          config: config,
+          database: database,
+          articleDAO: articleDao,
+        ),
+      )
       .addHandler(_$router);
   await shelf_io.serve(
     pipeline,
