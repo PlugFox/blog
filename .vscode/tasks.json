@@ -26,6 +26,18 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Generate",
+      "type": "shell",
+      "command": [
+        "make gen"
+      ],
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "problemMatcher": []
     }
   ]
 }

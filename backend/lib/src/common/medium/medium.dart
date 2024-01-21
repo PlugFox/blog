@@ -32,35 +32,45 @@ final class Medium {
           _ => 0,
         } ~/
         1000;
-    return items.map((node) {
-      final content = extractFirst(['content:encoded', 'content']) ?? '';
-      var excerpt = content.isNotEmpty
-          ? excerptRegExp.allMatches(content).map<String?>((e) => e.namedGroup('text')).whereType<String>().join(' ')
-          : '';
-      excerpt = excerpt.replaceAll(RegExp('<[^>]*>'), '');
-      if (excerpt.length > 140) excerpt = '${excerpt.substring(0, 140 - 3)}...';
-      final link = extractFirst(['link', 'url', 'dc:link']) ?? '';
-      return shared.Article(
-        id: null,
-        title: extractFirst(['title', 'dc:title']) ?? '',
-        link: link,
-        guid: extractFirst(['guid', 'dc:guid'])?.split('/').lastOrNull ??
-            link.split('/').lastOrNull?.split('?').firstOrNull?.split('-').lastOrNull ??
-            '',
-        author: extractFirst(
-                ['dc:creator', 'creator', 'author', 'dc:author', 'atom:author', 'dc:contributor', 'contributor']) ??
-            username,
-        createdAt: extractAll(['atom:created', 'created', 'pubDate'])
-            .map<int>(parseDate)
-            .fold<int>(0, (a, b) => a > b ? a : b),
-        updatedAt: extractAll(['atom:updated', 'updated', 'pubDate'])
-            .map<int>(parseDate)
-            .fold<int>(0, (a, b) => a > b ? a : b),
-        tags: extractAll(['category', 'tag']).toList(growable: false),
-        excerpt: excerpt,
-        content: content,
-        meta: null,
-      );
-    }).toList(growable: false);
+    return items
+        .map<shared.Article?>((node) {
+          final content = extractFirst(['content:encoded', 'content']) ?? '';
+          var excerpt = content.isNotEmpty
+              ? excerptRegExp
+                  .allMatches(content)
+                  .map<String?>((e) => e.namedGroup('text'))
+                  .whereType<String>()
+                  .join(' ')
+              : '';
+          excerpt = excerpt.replaceAll(RegExp('<[^>]*>'), '');
+          if (excerpt.length > 140) excerpt = '${excerpt.substring(0, 140 - 3)}...';
+          final link = extractFirst(['link', 'url', 'dc:link', 'og:url', 'al:url']) ?? '';
+          final guid = extractFirst(['guid', 'dc:guid', 'identifier'])?.split('/').lastOrNull ??
+              link.split('/').lastOrNull?.split('?').firstOrNull?.split('-').lastOrNull;
+          if (guid == null || guid.isEmpty) {
+            assert(false, 'Failed to parse guid');
+            return null;
+          }
+          return shared.Article(
+            title: extractFirst(['title', 'dc:title']) ?? '',
+            link: link,
+            id: guid,
+            author: extractFirst(
+                    ['dc:creator', 'creator', 'author', 'dc:author', 'atom:author', 'dc:contributor', 'contributor']) ??
+                username,
+            createdAt: extractAll(['atom:created', 'created', 'pubDate'])
+                .map<int>(parseDate)
+                .fold<int>(0, (a, b) => a > b ? a : b),
+            updatedAt: extractAll(['atom:updated', 'updated', 'pubDate'])
+                .map<int>(parseDate)
+                .fold<int>(0, (a, b) => a > b ? a : b),
+            tags: extractAll(['category', 'tag']).toList(growable: false),
+            excerpt: excerpt,
+            content: content,
+            meta: null,
+          );
+        })
+        .whereType<shared.Article>()
+        .toList(growable: false);
   }
 }
