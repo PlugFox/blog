@@ -11,6 +11,8 @@ import 'package:shelf/shelf.dart' as shelf;
 /// The value must be an integer between 0 and 6.
 ///
 /// If 'pretty' is set, the response is formatted as a human readable string.
+///
+/// E.g. `http://127.0.0.1:8080/meta/logs?verbose=3&pretty`
 FutureOr<shelf.Response> $logs(shelf.Request request) async {
   final database = request.context['DATABASE'] as Database;
   final verbose = switch (request.requestedUri.queryParameters['verbose']?.trim()) {
@@ -51,7 +53,7 @@ FutureOr<shelf.Response> $logs(shelf.Request request) async {
         buffer
           ..write(DateTime.fromMillisecondsSinceEpoch(log.timestamp * 1000))
           ..write(separator)
-          ..write('[${log.prefix}]')
+          ..write(log.prefix) //..write('[${log.prefix}]')
           ..write(separator)
           ..write(log.message)
           ..writeln();
