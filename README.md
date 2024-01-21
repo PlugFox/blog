@@ -13,7 +13,7 @@
 - ✅ API metadata
 - ✅ Routing & Middleware
 - ✅ SQLite database with ORM
-- ❌ Protocol Buffer's schema for API
+- ✅ Protocol Buffer's schema for API
 - ❌ Medium RSS parsing by authors
 - ❌ Pagination
 - ❌ Search by tags, authors, titles.
