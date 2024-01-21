@@ -34,6 +34,9 @@ jobs:
     defaults:
       run:
         working-directory: ./backend
+    services:
+      sqlite:
+        image: nouchka/sqlite3
     container:
       image: dart:beta
     timeout-minutes: 10
@@ -66,12 +69,12 @@ jobs:
         timeout-minutes: 1
         run: dart analyze --fatal-infos --fatal-warnings lib/
 
+      #    uname -a
+      #    apt-get -y update
+      #    apt-get install -y sqlite3 libsqlite3-dev
       - name: 🧪 Run tests
         timeout-minutes: 2
         run: |
-          uname -a
-          apt-get -y update
-          apt-get install -y sqlite3 libsqlite3-dev
           dart test --coverage=.coverage --timeout=120s --concurrency=12 \
             --reporter=github --platform=vm --file-reporter=json:.coverage/tests.json
 
