@@ -18,8 +18,7 @@
 - ✅ Pagination
 - ✅ Admin endpoints
 - ✅ Search by tags, authors, titles.
-- ❌ POST callbacks
-- ❌ Basic UI
+- ✅ Basic UI
 - ❌ Material Design
 - ❌ Dockerfiles
 - ❌ Docker Compose & Stack
