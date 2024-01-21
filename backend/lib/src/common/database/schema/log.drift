@@ -10,41 +10,41 @@ CREATE TABLE IF NOT EXISTS log_tbl (
     level INTEGER NOT NULL,
 
     -- req Message is the log message or error associated with this log event
-    message TEXT NOT NULL,
-
-    -- StackTrace a stack trace associated with this log event
-    stacktrace TEXT
+    -- shared.LogMessage is a protobuf message
+    data BLOB NOT NULL
 ) STRICT;
 
 -- Indexes
 CREATE INDEX IF NOT EXISTS log_timestamp_idx ON log_tbl (timestamp);
 CREATE INDEX IF NOT EXISTS log_level_idx ON log_tbl (level);
 
--- Search table
-CREATE TABLE IF NOT EXISTS log_prefix_tbl (
-    -- req Prefix (first 3 chars of word, lowercased)
-    prefix TEXT NOT NULL, -- CHECK(length(prefix) = 3)
-
-    -- req Unique identifier
-    log_id INTEGER NOT NULL,
-
-    -- req Word (3 or more chars, lowercased)
-    word TEXT NOT NULL,
-
-    -- req Word's length
-    len INTEGER NOT NULL,
-
-    -- Composite primary key
-    PRIMARY KEY (prefix, log_id, word),
-
-    -- Foreign keys
-    FOREIGN KEY (log_id)
-        REFERENCES log_tbl (id)
-            ON UPDATE CASCADE
-            ON DELETE CASCADE
-) STRICT;
-
--- Indexes
-CREATE INDEX IF NOT EXISTS log_prefix_prefix_idx ON log_prefix_tbl (prefix);
-CREATE INDEX IF NOT EXISTS log_prefix_log_id_idx ON log_prefix_tbl (log_id);
-CREATE INDEX IF NOT EXISTS log_prefix_len_idx ON log_prefix_tbl (len);
+/*
+ * -- Search table
+ * CREATE TABLE IF NOT EXISTS log_prefix_tbl (
+ *     -- req Prefix (first 3 chars of word, lowercased)
+ *     prefix TEXT NOT NULL, -- CHECK(length(prefix) = 3)
+ *
+ *     -- req Unique identifier
+ *     log_id INTEGER NOT NULL,
+ *
+ *     -- req Word (3 or more chars, lowercased)
+ *     word TEXT NOT NULL,
+ *
+ *     -- req Word's length
+ *     len INTEGER NOT NULL,
+ *
+ *     -- Composite primary key
+ *     PRIMARY KEY (prefix, log_id, word),
+ *
+ *     -- Foreign keys
+ *     FOREIGN KEY (log_id)
+ *         REFERENCES log_tbl (id)
+ *             ON UPDATE CASCADE
+ *             ON DELETE CASCADE
+ * ) STRICT;
+ *
+ * -- Indexes
+ * CREATE INDEX IF NOT EXISTS log_prefix_prefix_idx ON log_prefix_tbl (prefix);
+ * CREATE INDEX IF NOT EXISTS log_prefix_log_id_idx ON log_prefix_tbl (log_id);
+ * CREATE INDEX IF NOT EXISTS log_prefix_len_idx ON log_prefix_tbl (len);
+ */

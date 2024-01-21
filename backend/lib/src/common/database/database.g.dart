@@ -23,14 +23,11 @@ class LogTbl extends Table with TableInfo<LogTbl, LogTblData> {
   static const VerificationMeta _levelMeta = VerificationMeta('level');
   late final GeneratedColumn<int> level = GeneratedColumn<int>('level', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
-  static const VerificationMeta _messageMeta = VerificationMeta('message');
-  late final GeneratedColumn<String> message = GeneratedColumn<String>('message', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
-  static const VerificationMeta _stacktraceMeta = VerificationMeta('stacktrace');
-  late final GeneratedColumn<String> stacktrace = GeneratedColumn<String>('stacktrace', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false, $customConstraints: '');
+  static const VerificationMeta _dataMeta = VerificationMeta('data');
+  late final GeneratedColumn<Uint8List> data = GeneratedColumn<Uint8List>('data', aliasedName, false,
+      type: DriftSqlType.blob, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
   @override
-  List<GeneratedColumn> get $columns => [id, timestamp, level, message, stacktrace];
+  List<GeneratedColumn> get $columns => [id, timestamp, level, data];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -51,13 +48,10 @@ class LogTbl extends Table with TableInfo<LogTbl, LogTblData> {
     } else if (isInserting) {
       context.missing(_levelMeta);
     }
-    if (data.containsKey('message')) {
-      context.handle(_messageMeta, message.isAcceptableOrUnknown(data['message']!, _messageMeta));
+    if (data.containsKey('data')) {
+      context.handle(_dataMeta, this.data.isAcceptableOrUnknown(data['data']!, _dataMeta));
     } else if (isInserting) {
-      context.missing(_messageMeta);
-    }
-    if (data.containsKey('stacktrace')) {
-      context.handle(_stacktraceMeta, stacktrace.isAcceptableOrUnknown(data['stacktrace']!, _stacktraceMeta));
+      context.missing(_dataMeta);
     }
     return context;
   }
@@ -71,8 +65,7 @@ class LogTbl extends Table with TableInfo<LogTbl, LogTblData> {
       id: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       timestamp: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}timestamp'])!,
       level: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}level'])!,
-      message: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}message'])!,
-      stacktrace: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}stacktrace']),
+      data: attachedDatabase.typeMapping.read(DriftSqlType.blob, data['${effectivePrefix}data'])!,
     );
   }
 
@@ -98,22 +91,15 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
   final int level;
 
   /// req Message is the log message or error associated with this log event
-  final String message;
-
-  /// StackTrace a stack trace associated with this log event
-  final String? stacktrace;
-  const LogTblData(
-      {required this.id, required this.timestamp, required this.level, required this.message, this.stacktrace});
+  final Uint8List data;
+  const LogTblData({required this.id, required this.timestamp, required this.level, required this.data});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['timestamp'] = Variable<int>(timestamp);
     map['level'] = Variable<int>(level);
-    map['message'] = Variable<String>(message);
-    if (!nullToAbsent || stacktrace != null) {
-      map['stacktrace'] = Variable<String>(stacktrace);
-    }
+    map['data'] = Variable<Uint8List>(data);
     return map;
   }
 
@@ -122,8 +108,7 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
       id: Value(id),
       timestamp: Value(timestamp),
       level: Value(level),
-      message: Value(message),
-      stacktrace: stacktrace == null && nullToAbsent ? const Value.absent() : Value(stacktrace),
+      data: Value(data),
     );
   }
 
@@ -133,8 +118,7 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
       id: serializer.fromJson<int>(json['id']),
       timestamp: serializer.fromJson<int>(json['timestamp']),
       level: serializer.fromJson<int>(json['level']),
-      message: serializer.fromJson<String>(json['message']),
-      stacktrace: serializer.fromJson<String?>(json['stacktrace']),
+      data: serializer.fromJson<Uint8List>(json['data']),
     );
   }
   @override
@@ -144,19 +128,15 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
       'id': serializer.toJson<int>(id),
       'timestamp': serializer.toJson<int>(timestamp),
       'level': serializer.toJson<int>(level),
-      'message': serializer.toJson<String>(message),
-      'stacktrace': serializer.toJson<String?>(stacktrace),
+      'data': serializer.toJson<Uint8List>(data),
     };
   }
 
-  LogTblData copyWith(
-          {int? id, int? timestamp, int? level, String? message, Value<String?> stacktrace = const Value.absent()}) =>
-      LogTblData(
+  LogTblData copyWith({int? id, int? timestamp, int? level, Uint8List? data}) => LogTblData(
         id: id ?? this.id,
         timestamp: timestamp ?? this.timestamp,
         level: level ?? this.level,
-        message: message ?? this.message,
-        stacktrace: stacktrace.present ? stacktrace.value : this.stacktrace,
+        data: data ?? this.data,
       );
   @override
   String toString() {
@@ -164,14 +144,13 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
           ..write('id: $id, ')
           ..write('timestamp: $timestamp, ')
           ..write('level: $level, ')
-          ..write('message: $message, ')
-          ..write('stacktrace: $stacktrace')
+          ..write('data: $data')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, timestamp, level, message, stacktrace);
+  int get hashCode => Object.hash(id, timestamp, level, $driftBlobEquality.hash(data));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -179,55 +158,47 @@ class LogTblData extends DataClass implements Insertable<LogTblData> {
           other.id == this.id &&
           other.timestamp == this.timestamp &&
           other.level == this.level &&
-          other.message == this.message &&
-          other.stacktrace == this.stacktrace);
+          $driftBlobEquality.equals(other.data, this.data));
 }
 
 class LogTblCompanion extends UpdateCompanion<LogTblData> {
   final Value<int> id;
   final Value<int> timestamp;
   final Value<int> level;
-  final Value<String> message;
-  final Value<String?> stacktrace;
+  final Value<Uint8List> data;
   const LogTblCompanion({
     this.id = const Value.absent(),
     this.timestamp = const Value.absent(),
     this.level = const Value.absent(),
-    this.message = const Value.absent(),
-    this.stacktrace = const Value.absent(),
+    this.data = const Value.absent(),
   });
   LogTblCompanion.insert({
     this.id = const Value.absent(),
     this.timestamp = const Value.absent(),
     required int level,
-    required String message,
-    this.stacktrace = const Value.absent(),
+    required Uint8List data,
   })  : level = Value(level),
-        message = Value(message);
+        data = Value(data);
   static Insertable<LogTblData> custom({
     Expression<int>? id,
     Expression<int>? timestamp,
     Expression<int>? level,
-    Expression<String>? message,
-    Expression<String>? stacktrace,
+    Expression<Uint8List>? data,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (timestamp != null) 'timestamp': timestamp,
       if (level != null) 'level': level,
-      if (message != null) 'message': message,
-      if (stacktrace != null) 'stacktrace': stacktrace,
+      if (data != null) 'data': data,
     });
   }
 
-  LogTblCompanion copyWith(
-      {Value<int>? id, Value<int>? timestamp, Value<int>? level, Value<String>? message, Value<String?>? stacktrace}) {
+  LogTblCompanion copyWith({Value<int>? id, Value<int>? timestamp, Value<int>? level, Value<Uint8List>? data}) {
     return LogTblCompanion(
       id: id ?? this.id,
       timestamp: timestamp ?? this.timestamp,
       level: level ?? this.level,
-      message: message ?? this.message,
-      stacktrace: stacktrace ?? this.stacktrace,
+      data: data ?? this.data,
     );
   }
 
@@ -243,11 +214,8 @@ class LogTblCompanion extends UpdateCompanion<LogTblData> {
     if (level.present) {
       map['level'] = Variable<int>(level.value);
     }
-    if (message.present) {
-      map['message'] = Variable<String>(message.value);
-    }
-    if (stacktrace.present) {
-      map['stacktrace'] = Variable<String>(stacktrace.value);
+    if (data.present) {
+      map['data'] = Variable<Uint8List>(data.value);
     }
     return map;
   }
@@ -258,254 +226,7 @@ class LogTblCompanion extends UpdateCompanion<LogTblData> {
           ..write('id: $id, ')
           ..write('timestamp: $timestamp, ')
           ..write('level: $level, ')
-          ..write('message: $message, ')
-          ..write('stacktrace: $stacktrace')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class LogPrefixTbl extends Table with TableInfo<LogPrefixTbl, LogPrefixTblData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  LogPrefixTbl(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _prefixMeta = VerificationMeta('prefix');
-  late final GeneratedColumn<String> prefix = GeneratedColumn<String>('prefix', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
-  static const VerificationMeta _logIdMeta = VerificationMeta('logId');
-  late final GeneratedColumn<int> logId = GeneratedColumn<int>('log_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
-  static const VerificationMeta _wordMeta = VerificationMeta('word');
-  late final GeneratedColumn<String> word = GeneratedColumn<String>('word', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
-  static const VerificationMeta _lenMeta = VerificationMeta('len');
-  late final GeneratedColumn<int> len = GeneratedColumn<int>('len', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
-  @override
-  List<GeneratedColumn> get $columns => [prefix, logId, word, len];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'log_prefix_tbl';
-  @override
-  VerificationContext validateIntegrity(Insertable<LogPrefixTblData> instance, {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('prefix')) {
-      context.handle(_prefixMeta, prefix.isAcceptableOrUnknown(data['prefix']!, _prefixMeta));
-    } else if (isInserting) {
-      context.missing(_prefixMeta);
-    }
-    if (data.containsKey('log_id')) {
-      context.handle(_logIdMeta, logId.isAcceptableOrUnknown(data['log_id']!, _logIdMeta));
-    } else if (isInserting) {
-      context.missing(_logIdMeta);
-    }
-    if (data.containsKey('word')) {
-      context.handle(_wordMeta, word.isAcceptableOrUnknown(data['word']!, _wordMeta));
-    } else if (isInserting) {
-      context.missing(_wordMeta);
-    }
-    if (data.containsKey('len')) {
-      context.handle(_lenMeta, len.isAcceptableOrUnknown(data['len']!, _lenMeta));
-    } else if (isInserting) {
-      context.missing(_lenMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {prefix, logId, word};
-  @override
-  LogPrefixTblData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return LogPrefixTblData(
-      prefix: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}prefix'])!,
-      logId: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}log_id'])!,
-      word: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}word'])!,
-      len: attachedDatabase.typeMapping.read(DriftSqlType.int, data['${effectivePrefix}len'])!,
-    );
-  }
-
-  @override
-  LogPrefixTbl createAlias(String alias) {
-    return LogPrefixTbl(attachedDatabase, alias);
-  }
-
-  @override
-  bool get isStrict => true;
-  @override
-  List<String> get customConstraints => const [
-        'PRIMARY KEY(prefix, log_id, word)',
-        'FOREIGN KEY(log_id)REFERENCES log_tbl(id)ON UPDATE CASCADE ON DELETE CASCADE'
-      ];
-  @override
-  bool get dontWriteConstraints => true;
-}
-
-class LogPrefixTblData extends DataClass implements Insertable<LogPrefixTblData> {
-  /// req Prefix (first 3 chars of word, lowercased)
-  final String prefix;
-
-  /// req Unique identifier
-  /// CHECK(length(prefix) = 3)
-  final int logId;
-
-  /// req Word (3 or more chars, lowercased)
-  final String word;
-
-  /// req Word's length
-  final int len;
-  const LogPrefixTblData({required this.prefix, required this.logId, required this.word, required this.len});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['prefix'] = Variable<String>(prefix);
-    map['log_id'] = Variable<int>(logId);
-    map['word'] = Variable<String>(word);
-    map['len'] = Variable<int>(len);
-    return map;
-  }
-
-  LogPrefixTblCompanion toCompanion(bool nullToAbsent) {
-    return LogPrefixTblCompanion(
-      prefix: Value(prefix),
-      logId: Value(logId),
-      word: Value(word),
-      len: Value(len),
-    );
-  }
-
-  factory LogPrefixTblData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return LogPrefixTblData(
-      prefix: serializer.fromJson<String>(json['prefix']),
-      logId: serializer.fromJson<int>(json['log_id']),
-      word: serializer.fromJson<String>(json['word']),
-      len: serializer.fromJson<int>(json['len']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'prefix': serializer.toJson<String>(prefix),
-      'log_id': serializer.toJson<int>(logId),
-      'word': serializer.toJson<String>(word),
-      'len': serializer.toJson<int>(len),
-    };
-  }
-
-  LogPrefixTblData copyWith({String? prefix, int? logId, String? word, int? len}) => LogPrefixTblData(
-        prefix: prefix ?? this.prefix,
-        logId: logId ?? this.logId,
-        word: word ?? this.word,
-        len: len ?? this.len,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('LogPrefixTblData(')
-          ..write('prefix: $prefix, ')
-          ..write('logId: $logId, ')
-          ..write('word: $word, ')
-          ..write('len: $len')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(prefix, logId, word, len);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is LogPrefixTblData &&
-          other.prefix == this.prefix &&
-          other.logId == this.logId &&
-          other.word == this.word &&
-          other.len == this.len);
-}
-
-class LogPrefixTblCompanion extends UpdateCompanion<LogPrefixTblData> {
-  final Value<String> prefix;
-  final Value<int> logId;
-  final Value<String> word;
-  final Value<int> len;
-  final Value<int> rowid;
-  const LogPrefixTblCompanion({
-    this.prefix = const Value.absent(),
-    this.logId = const Value.absent(),
-    this.word = const Value.absent(),
-    this.len = const Value.absent(),
-    this.rowid = const Value.absent(),
-  });
-  LogPrefixTblCompanion.insert({
-    required String prefix,
-    required int logId,
-    required String word,
-    required int len,
-    this.rowid = const Value.absent(),
-  })  : prefix = Value(prefix),
-        logId = Value(logId),
-        word = Value(word),
-        len = Value(len);
-  static Insertable<LogPrefixTblData> custom({
-    Expression<String>? prefix,
-    Expression<int>? logId,
-    Expression<String>? word,
-    Expression<int>? len,
-    Expression<int>? rowid,
-  }) {
-    return RawValuesInsertable({
-      if (prefix != null) 'prefix': prefix,
-      if (logId != null) 'log_id': logId,
-      if (word != null) 'word': word,
-      if (len != null) 'len': len,
-      if (rowid != null) 'rowid': rowid,
-    });
-  }
-
-  LogPrefixTblCompanion copyWith(
-      {Value<String>? prefix, Value<int>? logId, Value<String>? word, Value<int>? len, Value<int>? rowid}) {
-    return LogPrefixTblCompanion(
-      prefix: prefix ?? this.prefix,
-      logId: logId ?? this.logId,
-      word: word ?? this.word,
-      len: len ?? this.len,
-      rowid: rowid ?? this.rowid,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (prefix.present) {
-      map['prefix'] = Variable<String>(prefix.value);
-    }
-    if (logId.present) {
-      map['log_id'] = Variable<int>(logId.value);
-    }
-    if (word.present) {
-      map['word'] = Variable<String>(word.value);
-    }
-    if (len.present) {
-      map['len'] = Variable<int>(len.value);
-    }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('LogPrefixTblCompanion(')
-          ..write('prefix: $prefix, ')
-          ..write('logId: $logId, ')
-          ..write('word: $word, ')
-          ..write('len: $len, ')
-          ..write('rowid: $rowid')
+          ..write('data: $data')
           ..write(')'))
         .toString();
   }
@@ -1158,13 +879,6 @@ abstract class _$Database extends GeneratedDatabase {
   late final Index logTimestampIdx =
       Index('log_timestamp_idx', 'CREATE INDEX IF NOT EXISTS log_timestamp_idx ON log_tbl (timestamp)');
   late final Index logLevelIdx = Index('log_level_idx', 'CREATE INDEX IF NOT EXISTS log_level_idx ON log_tbl (level)');
-  late final LogPrefixTbl logPrefixTbl = LogPrefixTbl(this);
-  late final Index logPrefixPrefixIdx =
-      Index('log_prefix_prefix_idx', 'CREATE INDEX IF NOT EXISTS log_prefix_prefix_idx ON log_prefix_tbl (prefix)');
-  late final Index logPrefixLogIdIdx =
-      Index('log_prefix_log_id_idx', 'CREATE INDEX IF NOT EXISTS log_prefix_log_id_idx ON log_prefix_tbl (log_id)');
-  late final Index logPrefixLenIdx =
-      Index('log_prefix_len_idx', 'CREATE INDEX IF NOT EXISTS log_prefix_len_idx ON log_prefix_tbl (len)');
   late final CharacteristicTbl characteristicTbl = CharacteristicTbl(this);
   late final Index characteristicMetaCreatedAtIdx = Index('characteristic_meta_created_at_idx',
       'CREATE INDEX IF NOT EXISTS characteristic_meta_created_at_idx ON characteristic_tbl (meta_created_at)');
@@ -1188,10 +902,6 @@ abstract class _$Database extends GeneratedDatabase {
         logTbl,
         logTimestampIdx,
         logLevelIdx,
-        logPrefixTbl,
-        logPrefixPrefixIdx,
-        logPrefixLogIdIdx,
-        logPrefixLenIdx,
         characteristicTbl,
         characteristicMetaCreatedAtIdx,
         characteristicMetaUpdatedAtIdx,
@@ -1204,18 +914,6 @@ abstract class _$Database extends GeneratedDatabase {
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
         [
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('log_tbl', limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('log_prefix_tbl', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('log_tbl', limitUpdateKind: UpdateKind.update),
-            result: [
-              TableUpdate('log_prefix_tbl', kind: UpdateKind.update),
-            ],
-          ),
           WritePropagation(
             on: TableUpdateQuery.onTableName('characteristic_tbl', limitUpdateKind: UpdateKind.update),
             result: [

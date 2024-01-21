@@ -9,6 +9,7 @@ import 'package:backend/src/common/database/database.dart';
 import 'package:backend/src/common/util/error_util.dart';
 import 'package:backend/src/common/util/log_buffer.dart';
 import 'package:l/l.dart';
+import 'package:shared/shared.dart' as shared;
 
 typedef InitializationResult = ({Config config, Map<String, Object?> context});
 
@@ -240,19 +241,22 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
           ..limit(LogBuffer.bufferLimit))
         .get()
         .then<List<LogMessage>>((logs) => logs
-            .map((l) => switch (l.stacktrace) {
-                  String stacktrace => LogMessage.error(
+            .map<Uint8List>((l) => l.data)
+            .map<shared.LogMessage>(shared.LogMessage.fromBuffer)
+            .map(
+              (l) => l.hasError() && l.error
+                  ? LogMessage.error(
                       timestamp: DateTime.fromMillisecondsSinceEpoch(l.timestamp * 1000),
                       level: LogLevel.fromValue(l.level),
                       message: l.message,
-                      stackTrace: StackTrace.fromString(stacktrace)),
-                  null => LogMessage.verbose(
+                      stackTrace: l.hasStacktrace() ? StackTrace.fromString(l.stacktrace) : null)
+                  : LogMessage.verbose(
                       timestamp: DateTime.fromMillisecondsSinceEpoch(l.timestamp * 1000),
                       level: LogLevel.fromValue(l.level),
                       message: l.message,
-                    )
-                })
-            .toList())
+                    ),
+            )
+            .toList(growable: false))
         .then<void>(LogBuffer.instance.addAll);
 
     final logsCache = <LogMessage>[];
@@ -267,13 +271,19 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
 
     final timer = Timer.periodic(const Duration(seconds: 5), (_) {
       if (logsCache.isEmpty) return;
+
       final logs = logsCache
-          .map<LogTblCompanion>((log) => LogTblCompanion.insert(
-                level: log.level.level,
+          .map<LogTblCompanion>(
+            (log) => LogTblCompanion.insert(
+              level: log.level.level,
+              data: shared.LogMessage(
                 message: log.message.toString(),
-                timestamp: Value<int>(log.timestamp.millisecondsSinceEpoch ~/ 1000),
-                stacktrace: Value<String?>(switch (log) { LogMessageError l => l.stackTrace.toString(), _ => null }),
-              ))
+                timestamp: log.timestamp.millisecondsSinceEpoch ~/ 1000,
+                stacktrace: switch (log) { LogMessageError l => l.stackTrace.toString(), _ => null },
+                error: log is LogMessageError,
+              ).writeToBuffer(),
+            ),
+          )
           .toList(growable: false);
       logsCache.clear();
       database.batch((batch) => batch.insertAll(database.logTbl, logs)).ignore();

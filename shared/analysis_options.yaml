@@ -6,6 +6,11 @@ analyzer:
     - "build/**"
     # Codegen
     - "lib/**.g.dart"
+    # Protobuf
+    - "lib/**.pb.dart"
+    - "lib/**.pbenum.dart"
+    - "lib/**.pbjson.dart"
+    - "lib/**.pbserver.dart"
     # Tests
     - "test/**.mocks.dart"
     - ".test_coverage.dart"
