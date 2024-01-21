@@ -9,8 +9,6 @@ import 'package:meta/meta.dart';
 /// the connection of widgets and the date of the layer.
 ///
 /// Do not implement this interface directly, instead extend [Controller].
-///
-/// {@nodoc}
 @internal
 abstract interface class IController implements Listenable {
   /// Whether the controller is permanently disposed

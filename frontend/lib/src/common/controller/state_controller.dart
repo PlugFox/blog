@@ -14,7 +14,6 @@ typedef StateControllerFilter<Value> = bool Function(Value prev, Value next);
 ///
 /// Do not implement this interface directly, instead extend [StateController].
 ///
-/// {@nodoc}
 @internal
 abstract interface class IStateController<S extends Object> implements IController {
   /// The current state of the controller.

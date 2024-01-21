@@ -3,16 +3,13 @@ import 'package:frontend/src/common/controller/state_controller.dart';
 import 'package:meta/meta.dart';
 
 /// StateRegistry Singleton class
-/// {@nodoc}
 @internal
 final class ControllerRegistry with ControllerRegistry$Global {
-  /// {@nodoc}
   factory ControllerRegistry() => _internalSingleton;
   ControllerRegistry._internal();
   static final ControllerRegistry _internalSingleton = ControllerRegistry._internal();
 }
 
-/// {@nodoc}
 @internal
 base mixin ControllerRegistry$Global {
   final Map<Type, List<WeakReference<IController>>> _globalRegistry = <Type, List<WeakReference<IController>>>{};

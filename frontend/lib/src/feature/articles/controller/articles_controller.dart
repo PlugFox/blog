@@ -41,40 +41,30 @@ sealed class ArticlesState extends _$ArticlesStateBase {
 }
 
 /// Idling state
-/// {@nodoc}
 final class ArticlesState$Idle extends ArticlesState {
-  /// {@nodoc}
   const ArticlesState$Idle({required super.data, super.message = 'Idling'});
 }
 
 /// Processing
-/// {@nodoc}
 final class ArticlesState$Processing extends ArticlesState {
-  /// {@nodoc}
   const ArticlesState$Processing({required super.data, super.message = 'Processing'});
 }
 
 /// Successful
-/// {@nodoc}
 final class ArticlesState$Successful extends ArticlesState {
-  /// {@nodoc}
   const ArticlesState$Successful({required super.data, super.message = 'Successful'});
 }
 
 /// Error
-/// {@nodoc}
 final class ArticlesState$Error extends ArticlesState {
-  /// {@nodoc}
   const ArticlesState$Error({required super.data, super.message = 'An error has occurred.'});
 }
 
 /// Pattern matching for [ArticlesState].
 typedef ArticlesStateMatch<R, S extends ArticlesState> = R Function(S state);
 
-/// {@nodoc}
 @immutable
 abstract base class _$ArticlesStateBase {
-  /// {@nodoc}
   const _$ArticlesStateBase({required this.data, required this.message});
 
   /// Data entity payload.
