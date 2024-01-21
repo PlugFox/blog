@@ -1,23 +1,29 @@
+import 'dart:convert';
+
 import 'package:backend/src/common/database/database.dart' as db;
 import 'package:backend/src/common/medium/article_dao.dart';
 import 'package:backend/src/common/medium/medium.dart';
 import 'package:http/http.dart' as http;
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 import 'package:shared/shared.dart';
 import 'package:test/test.dart';
 
 import 'fake_articles.dart';
+import 'medium_test.mocks.dart';
 
 /// Check if the medium articles are fetched and stored in the database.
+@GenerateNiceMocks([MockSpec<http.Client>()])
 void main() => group('Medium', () {
       const username = 'plugfox';
       late final db.Database database;
-      late final http.Client client;
+      late final MockClient client;
       late final Medium medium;
       late final ArticleDAO dao;
       late final List<Article> fakeArticles;
 
       setUpAll(() async {
-        client = http.Client();
+        client = MockClient();
         database = db.Database.memory();
         medium = Medium(client: client);
         dao = ArticleDAO(database: database);
@@ -30,6 +36,22 @@ void main() => group('Medium', () {
       });
 
       test('fetch_articles', () async {
+        // Mock the http client to return the fake articles.
+        when(client.get(Uri.parse('https://medium.com/feed/@$username'))).thenAnswer(
+          (_) async {
+            final bytes = utf8.encode($fakeArticlesRSS);
+            return http.Response.bytes(
+              bytes,
+              200,
+              headers: <String, String>{
+                'content-type': 'text/xml; charset=UTF-8',
+                'content-length': '${bytes.length}',
+              },
+              persistentConnection: false,
+              isRedirect: false,
+            );
+          },
+        );
         final articles = await medium.fetchArticlesRSS(username);
         expect(articles, isNotEmpty);
       });
@@ -58,9 +80,15 @@ void main() => group('Medium', () {
         expect(articles.any((a) => a.tags.contains('flutter')), isTrue);
       });
 
-      test('search_by_word', () async {
+      test('search_by_words', () async {
         await dao.upsertArticlesIntoDatabase(fakeArticles);
         final articles = await dao.searchInDatabase('Flut,  archite; isola');
+        expect(articles, isNotEmpty);
+      });
+
+      test('search_by_tags_and_words', () async {
+        await dao.upsertArticlesIntoDatabase(fakeArticles);
+        final articles = await dao.searchInDatabase('dart/flutter Flut,  archite; isola');
         expect(articles, isNotEmpty);
       });
     });

@@ -7,7 +7,7 @@ import 'package:xml/xml.dart' as xml;
 /// {@template medium}
 /// Medium service.
 /// {@endtemplate}
-final class Medium {
+class Medium {
   /// {@macro medium}
   Medium({
     required http.Client client,
