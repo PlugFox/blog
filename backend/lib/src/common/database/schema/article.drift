@@ -26,6 +26,19 @@ CREATE INDEX IF NOT EXISTS article_tbl_updated_at_idx ON article_tbl (updated_at
 
 
 
+/* ARTICLE CONTENT TABLE */
+
+-- Article table
+CREATE TABLE IF NOT EXISTS article_content_tbl (
+    -- req Unique GUID identifier of the article in the database
+    article_id TEXT NOT NULL PRIMARY KEY,
+
+    -- Time is the timestamp (in seconds)
+    content TEXT NOT NULL
+) STRICT;
+
+
+
 /* TAGS TABLE */
 
 -- Tags table

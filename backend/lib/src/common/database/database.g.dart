@@ -281,6 +281,183 @@ class ArticleTblCompanion extends UpdateCompanion<ArticleTblData> {
   }
 }
 
+class ArticleContentTbl extends Table with TableInfo<ArticleContentTbl, ArticleContentTblData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  ArticleContentTbl(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _articleIdMeta = VerificationMeta('articleId');
+  late final GeneratedColumn<String> articleId = GeneratedColumn<String>('article_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL PRIMARY KEY');
+  static const VerificationMeta _contentMeta = VerificationMeta('content');
+  late final GeneratedColumn<String> content = GeneratedColumn<String>('content', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
+  @override
+  List<GeneratedColumn> get $columns => [articleId, content];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'article_content_tbl';
+  @override
+  VerificationContext validateIntegrity(Insertable<ArticleContentTblData> instance, {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('article_id')) {
+      context.handle(_articleIdMeta, articleId.isAcceptableOrUnknown(data['article_id']!, _articleIdMeta));
+    } else if (isInserting) {
+      context.missing(_articleIdMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(_contentMeta, content.isAcceptableOrUnknown(data['content']!, _contentMeta));
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {articleId};
+  @override
+  ArticleContentTblData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ArticleContentTblData(
+      articleId: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}article_id'])!,
+      content: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+    );
+  }
+
+  @override
+  ArticleContentTbl createAlias(String alias) {
+    return ArticleContentTbl(attachedDatabase, alias);
+  }
+
+  @override
+  bool get isStrict => true;
+  @override
+  bool get dontWriteConstraints => true;
+}
+
+class ArticleContentTblData extends DataClass implements Insertable<ArticleContentTblData> {
+  /// req Unique GUID identifier of the article in the database
+  final String articleId;
+
+  /// Time is the timestamp (in seconds)
+  final String content;
+  const ArticleContentTblData({required this.articleId, required this.content});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['article_id'] = Variable<String>(articleId);
+    map['content'] = Variable<String>(content);
+    return map;
+  }
+
+  ArticleContentTblCompanion toCompanion(bool nullToAbsent) {
+    return ArticleContentTblCompanion(
+      articleId: Value(articleId),
+      content: Value(content),
+    );
+  }
+
+  factory ArticleContentTblData.fromJson(Map<String, dynamic> json, {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ArticleContentTblData(
+      articleId: serializer.fromJson<String>(json['article_id']),
+      content: serializer.fromJson<String>(json['content']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'article_id': serializer.toJson<String>(articleId),
+      'content': serializer.toJson<String>(content),
+    };
+  }
+
+  ArticleContentTblData copyWith({String? articleId, String? content}) => ArticleContentTblData(
+        articleId: articleId ?? this.articleId,
+        content: content ?? this.content,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ArticleContentTblData(')
+          ..write('articleId: $articleId, ')
+          ..write('content: $content')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(articleId, content);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ArticleContentTblData && other.articleId == this.articleId && other.content == this.content);
+}
+
+class ArticleContentTblCompanion extends UpdateCompanion<ArticleContentTblData> {
+  final Value<String> articleId;
+  final Value<String> content;
+  final Value<int> rowid;
+  const ArticleContentTblCompanion({
+    this.articleId = const Value.absent(),
+    this.content = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ArticleContentTblCompanion.insert({
+    required String articleId,
+    required String content,
+    this.rowid = const Value.absent(),
+  })  : articleId = Value(articleId),
+        content = Value(content);
+  static Insertable<ArticleContentTblData> custom({
+    Expression<String>? articleId,
+    Expression<String>? content,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (articleId != null) 'article_id': articleId,
+      if (content != null) 'content': content,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ArticleContentTblCompanion copyWith({Value<String>? articleId, Value<String>? content, Value<int>? rowid}) {
+    return ArticleContentTblCompanion(
+      articleId: articleId ?? this.articleId,
+      content: content ?? this.content,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (articleId.present) {
+      map['article_id'] = Variable<String>(articleId.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ArticleContentTblCompanion(')
+          ..write('articleId: $articleId, ')
+          ..write('content: $content, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 class ArticleTagTbl extends Table with TableInfo<ArticleTagTbl, ArticleTagTblData> {
   @override
   final GeneratedDatabase attachedDatabase;
@@ -1603,6 +1780,7 @@ abstract class _$Database extends GeneratedDatabase {
       'CREATE INDEX IF NOT EXISTS article_tbl_created_at_idx ON article_tbl (created_at)');
   late final Index articleTblUpdatedAtIdx = Index('article_tbl_updated_at_idx',
       'CREATE INDEX IF NOT EXISTS article_tbl_updated_at_idx ON article_tbl (updated_at)');
+  late final ArticleContentTbl articleContentTbl = ArticleContentTbl(this);
   late final ArticleTagTbl articleTagTbl = ArticleTagTbl(this);
   late final Index articleTagArticleIdIdx = Index('article_tag_article_id_idx',
       'CREATE INDEX IF NOT EXISTS article_tag_article_id_idx ON article_tag_tbl (article_id)');
@@ -1642,6 +1820,7 @@ abstract class _$Database extends GeneratedDatabase {
         articleTbl,
         articleTblCreatedAtIdx,
         articleTblUpdatedAtIdx,
+        articleContentTbl,
         articleTagTbl,
         articleTagArticleIdIdx,
         articleTagTagIdx,

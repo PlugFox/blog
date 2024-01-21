@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:backend/src/common/config/config.dart';
 import 'package:backend/src/common/database/database.dart';
+import 'package:backend/src/common/medium/article_dao.dart';
 import 'package:backend/src/common/server/authorization.dart';
 import 'package:backend/src/common/server/cors.dart';
 import 'package:backend/src/common/server/handle_errors.dart';
@@ -24,6 +25,7 @@ Future<void> serve({
   required Config config,
   required Database database,
 }) async {
+  final articleDao = ArticleDAO(database: database);
   final pipeline = const shelf.Pipeline()
       // TODO(plugfox): add middleware for meta headers
       .addMiddleware(cors())
@@ -33,6 +35,7 @@ Future<void> serve({
       .addMiddleware(injector(<String, Object>{
         'DATABASE': database,
         'CONFIG': config,
+        'ARTICLE_DAO': articleDao,
       }))
       .addHandler(_$router);
   await shelf_io.serve(
