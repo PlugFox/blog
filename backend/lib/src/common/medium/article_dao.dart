@@ -128,6 +128,7 @@ final class ArticleDAO {
       ..content = row.readTable(_database.articleContentTbl).content;
   }
 
+  // TODO(plugfox): implement search
   /// Search articles in the database.
   ///
   /// Search performing by tags and words
