@@ -27,7 +27,7 @@ final class Article2CSV extends Converter<Article, String> {
 
   @override
   String convert(Article input) {
-    final buffer = StringBuffer();
+    final buffer = StringBuffer('');
     addArticleToBuffer(input, buffer);
     return buffer.toString();
   }

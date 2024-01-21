@@ -32,7 +32,7 @@ FutureOr<shelf.Response> $getArticle(shelf.Request request) async {
         },
       );
     case 'csv' || 'tsv':
-      final buffer = StringBuffer()..writeln('id,created_at,updated_at,title');
+      final buffer = StringBuffer('')..writeln('id,created_at,updated_at,title');
       Article2CSV.addArticleToBuffer(article, buffer);
       return Responses.ok(
         buffer.toString(),
@@ -40,19 +40,12 @@ FutureOr<shelf.Response> $getArticle(shelf.Request request) async {
           'Content-Type': 'text/plain; charset=utf-8',
         },
       );
-    case 'pretty' || 'html' || 'web' || 'browser' || 'human' || 'text':
+    case 'pretty' || 'human' || 'text':
       return Responses.ok(
-        '<html>\n'
-        ' <head>\n'
-        '  <title>${article.title}</title>\n'
-        ' </head>\n'
-        ' <body>\n'
-        '  <h1>${article.title}</h1>\n'
-        '  <div>${article.content}</div>\n'
-        ' </body>\n'
-        '</html>',
+        '${article.title}\n\n'
+        '${article.content}',
         headers: <String, String>{
-          'Content-Type': 'text/html; charset=utf-8',
+          'Content-Type': 'text/plain; charset=utf-8',
         },
       );
     case 'proto' || 'protobuf':

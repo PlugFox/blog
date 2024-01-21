@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data' as td;
 
 import 'package:backend/src/common/database/database.dart' as db;
@@ -60,11 +62,13 @@ final class ArticleDAO {
                 .map<db.Insertable<db.ArticleContentTblData>>(
                   (a) => db.ArticleContentTblCompanion(
                     articleId: db.Value<String>(a.id),
-                    content: db.Value(a.hasContent() ? a.content : ''),
+                    content: db.Value(td.Uint8List.fromList(
+                        a.hasContent() && a.content.isNotEmpty ? _$contentCodec.encode(a.content) : <int>[])),
                   ),
                 )
                 .toList(growable: false),
           );
+
         // Prepare search table
         final search = <String, Set<String>>{/* String article.id : Set<String> words */};
         for (final article in articles) {
@@ -75,7 +79,7 @@ final class ArticleDAO {
           if (content.isEmpty) continue;
           final text = dom.Document.html('<html><body>$content</body></html>').body?.text.toLowerCase();
           if (text == null || text.isEmpty) continue;
-          var sanitized = text.trim().toLowerCase();
+          var sanitized = '${article.title.trim().toLowerCase()} ${text.trim().toLowerCase()}';
           while (sanitized.contains('  ')) sanitized = sanitized.replaceAll('  ', ' ');
           words.addAll(_$searchWordRegExp
               .allMatches(sanitized)
@@ -132,7 +136,7 @@ final class ArticleDAO {
     final row = await select.getSingleOrNull();
     if (row == null) return null;
     return shared.Article.fromBuffer(row.readTable(_database.articleTbl).data)
-      ..content = row.readTable(_database.articleContentTbl).content;
+      ..content = _$contentCodec.decode(row.readTable(_database.articleContentTbl).content);
   }
 
   // TODO(plugfox): implement search
@@ -161,6 +165,7 @@ final class ArticleDAO {
   }
 }
 
+final Codec<String, List<int>> _$contentCodec = utf8.fuse(gzip);
 final RegExp _$searchWordRegExp = RegExp('[a-za-яё0-9]+');
 String _$constructSearchQuery(Set<String> words, {int limit = 1000}) => '''
 WITH _input (value) AS (

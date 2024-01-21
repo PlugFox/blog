@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS article_content_tbl (
     article_id TEXT NOT NULL PRIMARY KEY,
 
     -- Time is the timestamp (in seconds)
-    content TEXT NOT NULL
+    content BLOB NOT NULL
 ) STRICT;
 
 

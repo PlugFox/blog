@@ -43,7 +43,7 @@ FutureOr<shelf.Response> $logs(shelf.Request request) async {
         },
       );
     case 'pretty' || 'csv' || 'tsv' || 'human':
-      final buffer = StringBuffer();
+      final buffer = StringBuffer('');
       const separator = ',';
       for (final log in logsList) {
         buffer

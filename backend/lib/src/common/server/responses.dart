@@ -27,7 +27,7 @@ sealed class Responses {
     Map<String, String>? headers,
   }) {
     String contnetType;
-    List<int> body;
+    Object body;
     switch (data) {
       case Map<String, Object?> data:
         contnetType = io.ContentType.json.value;
@@ -45,7 +45,7 @@ sealed class Responses {
         body = data;
       case String data:
         contnetType = io.ContentType.text.value;
-        body = utf8.encode(data);
+        body = data;
       case DateTime data:
         return ok({'value': data.toUtc().toIso8601String()}, headers: headers);
       case num data:
@@ -69,7 +69,6 @@ sealed class Responses {
       headers: <String, String>{
         ..._headers,
         ...?headers,
-        'Content-Length': body.length.toString(),
         if (headers == null ||
             headers.isEmpty ||
             !headers.containsKey('Content-Type') ||

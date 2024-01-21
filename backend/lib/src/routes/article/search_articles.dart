@@ -40,7 +40,7 @@ FutureOr<shelf.Response> $searchArticles(shelf.Request request) async {
         },
       );
     case 'csv' || 'tsv':
-      final buffer = StringBuffer()..writeln('id,created_at,updated_at,title');
+      final buffer = StringBuffer('')..writeln('id,created_at,updated_at,title');
       for (final article in articles) Article2CSV.addArticleToBuffer(article, buffer);
       return Responses.ok(
         buffer.toString(),
@@ -48,24 +48,13 @@ FutureOr<shelf.Response> $searchArticles(shelf.Request request) async {
           'Content-Type': 'text/plain; charset=utf-8',
         },
       );
-    case 'pretty' || 'html' || 'web' || 'browser' || 'human' || 'text':
-      final buffer = StringBuffer()
-        ..writeln('<html>')
-        ..writeln(' <head>')
-        ..writeln('  <title>Search results for "$search"</title>')
-        ..writeln(' </head>')
-        ..writeln(' <body>')
-        ..writeln('  <h1>Search results for "$search"</h1>')
-        ..writeln('  <ul>');
-      for (final article in articles) buffer.writeln('   <li><p>${article.title}</p></li>');
-      buffer
-        ..writeln('  </ul>')
-        ..writeln(' </body>')
-        ..writeln('</html>');
+    case 'pretty' || 'human' || 'text':
+      final buffer = StringBuffer('');
+      for (final article in articles) buffer.writeln('- ${article.title}');
       return Responses.ok(
         buffer.toString(),
         headers: <String, String>{
-          'Content-Type': 'text/html; charset=utf-8',
+          'Content-Type': 'text/plain; charset=utf-8',
         },
       );
     case 'proto' || 'protobuf':

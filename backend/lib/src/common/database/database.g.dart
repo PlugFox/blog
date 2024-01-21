@@ -290,8 +290,8 @@ class ArticleContentTbl extends Table with TableInfo<ArticleContentTbl, ArticleC
   late final GeneratedColumn<String> articleId = GeneratedColumn<String>('article_id', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL PRIMARY KEY');
   static const VerificationMeta _contentMeta = VerificationMeta('content');
-  late final GeneratedColumn<String> content = GeneratedColumn<String>('content', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
+  late final GeneratedColumn<Uint8List> content = GeneratedColumn<Uint8List>('content', aliasedName, false,
+      type: DriftSqlType.blob, requiredDuringInsert: true, $customConstraints: 'NOT NULL');
   @override
   List<GeneratedColumn> get $columns => [articleId, content];
   @override
@@ -323,7 +323,7 @@ class ArticleContentTbl extends Table with TableInfo<ArticleContentTbl, ArticleC
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ArticleContentTblData(
       articleId: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}article_id'])!,
-      content: attachedDatabase.typeMapping.read(DriftSqlType.string, data['${effectivePrefix}content'])!,
+      content: attachedDatabase.typeMapping.read(DriftSqlType.blob, data['${effectivePrefix}content'])!,
     );
   }
 
@@ -343,13 +343,13 @@ class ArticleContentTblData extends DataClass implements Insertable<ArticleConte
   final String articleId;
 
   /// Time is the timestamp (in seconds)
-  final String content;
+  final Uint8List content;
   const ArticleContentTblData({required this.articleId, required this.content});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['article_id'] = Variable<String>(articleId);
-    map['content'] = Variable<String>(content);
+    map['content'] = Variable<Uint8List>(content);
     return map;
   }
 
@@ -364,7 +364,7 @@ class ArticleContentTblData extends DataClass implements Insertable<ArticleConte
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ArticleContentTblData(
       articleId: serializer.fromJson<String>(json['article_id']),
-      content: serializer.fromJson<String>(json['content']),
+      content: serializer.fromJson<Uint8List>(json['content']),
     );
   }
   @override
@@ -372,11 +372,11 @@ class ArticleContentTblData extends DataClass implements Insertable<ArticleConte
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'article_id': serializer.toJson<String>(articleId),
-      'content': serializer.toJson<String>(content),
+      'content': serializer.toJson<Uint8List>(content),
     };
   }
 
-  ArticleContentTblData copyWith({String? articleId, String? content}) => ArticleContentTblData(
+  ArticleContentTblData copyWith({String? articleId, Uint8List? content}) => ArticleContentTblData(
         articleId: articleId ?? this.articleId,
         content: content ?? this.content,
       );
@@ -390,16 +390,18 @@ class ArticleContentTblData extends DataClass implements Insertable<ArticleConte
   }
 
   @override
-  int get hashCode => Object.hash(articleId, content);
+  int get hashCode => Object.hash(articleId, $driftBlobEquality.hash(content));
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ArticleContentTblData && other.articleId == this.articleId && other.content == this.content);
+      (other is ArticleContentTblData &&
+          other.articleId == this.articleId &&
+          $driftBlobEquality.equals(other.content, this.content));
 }
 
 class ArticleContentTblCompanion extends UpdateCompanion<ArticleContentTblData> {
   final Value<String> articleId;
-  final Value<String> content;
+  final Value<Uint8List> content;
   final Value<int> rowid;
   const ArticleContentTblCompanion({
     this.articleId = const Value.absent(),
@@ -408,13 +410,13 @@ class ArticleContentTblCompanion extends UpdateCompanion<ArticleContentTblData> 
   });
   ArticleContentTblCompanion.insert({
     required String articleId,
-    required String content,
+    required Uint8List content,
     this.rowid = const Value.absent(),
   })  : articleId = Value(articleId),
         content = Value(content);
   static Insertable<ArticleContentTblData> custom({
     Expression<String>? articleId,
-    Expression<String>? content,
+    Expression<Uint8List>? content,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -424,7 +426,7 @@ class ArticleContentTblCompanion extends UpdateCompanion<ArticleContentTblData> 
     });
   }
 
-  ArticleContentTblCompanion copyWith({Value<String>? articleId, Value<String>? content, Value<int>? rowid}) {
+  ArticleContentTblCompanion copyWith({Value<String>? articleId, Value<Uint8List>? content, Value<int>? rowid}) {
     return ArticleContentTblCompanion(
       articleId: articleId ?? this.articleId,
       content: content ?? this.content,
@@ -439,7 +441,7 @@ class ArticleContentTblCompanion extends UpdateCompanion<ArticleContentTblData> 
       map['article_id'] = Variable<String>(articleId.value);
     }
     if (content.present) {
-      map['content'] = Variable<String>(content.value);
+      map['content'] = Variable<Uint8List>(content.value);
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);

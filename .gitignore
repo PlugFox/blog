@@ -17,3 +17,6 @@ data/
 # SQLite database file
 *.sqlite3
 *.sqlite
+
+# macOS related files
+.DS_Store
