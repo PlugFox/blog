@@ -14,12 +14,14 @@
 - ✅ Routing & Middleware
 - ✅ SQLite database with ORM
 - ✅ Protocol Buffer's schema for API
-- ❌ Medium RSS parsing by authors
-- ❌ Pagination
+- ✅ Medium RSS parsing by authors
+- ✅ Pagination
 - ❌ Search by tags, authors, titles.
 - ❌ POST callbacks
+- ❌ Basic UI
 - ❌ Dockerfiles
 - ❌ Docker Compose & Stack
+- ❌ Admin menu based on local storage entry
 - ❌ CI/CD deployment with GitHub Actions
 - ❌ Shaders for frontend
 - ❌ Favicons
