@@ -232,7 +232,7 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
             .go();
       }
     });
-    if (DateTime.now().second % 10 == 0) await database.customStatement('VACUUM;');
+    /* if (DateTime.now().second % 10 == 0) */ await database.customStatement('VACUUM;');
   },
   'Migrate app from previous version': (config, context) async {
     final database = context['database'] as Database;
@@ -297,6 +297,7 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
           )
           .toList(growable: false);
       logsCache.clear();
+      // TODO(plugfox): delete logs more than 10000
       database.batch((batch) => batch.insertAll(database.logTbl, logs)).ignore();
     });
 
