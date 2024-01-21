@@ -26,9 +26,11 @@ sealed class Responses {
     Object? data, {
     Map<String, String>? headers,
   }) {
+    String contnetType;
     List<int> body;
     switch (data) {
       case Map<String, Object?> data:
+        contnetType = io.ContentType.json.value;
         body = _responseEncoder.convert(
           <String, Object>{
             'status': _kStatus.ok,
@@ -36,14 +38,17 @@ sealed class Responses {
           },
         );
       case null:
+        contnetType = io.ContentType.json.value;
         body = utf8.encode('{"status":"${_kStatus.ok}"}');
       case List<int> data:
+        contnetType = io.ContentType.binary.value;
         body = data;
+      case String data:
+        contnetType = io.ContentType.text.value;
+        body = utf8.encode(data);
       case DateTime data:
         return ok({'value': data.toUtc().toIso8601String()}, headers: headers);
       case num data:
-        return ok({'value': data}, headers: headers);
-      case String data:
         return ok({'value': data}, headers: headers);
       case List<Object?> data:
         return ok({'value': data}, headers: headers);
@@ -65,6 +70,7 @@ sealed class Responses {
         ..._headers,
         ...?headers,
         'Content-Length': body.length.toString(),
+        'Content-Type': contnetType,
       },
     );
   }

@@ -247,12 +247,12 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
               (l) => l.hasError() && l.error
                   ? LogMessage.error(
                       timestamp: DateTime.fromMillisecondsSinceEpoch(l.timestamp * 1000),
-                      level: LogLevel.fromValue(l.level),
+                      level: LogLevel.fromValue(l.prefix),
                       message: l.message,
                       stackTrace: l.hasStacktrace() ? StackTrace.fromString(l.stacktrace) : null)
                   : LogMessage.verbose(
                       timestamp: DateTime.fromMillisecondsSinceEpoch(l.timestamp * 1000),
-                      level: LogLevel.fromValue(l.level),
+                      level: LogLevel.fromValue(l.prefix),
                       message: l.message,
                     ),
             )
@@ -278,9 +278,15 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
               level: log.level.level,
               data: shared.LogMessage(
                 message: log.message.toString(),
+                level: log.level.level,
+                prefix: log.level.prefix,
                 timestamp: log.timestamp.millisecondsSinceEpoch ~/ 1000,
                 stacktrace: switch (log) { LogMessageError l => l.stackTrace.toString(), _ => null },
                 error: log is LogMessageError,
+                context: <String, String>{
+                  for (final e in log.context.entries)
+                    if (e.value is String) e.key: e.value as String,
+                },
               ).writeToBuffer(),
             ),
           )
