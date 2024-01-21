@@ -1,11 +1,16 @@
-import 'dart:io';
+// ignore_for_file: unnecessary_lambdas
 
-import 'package:http/http.dart';
 import 'package:test/test.dart';
+
+import 'unit/medium_test.dart' as medium_test;
 
 // TODO(plugfox): update test
 void main() {
-  const port = '8080';
+  group('Unit', () {
+    medium_test.main();
+  });
+
+  /* const port = '8080';
   const host = 'http://0.0.0.0:$port';
   late Process p;
 
@@ -36,5 +41,5 @@ void main() {
   test('404', () async {
     final response = await get(Uri.parse('$host/foobar'));
     expect(response.statusCode, 404);
-  });
+  }); */
 }

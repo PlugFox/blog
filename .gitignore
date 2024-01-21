@@ -9,7 +9,9 @@ build/
 # https://dart.dev/guides/libraries/private-files#pubspeclock.
 #pubspec.lock
 
+# Test coverage directory
 coverage/
+.coverage/
 
 .local-chromium/
 data/
@@ -20,3 +22,4 @@ data/
 
 # macOS related files
 .DS_Store
+

@@ -315,6 +315,10 @@ final class InitializationProgress {
   int _totalSteps = 0;
   String _currentStepName = '';
 
+  int get totalSteps => _totalSteps;
+  int get currentStep => _currentStep;
+  String get currentStepName => _currentStepName;
+
   late final Config config;
   late final Database database;
   late final LogBuffer logBuffer;
