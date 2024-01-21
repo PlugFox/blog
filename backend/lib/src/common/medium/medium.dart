@@ -1,3 +1,4 @@
+import 'package:html/dom.dart' as dom;
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared/shared.dart' as shared;
@@ -22,7 +23,6 @@ final class Medium {
     final document = xml.XmlDocument.parse(xmlString);
     final items = document.findAllElements('item');
     final dateFormat = DateFormat('EEE, dd MMM yyyy HH:mm:ss \'GMT\'');
-    final excerptRegExp = RegExp(r'<p>(?<text>.+)<\/p>');
     Iterable<String> extractAll(xml.XmlElement node, List<String> names, {bool recursive = false}) => names
         .expand<xml.XmlElement>(recursive ? node.findAllElements : node.findElements)
         .map<String>((e) => e.innerText)
@@ -41,14 +41,8 @@ final class Medium {
     return items
         .map<shared.Article?>((node) {
           final content = extractFirst(node, ['content:encoded', 'content']) ?? '';
-          var excerpt = content.isNotEmpty
-              ? excerptRegExp
-                  .allMatches(content)
-                  .map<String?>((e) => e.namedGroup('text'))
-                  .whereType<String>()
-                  .join(' ')
-              : '';
-          excerpt = excerpt.replaceAll(RegExp('<[^>]*>'), '');
+          var excerpt = content.isNotEmpty ? dom.Document.html('<html><body>$content</body></html>').body?.text : null;
+          excerpt ??= '';
           if (excerpt.length > 140) excerpt = '${excerpt.substring(0, 140 - 3)}...';
           final link = extractFirst(node, ['link', 'url', 'dc:link', 'og:url', 'al:url']) ?? '';
           final guid = extractFirst(node, ['guid', 'dc:guid', 'identifier'])?.split('/').lastOrNull ??

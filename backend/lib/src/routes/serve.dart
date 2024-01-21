@@ -9,12 +9,11 @@ import 'package:backend/src/common/server/handle_errors.dart';
 import 'package:backend/src/common/server/injector.dart';
 import 'package:backend/src/common/server/log.dart';
 import 'package:backend/src/common/server/responses.dart';
-import 'package:backend/src/routes/admin/check.dart';
+import 'package:backend/src/routes/admin/check_articles.dart';
 import 'package:backend/src/routes/admin/config.dart';
-import 'package:backend/src/routes/admin/health.dart';
 import 'package:backend/src/routes/admin/logs.dart';
-import 'package:backend/src/routes/article/article.dart';
-import 'package:backend/src/routes/article/articles.dart';
+import 'package:backend/src/routes/article/get_article.dart';
+import 'package:backend/src/routes/article/get_articles.dart';
 import 'package:shelf/shelf.dart' as shelf;
 import 'package:shelf/shelf_io.dart' as shelf_io;
 import 'package:shelf_router/shelf_router.dart';
@@ -50,7 +49,8 @@ Future<void> serve({
 
 /// The router for the application.
 shelf.Handler get _$router => (Router(notFoundHandler: _$notFound)
-      ..get('/admin/health', $healthCheck)
+      ..get('/health', _$healthCheck)
+      ..get('/status', _$healthCheck)
       ..get('/admin/logs', $logs)
       ..get('/admin/config', $config)
       ..get('/admin/articles', $checkArticles)
@@ -75,3 +75,5 @@ FutureOr<shelf.Response> _$notFound(shelf.Request request) => Responses.error(
         'headers': request.headers,
       }),
     );
+
+FutureOr<shelf.Response> _$healthCheck(shelf.Request request) => Responses.ok(null);
