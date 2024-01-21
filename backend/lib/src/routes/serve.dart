@@ -51,6 +51,7 @@ shelf.Handler get _$router => (Router(notFoundHandler: _$notFound)
       ..get('/admin/logs', $logs)
       ..get('/admin/config', $config)
       ..get('/admin/articles', $checkArticles)
+      /* ..patch('/admin/articles', $upsertArticlesByURLs) */
       /* ..put('/admin/articles', $upsertArticles) */
       /* ..post('/admin/articles', $upsertArticles) */
       /* ..delete('/admin/articles/<id>', $deleteArticle) */
