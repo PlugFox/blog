@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:backend/src/common/config/config.dart';
 import 'package:backend/src/common/config/initialization.dart';
 import 'package:backend/src/common/database/database.dart';
+import 'package:backend/src/common/medium/medium.dart';
 import 'package:backend/src/common/server/worker.dart';
+import 'package:http/http.dart' as http;
 import 'package:l/l.dart';
 
 /// Starts the server.
@@ -43,11 +45,18 @@ void main([List<String>? arguments]) => Future<void>.sync(() async {
           }
 
           // Periodic tasks
-          Timer.periodic(
-            Duration(seconds: config.interval),
-            (_) {},
-          );
+          if (config.interval > 0 && config.username.isNotEmpty) {
+            final medium = Medium(
+              client: http.Client(),
+              database: database,
+            );
+            Timer.periodic(
+              Duration(seconds: config.interval),
+              (_) => medium.fetchArticlesRSS(config.username).then<void>(medium.upsertArticlesIntoDatabase).ignore(),
+            );
+          }
 
+          // Log server info
           l
             ..i('Started ${workers.length} worker(s) at '
                 '${config.address.host}:${config.port} in '

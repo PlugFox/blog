@@ -3,8 +3,8 @@
 
 -- Article table
 CREATE TABLE IF NOT EXISTS article_tbl (
-    -- req Unique identifier of the article in the database
-    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- req Unique GUID identifier of the article in the database
+    id TEXT NOT NULL PRIMARY KEY,
 
     -- Time is the timestamp (in seconds)
     created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS article_tag_tbl (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 
     -- req Unique identifier of the article in the database
-    article_id INTEGER NOT NULL,
+    article_id TEXT NOT NULL,
 
     -- req Tag is the tag of the article
     tag TEXT NOT NULL,
@@ -57,10 +57,10 @@ CREATE INDEX IF NOT EXISTS article_tag_tag_idx ON article_tag_tbl (tag);
 -- Search table
 CREATE TABLE IF NOT EXISTS article_prefix_tbl (
     -- req Prefix (first 3 chars of word, lowercased)
-    prefix TEXT NOT NULL, -- CHECK(length(prefix) = 3)
+    prefix TEXT NOT NULL CHECK(length(prefix) = 3),
 
     -- req Unique identifier
-    article_id INTEGER NOT NULL,
+    article_id TEXT NOT NULL,
 
     -- req Word (3 or more chars, lowercased)
     word TEXT NOT NULL,

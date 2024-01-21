@@ -67,7 +67,7 @@ Config _$initializeServer$Config(List<String>? arguments) {
     'address': String.fromEnvironment('address', defaultValue: '0.0.0.0'),
     'port': String.fromEnvironment('port', defaultValue: '8080'),
     'database': String.fromEnvironment('database', defaultValue: 'db.sqlite'),
-    'interval': String.fromEnvironment('interval', defaultValue: '3600'),
+    'interval': String.fromEnvironment('interval', defaultValue: '86400'),
     'workers': String.fromEnvironment('workers'),
     'token': String.fromEnvironment('token'),
     'verbose': String.fromEnvironment('verbose'),
@@ -151,7 +151,7 @@ Config _$initializeServer$Config(List<String>? arguments) {
       env<int>(
         'interval',
         int.tryParse,
-        () => 3600,
+        () => 86400,
       ),
       0,
     ),
@@ -168,6 +168,11 @@ Config _$initializeServer$Config(List<String>? arguments) {
       String token when token.length < 6 => null,
       String token => token,
     },
+    username: env(
+      'username',
+      (value) => value,
+      () => '',
+    ).trim(),
     verbose: env<int>(
       'verbose',
       int.tryParse,

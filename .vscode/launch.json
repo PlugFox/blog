@@ -14,6 +14,9 @@
         "--workers=2",
         "--database=:memory:",
         "--interval=0",
+        "--username=plugfox",
+        "--token=password",
+        "--verbose=3",
       ],
       "env": {},
     }

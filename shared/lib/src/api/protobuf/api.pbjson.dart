@@ -86,21 +86,20 @@ final $typed_data.Uint8List errorDescriptor =
 const Article$json = {
   '1': 'Article',
   '2': [
-    {'1': 'id', '3': 1, '4': 1, '5': 13, '10': 'id'},
+    {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
     {'1': 'title', '3': 2, '4': 1, '5': 9, '10': 'title'},
     {'1': 'link', '3': 3, '4': 1, '5': 9, '10': 'link'},
-    {'1': 'guid', '3': 4, '4': 1, '5': 9, '10': 'guid'},
-    {'1': 'author', '3': 5, '4': 1, '5': 9, '10': 'author'},
-    {'1': 'tags', '3': 6, '4': 3, '5': 9, '10': 'tags'},
-    {'1': 'createdAt', '3': 7, '4': 1, '5': 13, '10': 'createdAt'},
-    {'1': 'updatedAt', '3': 8, '4': 1, '5': 13, '10': 'updatedAt'},
-    {'1': 'excerpt', '3': 9, '4': 1, '5': 9, '10': 'excerpt'},
-    {'1': 'content', '3': 10, '4': 1, '5': 9, '10': 'content'},
+    {'1': 'author', '3': 4, '4': 1, '5': 9, '10': 'author'},
+    {'1': 'tags', '3': 5, '4': 3, '5': 9, '10': 'tags'},
+    {'1': 'createdAt', '3': 6, '4': 1, '5': 13, '10': 'createdAt'},
+    {'1': 'updatedAt', '3': 7, '4': 1, '5': 13, '10': 'updatedAt'},
+    {'1': 'excerpt', '3': 8, '4': 1, '5': 9, '10': 'excerpt'},
+    {'1': 'content', '3': 9, '4': 1, '5': 9, '10': 'content'},
     {'1': 'meta', '3': 1000, '4': 3, '5': 11, '6': '.blog.api.Article.MetaEntry', '10': 'meta'},
   ],
   '3': [Article_MetaEntry$json],
   '9': [
-    {'1': 11, '2': 1000},
+    {'1': 10, '2': 1000},
   ],
 };
 
@@ -116,28 +115,27 @@ const Article_MetaEntry$json = {
 
 /// Descriptor for `Article`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List articleDescriptor =
-    $convert.base64Decode('CgdBcnRpY2xlEg4KAmlkGAEgASgNUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSEgoEbGluax'
-        'gDIAEoCVIEbGluaxISCgRndWlkGAQgASgJUgRndWlkEhYKBmF1dGhvchgFIAEoCVIGYXV0aG9y'
-        'EhIKBHRhZ3MYBiADKAlSBHRhZ3MSHAoJY3JlYXRlZEF0GAcgASgNUgljcmVhdGVkQXQSHAoJdX'
-        'BkYXRlZEF0GAggASgNUgl1cGRhdGVkQXQSGAoHZXhjZXJwdBgJIAEoCVIHZXhjZXJwdBIYCgdj'
-        'b250ZW50GAogASgJUgdjb250ZW50EjAKBG1ldGEY6AcgAygLMhsuYmxvZy5hcGkuQXJ0aWNsZS'
-        '5NZXRhRW50cnlSBG1ldGEaNwoJTWV0YUVudHJ5EhAKA2tleRgBIAEoCVIDa2V5EhQKBXZhbHVl'
-        'GAIgASgJUgV2YWx1ZToCOAFKBQgLEOgH');
+    $convert.base64Decode('CgdBcnRpY2xlEg4KAmlkGAEgASgJUgJpZBIUCgV0aXRsZRgCIAEoCVIFdGl0bGUSEgoEbGluax'
+        'gDIAEoCVIEbGluaxIWCgZhdXRob3IYBCABKAlSBmF1dGhvchISCgR0YWdzGAUgAygJUgR0YWdz'
+        'EhwKCWNyZWF0ZWRBdBgGIAEoDVIJY3JlYXRlZEF0EhwKCXVwZGF0ZWRBdBgHIAEoDVIJdXBkYX'
+        'RlZEF0EhgKB2V4Y2VycHQYCCABKAlSB2V4Y2VycHQSGAoHY29udGVudBgJIAEoCVIHY29udGVu'
+        'dBIwCgRtZXRhGOgHIAMoCzIbLmJsb2cuYXBpLkFydGljbGUuTWV0YUVudHJ5UgRtZXRhGjcKCU'
+        '1ldGFFbnRyeRIQCgNrZXkYASABKAlSA2tleRIUCgV2YWx1ZRgCIAEoCVIFdmFsdWU6AjgBSgUI'
+        'ChDoBw==');
 
 @$core.Deprecated('Use articlesDescriptor instead')
 const Articles$json = {
   '1': 'Articles',
   '2': [
     {'1': 'articles', '3': 1, '4': 3, '5': 11, '6': '.blog.api.Article', '10': 'articles'},
-    {'1': 'limit', '3': 2, '4': 1, '5': 13, '10': 'limit'},
-    {'1': 'offset', '3': 3, '4': 1, '5': 13, '10': 'offset'},
+    {'1': 'count', '3': 2, '4': 1, '5': 13, '10': 'count'},
   ],
 };
 
 /// Descriptor for `Articles`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List articlesDescriptor =
     $convert.base64Decode('CghBcnRpY2xlcxItCghhcnRpY2xlcxgBIAMoCzIRLmJsb2cuYXBpLkFydGljbGVSCGFydGljbG'
-        'VzEhQKBWxpbWl0GAIgASgNUgVsaW1pdBIWCgZvZmZzZXQYAyABKA1SBm9mZnNldA==');
+        'VzEhQKBWNvdW50GAIgASgNUgVjb3VudA==');
 
 @$core.Deprecated('Use logMessageDescriptor instead')
 const LogMessage$json = {
@@ -172,3 +170,17 @@ final $typed_data.Uint8List logMessageDescriptor =
         'Jsb2cuYXBpLkxvZ01lc3NhZ2UuQ29udGV4dEVudHJ5Ugdjb250ZXh0EhQKBWVycm9yGAcgASgI'
         'UgVlcnJvcho6CgxDb250ZXh0RW50cnkSEAoDa2V5GAEgASgJUgNrZXkSFAoFdmFsdWUYAiABKA'
         'lSBXZhbHVlOgI4AQ==');
+
+@$core.Deprecated('Use logMessagesDescriptor instead')
+const LogMessages$json = {
+  '1': 'LogMessages',
+  '2': [
+    {'1': 'logs', '3': 1, '4': 3, '5': 11, '6': '.blog.api.LogMessage', '10': 'logs'},
+    {'1': 'count', '3': 2, '4': 1, '5': 13, '10': 'count'},
+  ],
+};
+
+/// Descriptor for `LogMessages`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List logMessagesDescriptor =
+    $convert.base64Decode('CgtMb2dNZXNzYWdlcxIoCgRsb2dzGAEgAygLMhQuYmxvZy5hcGkuTG9nTWVzc2FnZVIEbG9ncx'
+        'IUCgVjb3VudBgCIAEoDVIFY291bnQ=');

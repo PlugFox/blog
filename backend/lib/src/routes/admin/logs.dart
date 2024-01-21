@@ -12,7 +12,7 @@ import 'package:shelf/shelf.dart' as shelf;
 ///
 /// If 'pretty' is set, the response is formatted as a human readable string.
 ///
-/// E.g. `http://127.0.0.1:8080/meta/logs?verbose=3&pretty`
+/// E.g. `http://127.0.0.1:8080/admin/logs?verbose=3&format=pretty`
 FutureOr<shelf.Response> $logs(shelf.Request request) async {
   final database = request.context['DATABASE'] as Database;
   final verbose = switch (request.requestedUri.queryParameters['verbose']?.trim()) {
@@ -27,29 +27,25 @@ FutureOr<shelf.Response> $logs(shelf.Request request) async {
           (tbl) => OrderingTerm(expression: tbl.timestamp, mode: OrderingMode.desc),
         ]))
       .get();
-  final logsIterable =
+  final logsList =
       logsDB.map<Uint8List>((l) => l.data).map<shared.LogMessage>(shared.LogMessage.fromBuffer).toList(growable: false);
-  switch (request.requestedUri.queryParameters['pretty']?.trim().toLowerCase()) {
-    case null || 'false':
+  switch (request.requestedUri.queryParameters['format']?.trim().toLowerCase()) {
+    case 'json':
       return Responses.ok(
         <String, Object?>{
           'logs': <Object?>[
-            for (final log in logsIterable)
-              <String, Object?>{
-                'timestamp': log.timestamp,
-                'level': log.level,
-                'prefix': log.prefix,
-                'message': log.message,
-                if (log.hasStacktrace()) 'stacktrace': log.stacktrace,
-                if (log.context.isNotEmpty) 'context': log.context,
-              },
+            for (final log in logsList) log.toProto3Json(),
           ],
+          'count': logsList.length,
+        },
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=utf-8',
         },
       );
-    default:
+    case 'pretty' || 'csv' || 'tsv' || 'human':
       final buffer = StringBuffer();
-      const separator = ' | ';
-      for (final log in logsIterable) {
+      const separator = ',';
+      for (final log in logsList) {
         buffer
           ..write(DateTime.fromMillisecondsSinceEpoch(log.timestamp * 1000))
           ..write(separator)
@@ -58,6 +54,19 @@ FutureOr<shelf.Response> $logs(shelf.Request request) async {
           ..write(log.message)
           ..writeln();
       }
-      return Responses.ok(buffer.toString());
+      return Responses.ok(
+        buffer.toString(),
+        headers: <String, String>{
+          'Content-Type': 'text/plain; charset=utf-8',
+        },
+      );
+    case 'proto' || 'protobuf':
+    default:
+      return Responses.ok(
+        shared.LogMessages(
+          logs: logsList,
+          count: logsList.length,
+        ).writeToBuffer(),
+      );
   }
 }

@@ -126,11 +126,11 @@ sealed class Pubspec {
     2024,
     1,
     21,
-    3,
-    8,
-    22,
-    264,
-    613,
+    6,
+    54,
+    1,
+    559,
+    540,
   );
 
   /// Name
@@ -428,6 +428,9 @@ sealed class Pubspec {
     'args': r'^2.4.0',
     'crypto': r'^3.0.3',
     'stack_trace': r'^1.11.1',
+    'xml': r'^6.5.0',
+    'intl': r'^0.19.0',
+    'http': r'^1.2.0',
     'l': r'5.0.0-pre.2',
     'drift': r'^2.15.0',
     'shared': <String, Object>{
@@ -441,7 +444,6 @@ sealed class Pubspec {
     'build_runner': r'^2.4.8',
     'pubspec_generator': r'^4.1.0-pre.1',
     'drift_dev': r'^2.15.0',
-    'http': r'^1.1.0',
     'lints': r'^3.0.0',
     'test': r'^1.25.1',
   };

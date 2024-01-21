@@ -285,10 +285,9 @@ class Error extends $pb.GeneratedMessage {
 /// Article represents a blog article.
 class Article extends $pb.GeneratedMessage {
   factory Article({
-    $core.int? id,
+    $core.String? id,
     $core.String? title,
     $core.String? link,
-    $core.String? guid,
     $core.String? author,
     $core.Iterable<$core.String>? tags,
     $core.int? createdAt,
@@ -306,9 +305,6 @@ class Article extends $pb.GeneratedMessage {
     }
     if (link != null) {
       $result.link = link;
-    }
-    if (guid != null) {
-      $result.guid = guid;
     }
     if (author != null) {
       $result.author = author;
@@ -341,16 +337,15 @@ class Article extends $pb.GeneratedMessage {
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Article',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
-    ..a<$core.int>(1, _omitFieldNames ? '' : 'id', $pb.PbFieldType.OU3)
+    ..aOS(1, _omitFieldNames ? '' : 'id')
     ..aOS(2, _omitFieldNames ? '' : 'title')
     ..aOS(3, _omitFieldNames ? '' : 'link')
-    ..aOS(4, _omitFieldNames ? '' : 'guid')
-    ..aOS(5, _omitFieldNames ? '' : 'author')
-    ..pPS(6, _omitFieldNames ? '' : 'tags')
-    ..a<$core.int>(7, _omitFieldNames ? '' : 'createdAt', $pb.PbFieldType.OU3, protoName: 'createdAt')
-    ..a<$core.int>(8, _omitFieldNames ? '' : 'updatedAt', $pb.PbFieldType.OU3, protoName: 'updatedAt')
-    ..aOS(9, _omitFieldNames ? '' : 'excerpt')
-    ..aOS(10, _omitFieldNames ? '' : 'content')
+    ..aOS(4, _omitFieldNames ? '' : 'author')
+    ..pPS(5, _omitFieldNames ? '' : 'tags')
+    ..a<$core.int>(6, _omitFieldNames ? '' : 'createdAt', $pb.PbFieldType.OU3, protoName: 'createdAt')
+    ..a<$core.int>(7, _omitFieldNames ? '' : 'updatedAt', $pb.PbFieldType.OU3, protoName: 'updatedAt')
+    ..aOS(8, _omitFieldNames ? '' : 'excerpt')
+    ..aOS(9, _omitFieldNames ? '' : 'content')
     ..m<$core.String, $core.String>(1000, _omitFieldNames ? '' : 'meta',
         entryClassName: 'Article.MetaEntry',
         keyFieldType: $pb.PbFieldType.OS,
@@ -379,10 +374,10 @@ class Article extends $pb.GeneratedMessage {
   static Article? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.int get id => $_getIZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.int v) {
-    $_setUnsignedInt32(0, v);
+  set id($core.String v) {
+    $_setString(0, v);
   }
 
   @$pb.TagNumber(1)
@@ -415,100 +410,84 @@ class Article extends $pb.GeneratedMessage {
   void clearLink() => clearField(3);
 
   @$pb.TagNumber(4)
-  $core.String get guid => $_getSZ(3);
+  $core.String get author => $_getSZ(3);
   @$pb.TagNumber(4)
-  set guid($core.String v) {
+  set author($core.String v) {
     $_setString(3, v);
   }
 
   @$pb.TagNumber(4)
-  $core.bool hasGuid() => $_has(3);
+  $core.bool hasAuthor() => $_has(3);
   @$pb.TagNumber(4)
-  void clearGuid() => clearField(4);
+  void clearAuthor() => clearField(4);
 
   @$pb.TagNumber(5)
-  $core.String get author => $_getSZ(4);
-  @$pb.TagNumber(5)
-  set author($core.String v) {
-    $_setString(4, v);
-  }
-
-  @$pb.TagNumber(5)
-  $core.bool hasAuthor() => $_has(4);
-  @$pb.TagNumber(5)
-  void clearAuthor() => clearField(5);
+  $core.List<$core.String> get tags => $_getList(4);
 
   @$pb.TagNumber(6)
-  $core.List<$core.String> get tags => $_getList(5);
+  $core.int get createdAt => $_getIZ(5);
+  @$pb.TagNumber(6)
+  set createdAt($core.int v) {
+    $_setUnsignedInt32(5, v);
+  }
+
+  @$pb.TagNumber(6)
+  $core.bool hasCreatedAt() => $_has(5);
+  @$pb.TagNumber(6)
+  void clearCreatedAt() => clearField(6);
 
   @$pb.TagNumber(7)
-  $core.int get createdAt => $_getIZ(6);
+  $core.int get updatedAt => $_getIZ(6);
   @$pb.TagNumber(7)
-  set createdAt($core.int v) {
+  set updatedAt($core.int v) {
     $_setUnsignedInt32(6, v);
   }
 
   @$pb.TagNumber(7)
-  $core.bool hasCreatedAt() => $_has(6);
+  $core.bool hasUpdatedAt() => $_has(6);
   @$pb.TagNumber(7)
-  void clearCreatedAt() => clearField(7);
+  void clearUpdatedAt() => clearField(7);
 
   @$pb.TagNumber(8)
-  $core.int get updatedAt => $_getIZ(7);
+  $core.String get excerpt => $_getSZ(7);
   @$pb.TagNumber(8)
-  set updatedAt($core.int v) {
-    $_setUnsignedInt32(7, v);
+  set excerpt($core.String v) {
+    $_setString(7, v);
   }
 
   @$pb.TagNumber(8)
-  $core.bool hasUpdatedAt() => $_has(7);
+  $core.bool hasExcerpt() => $_has(7);
   @$pb.TagNumber(8)
-  void clearUpdatedAt() => clearField(8);
+  void clearExcerpt() => clearField(8);
 
   @$pb.TagNumber(9)
-  $core.String get excerpt => $_getSZ(8);
+  $core.String get content => $_getSZ(8);
   @$pb.TagNumber(9)
-  set excerpt($core.String v) {
+  set content($core.String v) {
     $_setString(8, v);
   }
 
   @$pb.TagNumber(9)
-  $core.bool hasExcerpt() => $_has(8);
+  $core.bool hasContent() => $_has(8);
   @$pb.TagNumber(9)
-  void clearExcerpt() => clearField(9);
-
-  @$pb.TagNumber(10)
-  $core.String get content => $_getSZ(9);
-  @$pb.TagNumber(10)
-  set content($core.String v) {
-    $_setString(9, v);
-  }
-
-  @$pb.TagNumber(10)
-  $core.bool hasContent() => $_has(9);
-  @$pb.TagNumber(10)
-  void clearContent() => clearField(10);
+  void clearContent() => clearField(9);
 
   @$pb.TagNumber(1000)
-  $core.Map<$core.String, $core.String> get meta => $_getMap(10);
+  $core.Map<$core.String, $core.String> get meta => $_getMap(9);
 }
 
 /// Articles represents a list of blog articles.
 class Articles extends $pb.GeneratedMessage {
   factory Articles({
     $core.Iterable<Article>? articles,
-    $core.int? limit,
-    $core.int? offset,
+    $core.int? count,
   }) {
     final $result = create();
     if (articles != null) {
       $result.articles.addAll(articles);
     }
-    if (limit != null) {
-      $result.limit = limit;
-    }
-    if (offset != null) {
-      $result.offset = offset;
+    if (count != null) {
+      $result.count = count;
     }
     return $result;
   }
@@ -521,8 +500,7 @@ class Articles extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Articles',
       package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
     ..pc<Article>(1, _omitFieldNames ? '' : 'articles', $pb.PbFieldType.PM, subBuilder: Article.create)
-    ..a<$core.int>(2, _omitFieldNames ? '' : 'limit', $pb.PbFieldType.OU3)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'offset', $pb.PbFieldType.OU3)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'count', $pb.PbFieldType.OU3)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('Using this can add significant overhead to your binary. '
@@ -549,28 +527,16 @@ class Articles extends $pb.GeneratedMessage {
   $core.List<Article> get articles => $_getList(0);
 
   @$pb.TagNumber(2)
-  $core.int get limit => $_getIZ(1);
+  $core.int get count => $_getIZ(1);
   @$pb.TagNumber(2)
-  set limit($core.int v) {
+  set count($core.int v) {
     $_setUnsignedInt32(1, v);
   }
 
   @$pb.TagNumber(2)
-  $core.bool hasLimit() => $_has(1);
+  $core.bool hasCount() => $_has(1);
   @$pb.TagNumber(2)
-  void clearLimit() => clearField(2);
-
-  @$pb.TagNumber(3)
-  $core.int get offset => $_getIZ(2);
-  @$pb.TagNumber(3)
-  set offset($core.int v) {
-    $_setUnsignedInt32(2, v);
-  }
-
-  @$pb.TagNumber(3)
-  $core.bool hasOffset() => $_has(2);
-  @$pb.TagNumber(3)
-  void clearOffset() => clearField(3);
+  void clearCount() => clearField(2);
 }
 
 /// Log message.
@@ -723,6 +689,69 @@ class LogMessage extends $pb.GeneratedMessage {
   $core.bool hasError() => $_has(6);
   @$pb.TagNumber(7)
   void clearError() => clearField(7);
+}
+
+/// Log messages represents a list of log messages.
+class LogMessages extends $pb.GeneratedMessage {
+  factory LogMessages({
+    $core.Iterable<LogMessage>? logs,
+    $core.int? count,
+  }) {
+    final $result = create();
+    if (logs != null) {
+      $result.logs.addAll(logs);
+    }
+    if (count != null) {
+      $result.count = count;
+    }
+    return $result;
+  }
+  LogMessages._() : super();
+  factory LogMessages.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(i, r);
+  factory LogMessages.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(i, r);
+
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'LogMessages',
+      package: const $pb.PackageName(_omitMessageNames ? '' : 'blog.api'), createEmptyInstance: create)
+    ..pc<LogMessage>(1, _omitFieldNames ? '' : 'logs', $pb.PbFieldType.PM, subBuilder: LogMessage.create)
+    ..a<$core.int>(2, _omitFieldNames ? '' : 'count', $pb.PbFieldType.OU3)
+    ..hasRequiredFields = false;
+
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+      'Will be removed in next major version')
+  LogMessages clone() => LogMessages()..mergeFromMessage(this);
+  @$core.Deprecated('Using this can add significant overhead to your binary. '
+      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+      'Will be removed in next major version')
+  LogMessages copyWith(void Function(LogMessages) updates) =>
+      super.copyWith((message) => updates(message as LogMessages)) as LogMessages;
+
+  $pb.BuilderInfo get info_ => _i;
+
+  @$core.pragma('dart2js:noInline')
+  static LogMessages create() => LogMessages._();
+  LogMessages createEmptyInstance() => create();
+  static $pb.PbList<LogMessages> createRepeated() => $pb.PbList<LogMessages>();
+  @$core.pragma('dart2js:noInline')
+  static LogMessages getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<LogMessages>(create);
+  static LogMessages? _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<LogMessage> get logs => $_getList(0);
+
+  @$pb.TagNumber(2)
+  $core.int get count => $_getIZ(1);
+  @$pb.TagNumber(2)
+  set count($core.int v) {
+    $_setUnsignedInt32(1, v);
+  }
+
+  @$pb.TagNumber(2)
+  $core.bool hasCount() => $_has(1);
+  @$pb.TagNumber(2)
+  void clearCount() => clearField(2);
 }
 
 const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');

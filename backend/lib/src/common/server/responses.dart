@@ -70,7 +70,7 @@ sealed class Responses {
         ..._headers,
         ...?headers,
         'Content-Length': body.length.toString(),
-        'Content-Type': contnetType,
+        if (headers == null || headers.isEmpty || !headers.containsKey('Content-Type')) 'Content-Type': contnetType,
       },
     );
   }

@@ -26,26 +26,24 @@ message Error {
 
 // Article represents a blog article.
 message Article {
-  uint32 id = 1;
+  string id = 1; // GUID
   string title = 2;
   string link = 3;
-  string guid = 4;
-  string author = 5;
-  repeated string tags = 6;
-  uint32 createdAt = 7; // Unix timestamp in seconds.
-  uint32 updatedAt = 8; // Unix timestamp in seconds.
-  string excerpt = 9;
-  string content = 10;
+  string author = 4;
+  repeated string tags = 5;
+  uint32 createdAt = 6; // Unix timestamp in seconds.
+  uint32 updatedAt = 7; // Unix timestamp in seconds.
+  string excerpt = 8;
+  string content = 9;
 
-  reserved 11 to 999;
+  reserved 10 to 999;
   map<string, string> meta = 1000;
 }
 
 // Articles represents a list of blog articles.
 message Articles {
   repeated Article articles = 1;
-  uint32 limit = 2;
-  uint32 offset = 3;
+  uint32 count = 2;
 }
 
 // Log message.
@@ -57,4 +55,10 @@ message LogMessage {
   string stacktrace = 5;
   map<string, string> context = 6;
   bool error = 7;
+}
+
+// Log messages represents a list of log messages.
+message LogMessages {
+  repeated LogMessage logs = 1;
+  uint32 count = 2;
 }
