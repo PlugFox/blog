@@ -168,6 +168,11 @@ Config _$initializeServer$Config(List<String>? arguments) {
       String token when token.length < 6 => null,
       String token => token,
     },
+    username: env(
+      'username',
+      (value) => value,
+      () => '',
+    ).trim(),
     verbose: env<int>(
       'verbose',
       int.tryParse,

@@ -18,6 +18,7 @@ final class Config {
     required this.workers,
     required this.token,
     required this.verbose,
+    required this.username,
   });
 
   /// Create a [ArgParser] for the [Config].
@@ -72,6 +73,14 @@ final class Config {
           'If not provided, authentication will be disabled.\n'
           'Should be at least 6 characters long.',
       defaultsTo: '',
+    )
+    ..addOption(
+      'username',
+      abbr: 'u',
+      aliases: ['author', 'medium', 'medium-username', 'medium-user', 'medium-author', 'handle'],
+      help: 'Medium username.\n'
+          'The author of the articles.',
+      defaultsTo: const String.fromEnvironment('USERNAME', defaultValue: 'plugfox'),
     )
     ..addOption(
       'verbose',
@@ -131,6 +140,10 @@ final class Config {
   /// Set to 5 to log all minor details.
   /// Set to 6 to log everything.
   final int verbose;
+
+  /// Medium username.
+  /// The author of the articles.
+  final String username;
 }
 
 /// {@template environment_flavor}

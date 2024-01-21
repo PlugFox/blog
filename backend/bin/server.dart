@@ -43,10 +43,13 @@ void main([List<String>? arguments]) => Future<void>.sync(() async {
           }
 
           // Periodic tasks
-          Timer.periodic(
-            Duration(seconds: config.interval),
-            (_) {},
-          );
+          if (config.interval > 0 && config.username.isNotEmpty)
+            Timer.periodic(
+              Duration(seconds: config.interval),
+              (_) {
+                // TODO(plugfox): Fetch articles from medium by username
+              },
+            );
 
           l
             ..i('Started ${workers.length} worker(s) at '
