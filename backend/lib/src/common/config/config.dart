@@ -23,6 +23,8 @@ final class Config {
 
   /// Create a [ArgParser] for the [Config].
   static ArgParser argParser() => ArgParser()
+    ..addSeparator('Start server to provide medium articles as Protobuf API.')
+    ..addSeparator('Server options:\n')
     ..addOption(
       'environment',
       abbr: 'e',
@@ -54,9 +56,9 @@ final class Config {
     ..addOption(
       'interval',
       abbr: 'i',
-      aliases: ['timer', 'check', 'refresh', 'update', 'fetch', 'refetch', 'fetching', 'medium', 'cron'],
+      aliases: ['timer', 'check', 'refresh', 'update', 'fetch', 'refetch', 'fetching', 'cron'],
       help: 'The number of seconds between each medium articles check.',
-      defaultsTo: '3600',
+      defaultsTo: '86400',
     )
     ..addOption(
       'workers',
@@ -96,13 +98,15 @@ final class Config {
           ' Set to 6 to log everything.',
       defaultsTo: '3',
     )
+    ..addSeparator('')
     ..addFlag(
       'help',
       abbr: 'h',
       aliases: <String>['?', 'usage', 'info', 'man', 'manual', 'guide', 'reference'],
       help: 'Print this usage information.',
       negatable: false,
-    );
+    )
+    ..addSeparator('');
 
   /// The environment to run in.
   final EnvironmentFlavor environment;
@@ -119,7 +123,7 @@ final class Config {
   /// The number of seconds between each
   /// medium articles check.
   ///
-  /// Default value is 3600 seconds (1 hour).
+  /// Default value is 86400 seconds (1 day).
   ///
   /// 0 means no check.
   final int interval;
