@@ -1,26 +1,231 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
-    <title>frontend</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="main.dart.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
+  <title>Plague Fox</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/beercss@3.4.13/dist/cdn/beer.min.css" rel="stylesheet">
+
+  <!-- Beercss https://www.beercss.com/ -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.4.13/dist/cdn/beer.min.js"></script>
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.1.0/dist/cdn/material-dynamic-colors.min.js"></script>
+  <script defer src="main.dart.js"></script>
+
+  <script type="module">
+    window.addEventListener('DOMContentLoaded', (event) => {
+      // Toggle theme
+      const themeIcon = document.querySelector('.theme-icon');
+      function setTheme(theme) {
+        if (theme === 'dark') {
+          document.body.classList.add('dark');
+          document.body.classList.remove('light');
+          themeIcon.textContent = 'dark_mode'; // '🌜';
+        } else {
+          document.body.classList.add('light');
+          document.body.classList.remove('dark');
+          themeIcon.textContent = 'light_mode'; // '🌞';
+        }
+      }
+
+      // Set up initial theme
+      const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      setTheme(currentTheme);
+
+      // Drawer toggle
+      const overlay = document.querySelector('#drawer-main > .overlay');
+      const dialog = document.querySelector('#drawer-main > dialog');
+      document.body.addEventListener('click', function (e) {
+        if (e.target && e.target.matches('.drawer-toggle')) {
+          if (dialog.classList.contains('active')) {
+            overlay.classList.remove('active');
+            dialog.classList.remove('active');
+            dialog.blur();
+          } else {
+            overlay.classList.add('active');
+            dialog.classList.add('active');
+            dialog.focus();
+          }
+        } else if (e.target && e.target.matches('.theme-toggle')) {
+          const newTheme = document.body.classList.contains('light') ? 'dark' : 'light';
+          setTheme(newTheme);
+          localStorage.setItem('theme', newTheme);
+        }
+      });
+    });
+  </script>
 </head>
-<body><!--
-  <div id="articles">
-    <div class="article-card">
-      <h2 class="article-title">Заголовок статьи</h2>
-      <p class="article-author">Автор: Имя Автора</p>
-      <p class="article-date">Дата: 01/01/2024</p>
-      <div class="article-tags">
-        <span class="tag">Тег1</span>
-        <span class="tag">Тег2</span>
-      </div>
-      <p class="article-excerpt">Краткое описание...</p>
-    </div>
-  </div>-->
+
+<body class="light scroll">
+  <!-- App Bar -->
+  <header id="appbar" class="fixed blur">
+    <nav>
+      <!-- <button class="circle transparent">
+        <i>arrow_back</i>
+      </button> -->
+      <button class="circle transparent drawer-toggle">
+        <i>menu</i>
+      </button>
+      <h5 class="max">Plague Fox</h5>
+      <!-- <button class="circle transparent">
+        <i>attach_file</i>
+      </button>
+      <button class="circle transparent">
+        <i>today</i>
+      </button> -->
+      <!-- <button class="circle transparent">
+        <i>more_vert</i>
+      </button> -->
+    </nav>
+  </header>
+
+  <!-- Drawer -->
+  <div id="drawer-main">
+    <div class="overlay drawer-toggle"></div>
+    <dialog class="left no-padding">
+      <nav class="drawer">
+        <header>
+          <nav>
+            <img class="circle" src="/favicon.png">
+            <h6 class="max">Plague Fox</h6>
+            <button class=" circle transparent theme-toggle">
+              <i class="theme-icon">dark_mode</i>
+            </button>
+            <button class="transparent circle large drawer-toggle"">
+              <i>close</i>
+            </button>
+          </nav>
+        </header>
+        <a>
+          <i>inbox</i>
+          <span class=" max">Inbox</span>
+              <b>24</b>
+              </a>
+              <a>
+                <i>send</i>
+                <span>Outbox</span>
+              </a>
+              <a>
+                <i>favorite</i>
+                <span>favorities</span>
+              </a>
+              <a>
+                <i>delete</i>
+                <span>Trash</span>
+              </a>
+              <div class="divider"></div>
+              <label>Labels</label>
+              <a>
+                <i>fiber_manual_record</i>
+                <span>Label</span>
+              </a>
+              <a>
+                <i>change_history</i>
+                <span>Label</span>
+              </a>
+              <a>
+                <i>stop</i>
+                <span>Label</span>
+              </a>
+          </nav>
+    </dialog>
+  </div>
+
+  <!-- Bottom bar -->
+  <!-- <nav class="bottom">
+      <a>
+        <i>home</i>
+        <div>Home</div>
+      </a>
+      <a>
+        <i>search</i>
+        <div>Search</div>
+      </a>
+      <a>
+        <i>share</i>
+        <div>share</div>
+      </a>
+    </nav> -->
+
+  <main id="articles" class="responsive">
+    <br />
+    <h3>Compact</h3>
+    <h5>The beer is ready!</h5>
+    <br />
+    <div class="divider"></div>
+    <br />
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const articlesContainer = document.getElementById('articles');
+      const fragment = document.createDocumentFragment();
+
+      for (let i = 0; i < 1000; i++) {
+        const articleElement = createArticleElement();
+        fragment.appendChild(articleElement);
+      }
+
+      articlesContainer.appendChild(fragment);
+
+      function createArticleElement() {
+        // Создаем элемент article
+        const article = document.createElement('article');
+        article.className = 'no-padding'; // white-text left-shadow
+
+        // Добавляем внутреннее содержимое
+        article.innerHTML = `
+      <div class="grid no-space">
+        <div class="s4">
+          <!-- Здесь может быть изображение -->
+          <!-- <div class="absolute top left right padding">
+            <h5>Title</h5>
+            <p>Some text here</p>
+          </div> -->
+        </div>
+        <div class="s8">
+          <div class="padding">
+            <h5>Title</h5>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            <nav>
+              <button class="border round">Button</button>
+              <button class="border round">Button</button>
+              <button class="border round">Button</button>
+            </nav>
+          </div>
+        </div>
+      </div>`;
+        return article;
+      }
+    });
+  </script>
+
+  <script>
+    // Sliver App Bar
+    /* document.addEventListener('DOMContentLoaded', () => {
+      let lastScrollTop = 0;
+      const appbar = document.getElementById('appbar');
+
+      window.addEventListener('scroll', () => {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (currentScroll > lastScrollTop) {
+          // Скролл вниз
+          appbar.classList.add('appbar-hidden');
+          document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+        } else {
+          // Скролл вверх
+          appbar.classList.remove('appbar-hidden');
+          document.body.style.backgroundColor = 'rgba(255, 0, 0, 0.2)';
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Для браузеров, которые не поддерживают отрицательный скролл
+      }, false);
+    }); */
+  </script>
 </body>
+
 </html>

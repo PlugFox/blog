@@ -24,3 +24,7 @@ gen: codegen
 fix: get
 	@dart fix --apply .
 	@dart format --fix -l 120 .
+
+# Build web
+build-web:
+	@dart compile js -O3 -m --no-source-maps -o frontend/web/main.dart.js frontend/web/main.dart

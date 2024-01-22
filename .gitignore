@@ -22,3 +22,7 @@ coverage/
 # macOS related files
 .DS_Store
 
+# Dart Web Output
+*.dart.js
+*.dart.js.deps
+*.dart.js.map
