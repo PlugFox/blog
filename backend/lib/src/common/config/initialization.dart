@@ -152,14 +152,11 @@ Config _$initializeServer$Config(List<String>? arguments) {
       ),
       0,
     ),
-    workers: math.max(
-      env<int>(
-        'workers',
-        int.tryParse,
-        () => io.Platform.numberOfProcessors * 2,
-      ),
-      1,
-    ),
+    workers: env<int>(
+      'workers',
+      int.tryParse,
+      () => io.Platform.numberOfProcessors,
+    ).clamp(1, 14),
     token: switch (env('token', (value) => value, () => '').trim()) {
       String token when token.isEmpty => null,
       String token when token.length < 6 => null,

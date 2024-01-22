@@ -65,7 +65,7 @@ final class Config {
       abbr: 'w',
       aliases: ['threads', 'cores', 'processors', 'cpus', 'cpu', 'parallel', 'concurrent', 'isolates', 'concurrency'],
       help: 'The number of workers to spawn.',
-      defaultsTo: '${io.Platform.numberOfProcessors * 2}',
+      defaultsTo: '${io.Platform.numberOfProcessors.clamp(1, 14)}',
     )
     ..addOption(
       'token',
@@ -129,7 +129,8 @@ final class Config {
   final int interval;
 
   /// The number of workers to spawn.
-  /// Default value is equal to the number of processors * 2.
+  /// Default value is equal to the number of processors,
+  /// clamped between 1 and 14.
   final int workers;
 
   /// The secret token to use for authentication.
