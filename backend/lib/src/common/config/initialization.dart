@@ -155,7 +155,7 @@ Config _$initializeServer$Config(List<String>? arguments) {
     workers: env<int>(
       'workers',
       int.tryParse,
-      () => io.Platform.numberOfProcessors,
+      () => io.Platform.numberOfProcessors ~/ 2,
     ).clamp(1, 14),
     token: switch (env('token', (value) => value, () => '').trim()) {
       String token when token.isEmpty => null,
