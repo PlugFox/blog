@@ -49,9 +49,11 @@ function createFakeArticle() {
   // Добавляем внутреннее содержимое
   article.innerHTML = `
   <ink-well>
-    <div class="grid no-space">
+    <div class="article-layout grid no-space">
       <div class="m3 l3 m l">
-        <img class="responsive" draggable="false" src="images/dash.png"/>
+        <div class="article-thumbnail responsive">
+          <img draggable="false" src="images/dash.png"/>
+        </div>
         <!--
         <div class="absolute top left right padding top-shadow white-text">
           <h5>Title</h5>
