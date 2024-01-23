@@ -158,6 +158,7 @@ ink-well {
   background-position: center;
   background-size: cover;
   transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 body.light ink-well:hover {
