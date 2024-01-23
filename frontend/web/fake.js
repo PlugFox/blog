@@ -14,11 +14,26 @@ window.addEventListener('DOMContentLoaded', (event) => {
   articlesContainer.appendChild(fragment);
 });
 
+function addRippleEffect(e) {
+  e.addEventListener('click', function (e) {
+    const rect = this.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = Math.max(rect.width, rect.height) + 'px';
+    ripple.style.left = e.clientX - rect.left - (ripple.offsetWidth / 2) + 'px';
+    ripple.style.top = e.clientY - rect.top - (ripple.offsetHeight / 2) + 'px';
+    this.appendChild(ripple);
+    setTimeout(() => {
+      ripple.remove();
+    }, 600); // 600ms - transition-duration in CSS
+  });
+}
+
 /// Create fake article element
 function createFakeArticle() {
   // Создаем элемент article
   const article = document.createElement('article');
-  article.className = 'no-padding border'; // white-text left-shadow
+  article.className = 'no-padding border ripple-effect no-select'; // white-text left-shadow
   //article.style = '';
 
   // Добавляем внутреннее содержимое
@@ -76,5 +91,7 @@ function createFakeArticle() {
       </div>
     </div>
   </div>`;
+
+  addRippleEffect(article);
   return article;
 }

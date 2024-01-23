@@ -14,6 +14,21 @@ html, body {
   max-width: 720px;
 }
 
+.no-select {
+  -webkit-touch-callout: none;
+  /* Safari на iOS */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Нестандартный синтаксис, поддерживаемый как в Chrome, так и в Opera */
+}
+
 .article-title {
   overflow: hidden;
   display: -webkit-box;
@@ -58,6 +73,27 @@ html, body {
   line-height: 1.5em;;
   height: 4.5em; /* line-height * line-clamp  */
   text-overflow: ellipsis;
+}
+
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+  /* Остальные стили для кнопки */
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+  background-color: rgba(255, 0, 0, 0.7);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
 }
 
 /*
