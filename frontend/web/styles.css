@@ -10,23 +10,25 @@ html, body {
 }
 */
 
-#articles {
-  max-width: 720px;
+body.light {
+  background: repeating-linear-gradient(45deg,
+    #f7f7f7,
+    #f7f7f7 8px,
+    #f0f0f0 8px,
+    #f0f0f0 16px
+  );
 }
 
-.no-select {
-  -webkit-touch-callout: none;
-  /* Safari на iOS */
-  -webkit-user-select: none;
-  /* Safari */
-  -khtml-user-select: none;
-  /* Konqueror HTML */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* Нестандартный синтаксис, поддерживаемый как в Chrome, так и в Opera */
+body.dark {
+  background: repeating-linear-gradient(45deg,
+      #0f0e11,
+      #0f0e11 8px,
+      #141316 8px,
+      #141316 16px);
+}
+
+#articles {
+  max-width: 720px;
 }
 
 .article {
@@ -36,6 +38,14 @@ html, body {
   background-color: transparent;
   box-shadow: none;
   overflow: hidden;
+}
+
+body.light .article {
+  background-color: #f0f0f0;
+}
+
+body.dark .article {
+  background-color: #141316;
 }
 
 body.light .elevation {
@@ -89,6 +99,21 @@ body.light .elevation {
   line-height: 1.5em;;
   height: 4.5em; /* line-height * line-clamp  */
   text-overflow: ellipsis;
+}
+
+.no-select {
+  -webkit-touch-callout: none;
+  /* Safari на iOS */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Нестандартный синтаксис, поддерживаемый как в Chrome, так и в Opera */
 }
 
 ink-well {

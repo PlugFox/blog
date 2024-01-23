@@ -51,7 +51,7 @@ function createFakeArticle() {
   <ink-well>
     <div class="grid no-space">
       <div class="m3 l3 m l">
-        <img class="responsive" src="images/dash.png"/>
+        <img class="responsive" draggable="false" src="images/dash.png"/>
         <!--
         <div class="absolute top left right padding top-shadow white-text">
           <h5>Title</h5>
