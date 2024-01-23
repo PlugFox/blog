@@ -29,6 +29,15 @@ html, body {
   /* Нестандартный синтаксис, поддерживаемый как в Chrome, так и в Opera */
 }
 
+.article {
+  /* Дополнительные стили (тени, отступы и т.д.) */
+  box-sizing: border-box;
+  border: 0.0625rem solid #948f99;
+  background-color: transparent;
+  box-shadow: none;
+  overflow: hidden;
+}
+
 .article-title {
   overflow: hidden;
   display: -webkit-box;
@@ -75,18 +84,40 @@ html, body {
   text-overflow: ellipsis;
 }
 
-.ripple-effect {
+ink-well {
+  display: block;
+  width: 100%;
+  height: 100%;
   position: relative;
   overflow: hidden;
-  /* Остальные стили для кнопки */
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition: background-color 0.3s ease;
 }
 
-.ripple {
+body.light ink-well:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+body.dark ink-well:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ink {
   position: absolute;
   border-radius: 50%;
   transform: scale(0);
   animation: ripple 600ms linear;
-  background-color: rgba(255, 0, 0, 0.7);
+}
+
+body.light .ink {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+body.dark .ink {
+  background-color: rgba(255, 255, 255, 0.25);
 }
 
 @keyframes ripple {
