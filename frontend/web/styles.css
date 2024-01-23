@@ -1,3 +1,4 @@
+/*
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
 html, body {
@@ -7,46 +8,64 @@ html, body {
   padding: 0;
   font-family: 'Roboto', sans-serif;
 }
+*/
 
 #articles {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.article-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  margin: 10px;
-  width: 300px;
+  max-width: 720px;
 }
 
 .article-title {
-  color: #333;
-  margin-bottom: 5px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  line-height: 1em;
+  height: 1em; /* line-height * line-clamp  */
+  text-overflow: ellipsis;
 }
 
-.article-author,
-.article-date {
-  color: #666;
-  font-size: 0.9em;
-  margin-bottom: 5px;
+.article-meta {
+  display: flex;
+  gap: 0.75em;
+  color: var(--secondary-text-color);
+  font-size: 10px !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  line-height: 1em;
+  height: 1em;
+  /* line-height * line-clamp  */
 }
 
-.article-tags {
-  margin-bottom: 10px;
+.article-meta-tags .article-tag {
+  color: #ec407a;
 }
 
-.tag {
-  display: inline-block;
-  background-color: #eee;
-  border-radius: 5px;
-  padding: 3px 8px;
-  font-size: 0.8em;
-  margin-right: 5px;
+.article-tag:not(:last-child)::after {
+  content: ", ";
 }
 
 .article-excerpt {
-  color: #333;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  line-height: 1.5em;;
+  height: 4.5em; /* line-height * line-clamp  */
+  text-overflow: ellipsis;
 }
+
+/*
+@media only screen and (min-width: 601px) {
+  .article-excerpt {
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
+    height: 6em;
+  }
+}
+*/
