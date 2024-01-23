@@ -43,7 +43,7 @@ function rippleEffect(e) {
 function createFakeArticle() {
   // Создаем элемент article
   const article = document.createElement('article');
-  article.className = 'article no-padding no-select'; // white-text left-shadow
+  article.className = 'article no-padding no-select elevation'; // white-text left-shadow
   //article.style = '';
 
   // Добавляем внутреннее содержимое
