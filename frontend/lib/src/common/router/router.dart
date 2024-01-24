@@ -25,6 +25,16 @@ final class Route {
         segments = const <String>[],
         params = const <String, String>{};
 
+  /// Route from url
+  factory Route.fromUrl(Uri uri) {
+    final fragment = uri.fragment;
+    var newRoute = fragment.trim().toLowerCase().replaceAll(' ', '');
+    if (newRoute.isEmpty) return const Route.empty();
+    while (newRoute.startsWith('/') || newRoute.startsWith('#')) newRoute = newRoute.substring(1);
+    while (newRoute.endsWith('/') || newRoute.endsWith('#')) newRoute = newRoute.substring(0, newRoute.length - 1);
+    return Route(Uri.decodeComponent(newRoute));
+  }
+
   /// {@macro router}
   factory Route(String path) {
     final paramsIndex = path.indexOf('?');
@@ -120,15 +130,7 @@ final class Router with ChangeNotifier {
         _onRouteChange = onRouteChange {
     _hashChangeSubscription = html.window.onHashChange.listen((_) => _checkRouteChange());
     _popStateSubscription = html.window.onPopState.listen((_) => _checkRouteChange());
-    _notifyRouteChange(Uri.tryParse(html.window.location.href)?.fragment ?? '');
-  }
-
-  static Route _normalizeRoute(String route) {
-    var newRoute = route.trim().toLowerCase().replaceAll(' ', '');
-    if (newRoute.isEmpty) return const Route.empty();
-    while (newRoute.startsWith('/') || newRoute.startsWith('#')) newRoute = newRoute.substring(1);
-    while (newRoute.endsWith('/') || newRoute.endsWith('#')) newRoute = newRoute.substring(0, newRoute.length - 1);
-    return Route(Uri.decodeComponent(newRoute));
+    _notifyRouteChange(Uri.tryParse(html.window.location.href) ?? Uri());
   }
 
   /// Callback for route change
@@ -149,12 +151,12 @@ final class Router with ChangeNotifier {
     final newUri = Uri.tryParse(html.window.location.href);
     if (newUri == null || uri.fragment == newUri.fragment) return;
     _uri = newUri;
-    _notifyRouteChange(uri.fragment);
+    _notifyRouteChange(uri);
   }
 
   /// Function for notifying about route change
-  void _notifyRouteChange(String route) {
-    final newRoute = _currentRoute = _normalizeRoute(route);
+  void _notifyRouteChange(Uri uri) {
+    final newRoute = _currentRoute = Route.fromUrl(uri);
     _onRouteChange(newRoute, (content) {
       if (newRoute != currentRoute) return;
       final routerElement = _getRouterElement();
@@ -179,9 +181,8 @@ final class Router with ChangeNotifier {
   }
 
   /// Function for setting route
-  void setRoute(String route) {
-    final newRoute = _normalizeRoute(route);
-    if (newRoute == currentRoute) return;
+  static void setRoute(String route) {
+    final newRoute = Route(route);
     html.window.location.hash = newRoute.path;
   }
 
