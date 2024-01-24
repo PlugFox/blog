@@ -6,19 +6,7 @@ import 'package:frontend/src/common/router/router.dart';
 
 void main() => runZonedGuarded<Future<void>>(
       () async {
-        void runApp() {
-          //html.document.body?.append(ArticlesComponent().element);
-          if (html.document.getElementsByTagName('router').whereType<html.Element>().isEmpty) {
-            html.document.body?.append(html.Element.tag('router'));
-          }
-          Router(onRoute);
-        }
-
-        if (html.document.readyState?.trim().toLowerCase() == 'complete') {
-          runApp();
-        } else {
-          html.window.onLoad.listen((_) => runApp());
-        }
+        runApp();
       },
       (error, stackTrace) => log(
         'Top level exception',
@@ -28,6 +16,17 @@ void main() => runZonedGuarded<Future<void>>(
         name: 'main',
       ),
     );
+
+void runApp() => Future<void>(() async {
+      if (html.document.readyState?.trim().toLowerCase() != 'complete') {
+        await html.window.onLoad.first;
+      }
+      // Add router element if not present
+      if (html.document.getElementsByTagName('router').whereType<html.Element>().isEmpty) {
+        html.document.body?.append(html.Element.tag('router'));
+      }
+      Router(onRoute);
+    });
 
 FutureOr<void> onRoute(Route route, void Function(Object? content) emit) {
   emit('''

@@ -103,9 +103,9 @@ final class Router with ChangeNotifier {
       : _uri = Uri(),
         _currentRoute = const Route.empty(),
         _onRouteChange = onRouteChange {
-    _hashChangeSubscription = html.window.onHashChange.listen((_) => _notifyRouteChange());
-    _popStateSubscription = html.window.onPopState.listen((_) => _notifyRouteChange());
-    _notifyRouteChange();
+    _hashChangeSubscription = html.window.onHashChange.listen((_) => _checkRouteChange());
+    _popStateSubscription = html.window.onPopState.listen((_) => _checkRouteChange());
+    _notifyRouteChange(Uri.tryParse(html.window.location.href)?.fragment ?? '');
   }
 
   static Route _normalizeRoute(String route) {
@@ -113,7 +113,7 @@ final class Router with ChangeNotifier {
     if (newRoute.isEmpty) return const Route.empty();
     while (newRoute.startsWith('/') || newRoute.startsWith('#')) newRoute = newRoute.substring(1);
     while (newRoute.endsWith('/') || newRoute.endsWith('#')) newRoute = newRoute.substring(0, newRoute.length - 1);
-    return Route(newRoute);
+    return Route(Uri.decodeComponent(newRoute));
   }
 
   /// Callback for route change
@@ -129,12 +129,17 @@ final class Router with ChangeNotifier {
   html.Element? _getRouterElement() =>
       html.document.getElementsByTagName('router').whereType<html.Element>().firstOrNull;
 
-  /// Function for notifying about route change
-  void _notifyRouteChange() {
+  /// Function for check about route change
+  void _checkRouteChange() {
     final newUri = Uri.tryParse(html.window.location.href);
     if (newUri == null || uri.fragment == newUri.fragment) return;
     _uri = newUri;
-    final newRoute = _currentRoute = _normalizeRoute(_uri.fragment);
+    _notifyRouteChange(uri.fragment);
+  }
+
+  /// Function for notifying about route change
+  void _notifyRouteChange(String route) {
+    final newRoute = _currentRoute = _normalizeRoute(route);
     _onRouteChange(newRoute, (content) {
       if (newRoute != currentRoute) return;
       final routerElement = _getRouterElement();
