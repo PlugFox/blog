@@ -31,11 +31,10 @@ void runApp() => Future<void>(() async {
 FutureOr<void> onRoute(Route route, void Function(Object? content) emit) {
   emit('''
   <div id="current-route" class="responsive center-align padding">
-    <p>Route: ${route.path}</p>
-    <p>Key: ${route.key}</p>
-    <p>Name: ${route.name}</p>
-    <p>Segments: ${route.segments.join(', ')}</p>
-    <p>Params: ${route.params.entries.map((e) => '${e.key}: ${e.value}').join(', ')}</p>
+    <p>Route: "${route.path}"</p>
+    <p>Key: "${route.key}"</p>
+    <p>Segments: [${route.segments.map((e) => '"$e"').join(', ')}]</p>
+    <p>Params: ${route.params.entries.map((e) => e.value.isEmpty ? e.key : '${e.key}: "${e.value}"').join(', ')}</p>
   </div>
   ''');
 }

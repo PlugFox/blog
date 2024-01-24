@@ -22,7 +22,6 @@ final class Route {
   const Route.empty()
       : key = '',
         path = '',
-        name = '',
         segments = const <String>[],
         params = const <String, String>{};
 
@@ -31,36 +30,56 @@ final class Route {
     final paramsIndex = path.indexOf('?');
     final params = <String, String>{};
     if (paramsIndex != -1) {
-      final paramsString = path.substring(paramsIndex + 1);
+      final paramsString = path.toLowerCase().substring(paramsIndex + 1);
       paramsString.split('&').forEach((param) {
         final keyIndex = param.indexOf('=');
         if (keyIndex == -1) {
-          params[param] = '';
+          params[param.trim()] = '';
         } else {
           final key = param.substring(0, keyIndex);
           final value = param.substring(keyIndex + 1);
-          params[key] = value;
+          params[key.trim()] = value.trim();
         }
       });
+      params.remove('');
     }
     final segments = (paramsIndex != -1 ? path.substring(0, paramsIndex) : path)
+        .toLowerCase()
         .split('/')
+        .map((segment) => segment.trim())
         .where((segment) => segment.isNotEmpty)
         .toList(growable: false);
 
+    final normalizedSegments = List<String>.unmodifiable(segments);
+    final normalizedParams = Map<String, String>.unmodifiable(params);
+    final buffer = StringBuffer(normalizedSegments.firstOrNull ?? '');
+    for (var i = 1; i < normalizedSegments.length; i++) buffer.write('/${normalizedSegments[i]}');
+    if (normalizedParams.isNotEmpty) {
+      final entries = normalizedParams.entries.toList(growable: false)..sort((a, b) => a.key.compareTo(b.key));
+      buffer
+        ..write('?')
+        ..write(entries.first.key)
+        ..write('=')
+        ..write(entries.first.value);
+      for (var i = 1; i < entries.length; i++)
+        buffer
+          ..write('&')
+          ..write(entries[i].key)
+          ..write('=')
+          ..write(entries[i].value);
+    }
+    final normalizedPath = buffer.toString();
     return Route._(
-      path.hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0'),
-      path,
-      segments.firstOrNull ?? '',
-      segments,
-      params,
+      normalizedPath.hashCode.toUnsigned(20).toRadixString(16).padLeft(5, '0'),
+      normalizedPath,
+      normalizedSegments,
+      normalizedParams,
     );
   }
 
   const Route._(
     this.key,
     this.path,
-    this.name,
     this.segments,
     this.params,
   );
@@ -71,10 +90,6 @@ final class Route {
   /// Full path/fragment of the route
   /// e.g. for route '/articles/:id?key=value' path will be '/articles/:id?key=value'
   final String path;
-
-  /// Name of the route
-  /// e.g. for route '/articles/:id?key=value' name will be 'articles'
-  final String name;
 
   /// Segments of the route
   /// e.g. for route '/articles/:id?key=value' segments will be ['articles', ':id']
