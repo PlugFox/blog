@@ -32,11 +32,15 @@ final $config = () {
   return <String, String?>{
     'environment': extractValue('environment'),
     'api': extractValue('api'),
+    'title': extractValue('title'),
   };
 }();
 
 /// API URL
 final String $api = $config['api'] ?? (throw Exception('API not set'));
+
+/// API URL
+final String $title = $config['title'] ?? 'Unknown';
 
 /// Is development environment
 final bool $development = $config['environment']?.toLowerCase() == 'development';

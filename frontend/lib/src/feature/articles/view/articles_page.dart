@@ -9,7 +9,7 @@ final class ArticlesPage implements Page {
   ArticlesPage();
 
   @override
-  String get title => 'Articles';
+  String get title => $title;
 
   @override
   void create() {
