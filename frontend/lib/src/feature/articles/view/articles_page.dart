@@ -3,6 +3,7 @@ import 'dart:html' as html;
 
 import 'package:frontend/frontend.dart';
 import 'package:frontend/src/common/view/page.dart';
+import 'package:frontend/src/feature/articles/view/article_card.dart';
 
 final class ArticlesPage implements Page {
   ArticlesPage();
@@ -20,22 +21,23 @@ final class ArticlesPage implements Page {
 
   @override
   Object? build() async {
-    final articles = '''
-    <h1>Articles</h1>
+    const articles = '''
+    <h1 class="center-align">Articles</h1>
     <h3 class="center-align">Compact</h3>
     <h5 class="center-align">The beer is ready!</h5>
     <br />
-    <div class="divider" />
+    <div class="divider"></div>
     <br />
-    <div id="articles">${_articlesToHtml()}</div>
+    <div id="articles" class="center-align"></div>
     ''';
     final htmlValidator = html.NodeValidatorBuilder.common()
-      ..allowElement('a')
+      ..allowElement('a', attributes: ['href'])
       ..allowElement('button')
       ..allowElement('main');
-    return html.Element.tag('main')
-      ..className = 'responsive'
-      ..setInnerHtml(articles, validator: htmlValidator); // ignore: unsafe_html
+    return html.document.createElement('main')
+      /* ..className = 'responsive' */
+      ..setInnerHtml(articles, validator: htmlValidator) // ignore: unsafe_html
+      ..querySelector('#articles')?.append(_articlesToHtml());
   }
 
   @override
@@ -43,9 +45,15 @@ final class ArticlesPage implements Page {
     $articlesController.removeListener(_onArticlesStateChange);
   }
 
-  void _onArticlesStateChange() =>
-      html.querySelector('#articles')?.setInnerHtml(_articlesToHtml()); // ignore: unsafe_html
+  void _onArticlesStateChange() => html.document.body?.querySelector('#articles')
+    ?..children.clear()
+    ..append(_articlesToHtml());
 
-  String _articlesToHtml() =>
-      $articlesController.state.data.map((e) => '<p>Article{"id": "${e.id}", "title": "${e.title}"}</p>').join('\n');
+  html.Node _articlesToHtml() {
+    final fragment = html.DocumentFragment(); // html.document.createElement('div'); // html.Element.div();
+    for (final article in $articlesController.state.data) {
+      fragment.append(ArticleCard.build(article));
+    }
+    return fragment;
+  }
 }

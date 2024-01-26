@@ -126,11 +126,11 @@ sealed class Pubspec {
     2024,
     1,
     26,
-    16,
-    21,
-    47,
-    665,
-    386,
+    19,
+    55,
+    38,
+    734,
+    742,
   );
 
   /// Name
@@ -427,6 +427,7 @@ sealed class Pubspec {
     'shared': <String, Object>{
       'path': r'../shared',
     },
+    'collection': r'^1.18.0',
   };
 
   /// Developer dependencies
@@ -491,4 +492,5 @@ sealed class Pubspec {
     'dev_dependencies': devDependencies,
     'dependency_overrides': dependencyOverrides,
   };
+
 }

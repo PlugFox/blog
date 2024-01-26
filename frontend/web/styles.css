@@ -106,8 +106,8 @@ article.post {
   -webkit-box-orient: vertical;
   line-clamp: 1;
   -webkit-line-clamp: 1;
-  line-height: 1em;
-  height: 1em; /* line-height * line-clamp  */
+  line-height: normal;
+  height: 1.25em; /* line-height * line-clamp  */
   text-overflow: ellipsis;
 }
 
@@ -132,7 +132,7 @@ article.post {
 }
 
 .article-tag:not(:last-child)::after {
-  content: ", ";
+  content: ",\00a0\00a0";
 }
 
 .article-excerpt {

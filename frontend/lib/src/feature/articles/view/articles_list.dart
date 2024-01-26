@@ -1,15 +1,5 @@
-import 'dart:async';
-import 'dart:html' as html;
 
-import 'package:frontend/src/common/view/component.dart';
-import 'package:frontend/src/feature/articles/controller/articles_controller.dart';
-import 'package:frontend/src/feature/articles/data/articles_repository.dart';
-import 'package:frontend/src/feature/articles/view/article_card.dart';
-import 'package:http/browser_client.dart';
-import 'package:meta/meta.dart';
-import 'package:shared/shared.dart';
-
-final class ArticlesComponent extends Component {
+/* final class ArticlesComponent extends Component {
   ArticlesComponent() : super(key: 'articles');
 
   late final ArticlesController _controller;
@@ -69,4 +59,4 @@ final class ArticlesComponent extends Component {
       stopwatch.stop();
     }
   }
-}
+} */

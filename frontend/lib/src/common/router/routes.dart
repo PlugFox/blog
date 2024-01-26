@@ -4,6 +4,7 @@ import 'dart:html';
 
 import 'package:frontend/src/common/router/router.dart';
 import 'package:frontend/src/common/view/page.dart';
+import 'package:frontend/src/feature/articles/view/article_page.dart';
 import 'package:frontend/src/feature/articles/view/articles_page.dart';
 import 'package:frontend/src/feature/contacts/view/contacts_page.dart';
 import 'package:frontend/src/feature/my_setup/view/my_setup_page.dart';
@@ -17,8 +18,8 @@ FutureOr<void> onRoute(Route route, void Function(Object? content) emit) async {
   final segment = route.segments.firstOrNull;
   final id = route.segments.elementAtOrNull(1);
   switch (segment) {
-    case 'article' || 'post' when id != null:
-      emit('<p>Article #$id</p>');
+    case 'articles' || 'article' || 'post' when id != null:
+      _currentPage = ArticlePage(id: id);
     case 'contact' || 'contacts':
       _currentPage = ContactsPage();
     case 'about' || 'cv' || 'me' || 'resume':

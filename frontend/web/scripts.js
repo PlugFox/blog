@@ -14,6 +14,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
         dialog.classList.add('active');
         dialog.focus();
       }
+    } else if (e.target && e.target.matches('.theme-toggle')) {
+      const newTheme = document.body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+      localStorage.setItem('theme', newTheme);
     }
   });
 });

@@ -186,7 +186,7 @@ final class Router with ChangeNotifier {
     if (html.window.location.hash == newRoute.path) return;
     html.window.location.hash = newRoute.path;
     if (html.document.title != title) html.document.title = title;
-    html.window.history.replaceState(null, title, newRoute.path);
+    html.window.history.replaceState(null, title, '#${newRoute.path}');
   }
 
   @override
