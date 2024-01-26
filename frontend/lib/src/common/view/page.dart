@@ -8,7 +8,7 @@ abstract interface class Page {
       );
 
   /// The name of the page
-  String get name;
+  String get title;
 
   /// Called when the page is opened
   FutureOr<void> create();

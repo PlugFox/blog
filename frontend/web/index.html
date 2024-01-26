@@ -177,11 +177,24 @@
             </button>
           </nav>
         </header>
-        <a>
-          <i>inbox</i>
-          <span class=" max">Inbox</span>
-              <b>24</b>
+              <!--
+              <a>
+                <i>inbox</i><span class=" max">Inbox</span><b>24</b>
               </a>
+              -->
+              <a onclick="setPage('articles', 'Articles')">
+                <i>feed</i>
+                <span>Articles</span>
+              </a>
+              <a onclick="setPage('contacts', 'Contacts')">
+                <i>contact_page</i>
+                <span>Contacts</span>
+              </a>
+              <a onclick="setPage('my-setup', 'My Setup')">
+                <i>devices</i>
+                <span>My Setup</span>
+              </a>
+              <!--
               <a>
                 <i>send</i>
                 <span>Outbox</span>
@@ -208,6 +221,7 @@
                 <i>stop</i>
                 <span>Label</span>
               </a>
+              -->
           </nav>
     </dialog>
   </div>
@@ -267,7 +281,8 @@
 
   <router />
 
-  <script type="module" src="scripts.js"></script>
+
+  <script src="scripts.js"></script>
   <!--<script type="module" src="fake.js"></script>-->
 
   <!-- Global site tag (gtag.js) - Google Analytics -->

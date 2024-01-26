@@ -4,7 +4,7 @@ final class ContactsPage implements Page {
   ContactsPage();
 
   @override
-  String get name => 'contacts';
+  String get title => 'Contacts';
 
   @override
   void create() {

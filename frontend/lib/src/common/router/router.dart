@@ -181,9 +181,12 @@ final class Router with ChangeNotifier {
   }
 
   /// Function for setting route
-  static void setRoute(String route) {
+  static void setRoute(String route, String title) {
     final newRoute = Route(route);
+    if (html.window.location.hash == newRoute.path) return;
     html.window.location.hash = newRoute.path;
+    if (html.document.title != title) html.document.title = title;
+    html.window.history.replaceState(null, title, newRoute.path);
   }
 
   @override

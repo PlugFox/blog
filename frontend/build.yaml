@@ -5,7 +5,7 @@
 #        dev: true
 
 targets:
-  $default:
+  frontend:
     sources:
       - $package$
       - web/**

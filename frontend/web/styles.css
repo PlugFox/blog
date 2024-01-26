@@ -31,6 +31,13 @@ body.dark {
       #141316 16px);
 }
 
+body.light .elevation {
+  box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.14),
+      0 4px 5px rgba(0, 0, 0, 0.12),
+      0 1px 10px rgba(0, 0, 0, 0.2);
+}
+
 header#appbar {
   box-shadow:
       0 3px 5px -1px rgba(0, 0, 0, 0.2),
@@ -38,12 +45,9 @@ header#appbar {
       0 1px 18px 0 rgba(0, 0, 0, 0.12);
 }
 
-#articles {
-  max-width: 720px;
-}
+/* Card */
 
-.article {
-  /* Дополнительные стили (тени, отступы и т.д.) */
+.card {
   box-sizing: border-box;
   border: 0.0625rem solid #948f99;
   background-color: transparent;
@@ -52,25 +56,35 @@ header#appbar {
   height: 180px;
 }
 
-body.light .article {
+body.light .card {
   background-color: #f0f0f0;
 }
 
-body.dark .article {
+body.dark .card {
   background-color: #141316;
 }
 
-body.light .elevation {
-  box-shadow:
-      0 2px 4px rgba(0, 0, 0, 0.14),
-      0 4px 5px rgba(0, 0, 0, 0.12),
-      0 1px 10px rgba(0, 0, 0, 0.2);
-}
-
-.article-layout {
+.card-layout {
   display: flex;
   flex-direction: row;
   height: 100%;
+}
+
+/* Article */
+
+article {
+  max-width: 720px;
+}
+
+article.post {
+  margin: 8px auto;
+  padding: 1.5em;
+}
+
+#articles {
+  max-width: 720px;
+  margin: 8px auto;
+  padding: 1.5em;
 }
 
 .article-thumbnail {
@@ -132,20 +146,7 @@ body.light .elevation {
   text-overflow: ellipsis;
 }
 
-.no-select {
-  -webkit-touch-callout: none;
-  /* Safari на iOS */
-  -webkit-user-select: none;
-  /* Safari */
-  -khtml-user-select: none;
-  /* Konqueror HTML */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* Internet Explorer/Edge */
-  user-select: none;
-  /* Нестандартный синтаксис, поддерживаемый как в Chrome, так и в Opera */
-}
+/* Inkwell */
 
 ink-well {
   display: block;
@@ -191,6 +192,22 @@ body.dark .ink {
   }
 }
 
+/* Other */
+
+.no-select {
+  -webkit-touch-callout: none;
+  /* Safari на iOS */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Нестандартный синтаксис, поддерживаемый как в Chrome, так и в Opera */
+}
 /*
 @media only screen and (min-width: 601px) {
   .article-excerpt {

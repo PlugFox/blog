@@ -42,14 +42,14 @@ function rippleEffect(e) {
 /// Create fake article element
 function createFakeArticle() {
   // Создаем элемент article
-  const article = document.createElement('article');
-  article.className = 'article no-padding no-select elevation'; // white-text left-shadow
-  //article.style = '';
+  const article = document.createElement('card');
+  article.className = 'card no-padding no-select elevation'; // white-text left-shadow
+  //card.style = '';
 
   // Добавляем внутреннее содержимое
   article.innerHTML = `
   <ink-well>
-    <div class="article-layout grid no-space">
+    <div class="card-layout grid no-space">
       <div class="m3 l3 m l">
         <div class="article-thumbnail responsive">
           <img draggable="false" src="images/dash.png"/>
@@ -107,5 +107,5 @@ function createFakeArticle() {
   </ink-well>`;
 
 
-  return rippleEffect(article);;
+  return rippleEffect(card);;
 }

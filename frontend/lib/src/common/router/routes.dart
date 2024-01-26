@@ -1,13 +1,14 @@
 // Callback for route change
 import 'dart:async';
+import 'dart:html';
 
 import 'package:frontend/src/common/router/router.dart';
 import 'package:frontend/src/common/view/page.dart';
 import 'package:frontend/src/feature/articles/view/articles_page.dart';
 import 'package:frontend/src/feature/contacts/view/contacts_page.dart';
+import 'package:frontend/src/feature/my_setup/view/my_setup_page.dart';
 
 /// Current page name
-String get $currentPageName => _currentPage?.name ?? '';
 Page? _currentPage;
 
 FutureOr<void> onRoute(Route route, void Function(Object? content) emit) async {
@@ -22,6 +23,8 @@ FutureOr<void> onRoute(Route route, void Function(Object? content) emit) async {
       _currentPage = ContactsPage();
     case 'about' || 'cv' || 'me' || 'resume':
       emit('<p>About</p>');
+    case 'setup' || 'my-setup' || 'mysetup' || 'devices':
+      _currentPage = MySetupPage();
     case null || '' || 'articles' || 'medium' || 'posts' || 'home' || '404':
     default:
       _currentPage = ArticlesPage();
@@ -31,6 +34,8 @@ FutureOr<void> onRoute(Route route, void Function(Object? content) emit) async {
     return;
   }
   await _currentPage?.create();
+  final title = _currentPage?.title;
+  if (title != null && document.title != title) document.title = title;
   final content = await _currentPage?.build();
   emit(content);
 
