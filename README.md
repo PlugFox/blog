@@ -21,6 +21,8 @@
 - ✅ Basic UI
 - ✅ Dark Mode
 - ✅ Material Design
+- ❌ Article page
+- ❌ Search bar
 - ❌ Dockerfiles
 - ❌ Docker Compose & Stack
 - ❌ Nginx gzip compression and caching
