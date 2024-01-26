@@ -2,22 +2,37 @@
 import 'dart:async';
 
 import 'package:frontend/src/common/router/router.dart';
+import 'package:frontend/src/common/view/page.dart';
+import 'package:frontend/src/feature/articles/view/articles_page.dart';
+import 'package:frontend/src/feature/contacts/view/contacts_page.dart';
+
+/// Current page name
+String get $currentPageName => _currentPage?.name ?? '';
+Page? _currentPage;
 
 FutureOr<void> onRoute(Route route, void Function(Object? content) emit) async {
-  final page = route.segments.firstOrNull;
+  runZonedGuarded<void>(() => _currentPage?.dispose(), (error, stackTrace) {/* */});
+  _currentPage = null;
+  final segment = route.segments.firstOrNull;
   final id = route.segments.elementAtOrNull(1);
-  switch (page) {
+  switch (segment) {
     case 'article' || 'post' when id != null:
       emit('<p>Article #$id</p>');
     case 'contact' || 'contacts':
-      //await getPage('contacts').then(emit);
-      emit('<p>Contacts</p>');
+      _currentPage = ContactsPage();
     case 'about' || 'cv' || 'me' || 'resume':
       emit('<p>About</p>');
-    case null || '' || 'home' || '404':
+    case null || '' || 'articles' || 'medium' || 'posts' || 'home' || '404':
     default:
-      emit('<p>Home</p>');
+      _currentPage = ArticlesPage();
   }
+  if (_currentPage == null) {
+    emit('<p>404</p>');
+    return;
+  }
+  await _currentPage?.create();
+  final content = await _currentPage?.build();
+  emit(content);
 
   /* emit('''
   <div id="current-route" class="responsive center-align padding">
@@ -28,6 +43,3 @@ FutureOr<void> onRoute(Route route, void Function(Object? content) emit) async {
   </div>
   '''); */
 }
-
-/* Future<String?> getPage(String page) =>
-    html.HttpRequest.getString('pages/$page.html').then((value) => value.trim(), onError: (error) => null); */
