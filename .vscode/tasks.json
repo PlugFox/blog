@@ -38,6 +38,27 @@
         "isDefault": true
       },
       "problemMatcher": []
+    },
+    {
+      "label": "Start BE server",
+      "type": "shell",
+      "command": [
+        "dart run backend/bin/server.dart",
+        " --environment=development",
+        " --host=0.0.0.0",
+        " --port=8080",
+        " --workers=2",
+        " --database=db.sqlite",
+        " --interval=0",
+        " --username=plugfox",
+        " --token=password",
+        " --verbose=3",
+      ],
+      "group": {
+        "kind": "none",
+        "isDefault": true
+      },
+      "problemMatcher": [],
     }
   ]
 }

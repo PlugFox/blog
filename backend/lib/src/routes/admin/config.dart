@@ -19,7 +19,7 @@ FutureOr<shelf.Response> $config(shelf.Request request) {
       'debug': metadata.debug,
       'name': metadata.name,
       'version': metadata.version.representation.toString(),
-      'timestamp': metadata.timestamp.toIso8601String(),
+      'timestamp': metadata.built.toIso8601String(),
       'os': metadata.os,
       'cpus': metadata.cpus,
       'locale': metadata.locale,

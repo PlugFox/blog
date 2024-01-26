@@ -9,6 +9,7 @@
       "program": "web",
       "args": [],
       "env": {},
+      "postDebugTask": "Format",
     },
     {
       "name": "Start an ephemeral server [debug]",

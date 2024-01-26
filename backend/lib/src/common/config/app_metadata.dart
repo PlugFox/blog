@@ -11,7 +11,7 @@ final class AppMetadata {
   static final AppMetadata _internalSingleton = AppMetadata._internal(
     debug: !const bool.fromEnvironment('dart.vm.product'),
     version: Pubspec.version,
-    timestamp: Pubspec.timestamp.toUtc(),
+    built: Pubspec.timestamp.toUtc(),
     name: Pubspec.name,
     os: io.Platform.operatingSystem,
     cpus: io.Platform.numberOfProcessors,
@@ -25,7 +25,7 @@ final class AppMetadata {
   const AppMetadata._internal({
     required this.debug,
     required this.version,
-    required this.timestamp,
+    required this.built,
     required this.name,
     required this.os,
     required this.cpus,
@@ -43,7 +43,7 @@ final class AppMetadata {
   final PubspecVersion version;
 
   /// App timestamp
-  final DateTime timestamp;
+  final DateTime built;
 
   /// Operating system
   final String os;
@@ -62,7 +62,7 @@ final class AppMetadata {
         'X-Meta-Debug': debug ? 'true' : 'false',
         'X-Meta-Name': name,
         'X-Meta-Version': version.representation,
-        'X-Meta-Timestamp': timestamp.toUtc().toIso8601String(),
+        'X-Meta-Built': built.toUtc().toIso8601String(),
         'X-Meta-Operating-System': os,
         'X-Meta-Processors-Count': cpus.toString(),
         'X-Meta-Locale': locale,

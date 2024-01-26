@@ -1,3 +1,4 @@
+/*
 @import url(https://fonts.googleapis.com/css?family=Roboto);
 
 html, body {
@@ -7,46 +8,212 @@ html, body {
   padding: 0;
   font-family: 'Roboto', sans-serif;
 }
+*/
 
-#articles {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+body {
+  background-attachment: fixed !important;
 }
 
-.article-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 15px;
-  margin: 10px;
-  width: 300px;
+body.light {
+  background: repeating-linear-gradient(45deg,
+    #f7f7f7,
+    #f7f7f7 8px,
+    #f0f0f0 8px,
+    #f0f0f0 16px
+  );
+}
+
+body.dark {
+  background: repeating-linear-gradient(45deg,
+      #0f0e11,
+      #0f0e11 8px,
+      #141316 8px,
+      #141316 16px);
+}
+
+body.light .elevation {
+  box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.14),
+      0 4px 5px rgba(0, 0, 0, 0.12),
+      0 1px 10px rgba(0, 0, 0, 0.2);
+}
+
+header#appbar {
+  box-shadow:
+      0 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0 6px 10px 0 rgba(0, 0, 0, 0.14),
+      0 1px 18px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Card */
+
+.card {
+  box-sizing: border-box;
+  border: 0.0625rem solid #948f99;
+  background-color: transparent;
+  box-shadow: none;
+  overflow: hidden;
+  height: 180px;
+}
+
+body.light .card {
+  background-color: #f0f0f0;
+}
+
+body.dark .card {
+  background-color: #141316;
+}
+
+.card-layout {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+/* Article */
+
+article {
+  max-width: 720px;
+}
+
+article.post {
+  margin: 8px auto;
+  padding: 1.5em;
+}
+
+#articles {
+  max-width: 720px;
+  margin: 8px auto;
+  padding: 1.5em;
+}
+
+.article-thumbnail {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.article-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .article-title {
-  color: #333;
-  margin-bottom: 5px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  line-height: normal;
+  height: 1.25em; /* line-height * line-clamp  */
+  text-overflow: ellipsis;
 }
 
-.article-author,
-.article-date {
-  color: #666;
-  font-size: 0.9em;
-  margin-bottom: 5px;
+.article-meta {
+  display: flex;
+  gap: 0.75em;
+  color: var(--secondary-text-color);
+  font-size: 10px !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  line-height: 1em;
+  height: 1em;
+  /* line-height * line-clamp  */
 }
 
-.article-tags {
-  margin-bottom: 10px;
+.article-meta-tags .article-tag {
+  color: #ec407a;
 }
 
-.tag {
-  display: inline-block;
-  background-color: #eee;
-  border-radius: 5px;
-  padding: 3px 8px;
-  font-size: 0.8em;
-  margin-right: 5px;
+.article-tag:not(:last-child)::after {
+  content: ",\00a0\00a0";
 }
 
 .article-excerpt {
-  color: #333;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  line-height: 1.5em;;
+  height: 4.5em; /* line-height * line-clamp  */
+  text-overflow: ellipsis;
 }
+
+/* Inkwell */
+
+ink-well {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+body.light ink-well:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+body.dark ink-well:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ink {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 600ms linear;
+}
+
+body.light .ink {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+body.dark .ink {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Other */
+
+.no-select {
+  -webkit-touch-callout: none;
+  /* Safari на iOS */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Нестандартный синтаксис, поддерживаемый как в Chrome, так и в Opera */
+}
+/*
+@media only screen and (min-width: 601px) {
+  .article-excerpt {
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
+    height: 6em;
+  }
+}
+*/

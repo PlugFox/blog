@@ -8,7 +8,7 @@ import 'package:shelf/shelf.dart' as shelf;
 
 /// Check articles.
 ///
-/// E.g. `http://127.0.0.1:8080/admin/check
+/// E.g. `http://127.0.0.1:8080/admin/articles/check
 FutureOr<shelf.Response> $checkArticles(shelf.Request request) async {
   final Dependencies(:config, :database) = Dependencies.from(request);
   final client = http.Client();

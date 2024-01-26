@@ -17,17 +17,21 @@
 - ✅ Medium RSS parsing by authors
 - ✅ Pagination
 - ✅ Admin endpoints
-- ✅ Search by tags, authors, titles.
+- ✅ Search by tags, authors, titles
 - ✅ Basic UI
-- ❌ Material Design
+- ✅ Dark Mode
+- ✅ Material Design
+- ❌ Article page
+- ❌ Search bar
 - ❌ Dockerfiles
 - ❌ Docker Compose & Stack
+- ❌ Nginx gzip compression and caching
 - ❌ Admin menu based on local storage entry
 - ❌ CI/CD deployment with GitHub Actions
+- ❌ Minification
 - ❌ Shaders for frontend
 - ❌ Favicons
 - ❌ Progressive Web App
-- ❌ Dark Mode
 - ❌ i18n
 - ❌ SEO
 - ❌ Google Analytics

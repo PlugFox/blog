@@ -1,26 +1,314 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
-    <title>frontend</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="main.dart.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="scaffolded-by" content="https://github.com/dart-lang/sdk">
+  <title>Plague Fox</title>
+
+
+  <meta name="author" content="@PlugFox">
+  <meta name="keywords"
+    content="dart, flutter, fox, plague, plugfox, developer, software, engineer, cross-platform, android, ios, web, linux, windows, macos, fuchsia">
+
+  <!-- Favicon https://realfavicongenerator.net -->
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="194x194" href="icons/favicon-194x194.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+  <link rel="manifest" href="icons/site.webmanifest">
+  <link rel="mask-icon" href="icons/safari-pinned-tab.svg" color="#263238">
+  <link rel="shortcut icon" href="icons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="icons/browserconfig.xml">
+  <meta name="theme-color" content="#cfd8dc">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Plague Fox">
+
+  <!-- Pinned Sites  -->
+  <meta name="application-name" content="Plague Fox">
+  <meta name="msapplication-tooltip" content="Plague Fox">
+  <meta name="msapplication-starturl" content="/">
+
+  <!-- Tap highlighting  -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <!-- UC Mobile Browser  -->
+  <meta name="full-screen" content="yes">
+  <meta name="browsermode" content="application">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <meta name="description"
+    content="Dart &amp; Flutter Engineer, Team Lead, Full-Stack, Open Source contributor, and T-shaped person. Talks about #flutter &amp; #dart.">
+  <link rel="icon" href="icons/icon-256x256.png" type="image/png">
+  <link rel="canonical" href="https://plugfox.dev/">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+
+  <meta property="og:site_name" content="Plague Fox">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Plague Fox: engineer by day, fox by night">
+  <meta property="og:description"
+    content="Dart &amp; Flutter Engineer, Team Lead, Full-Stack, Open Source contributor, and T-shaped person. Talks about #flutter &amp; #dart.">
+  <meta property="og:url" content="https://plugfox.dev/">
+  <meta property="og:image" content="https://plugfox.dev/icons/twitter-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Plague Fox: engineer by day, fox by night">
+  <meta name="twitter:description"
+    content="Dart &amp; Flutter Engineer, Team Lead, Full-Stack, Open Source contributor, and T-shaped person. Talks about #flutter &amp; #dart.">
+  <meta name="twitter:url" content="https://plugfox.dev/">
+  <meta name="twitter:image" content="https://plugfox.dev/icons/twitter-image.png">
+  <meta name="twitter:site" content="@plugfox">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/beercss@3.4.13/dist/cdn/beer.min.css" rel="stylesheet">
+
+  <!-- Beercss https://www.beercss.com/ -->
+  <!--<script type="module" src="https://cdn.jsdelivr.net/npm/beercss@3.4.13/dist/cdn/beer.min.js"></script>-->
+  <script type="module"
+    src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.1.0/dist/cdn/material-dynamic-colors.min.js"></script>
+  <script defer src="main.dart.js"></script>
+
+  <script id="config">
+    var config;
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      config = {
+        "environment": "development",
+        "api": "http://localhost:8080",
+        "title": "Plague Fox"
+      };
+    } else {
+      config = {
+        "environment": "production",
+        "api": "https://api.blog.plugfox.com",
+        "title": "Plague Fox"
+      };
+    }
+  </script>
+
+  <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "publisher": {
+            "@type": "Organization",
+            "name": "Plague Fox",
+            "url": "https://plugfox.dev/",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://plugfox.dev/content/images/size/w256h256/2022/07/squanch_fox-2.png",
+                "width": 60,
+                "height": 60
+            }
+        },
+        "url": "https://plugfox.dev/",
+        "mainEntityOfPage": "https://plugfox.dev/",
+        "description": "Dart &amp; Flutter Engineer, Team Lead, Full-Stack, Open Source contributor, and T-shaped person. Talks about #flutter &amp; #dart."
+    }
+  </script>
 </head>
-<body><!--
-  <div id="articles">
-    <div class="article-card">
-      <h2 class="article-title">Заголовок статьи</h2>
-      <p class="article-author">Автор: Имя Автора</p>
-      <p class="article-date">Дата: 01/01/2024</p>
-      <div class="article-tags">
-        <span class="tag">Тег1</span>
-        <span class="tag">Тег2</span>
-      </div>
-      <p class="article-excerpt">Краткое описание...</p>
-    </div>
-  </div>-->
+
+<body class="scroll">
+  <!--
+  <dialog class="max active">
+    <h5>Fullscreen</h5>
+    <div>Some text here</div>
+    <nav class="right-align">
+      <button class="border" onclick="closeDialog()">Cancel</button>
+    </nav>
+  </dialog>
+  -->
+
+  <!--
+  <div class="overlay active">
+    <dialog class="active">
+      <h5>Fullscreen</h5>
+      <div>Some text here</div>
+      <nav class="right-align">
+        <button class="border" onclick="closeDialog()">Cancel</button>
+      </nav>
+    </dialog>
+  </div>
+  -->
+
+  <!-- App Bar -->
+  <header id="appbar" class="fixed blur no-select">
+    <nav>
+      <!-- <button class="circle transparent">
+        <i>arrow_back</i>
+      </button> -->
+      <button class="circle transparent drawer-toggle">
+        <i>menu</i>
+      </button>
+      <h5 class="max">Plague Fox</h5>
+      <!-- <button class="circle transparent">
+        <i>attach_file</i>
+      </button>
+      <button class="circle transparent">
+        <i>today</i>
+      </button> -->
+      <!-- <button class="circle transparent">
+        <i>more_vert</i>
+      </button> -->
+    </nav>
+  </header>
+
+  <!-- Drawer -->
+  <div id="drawer-main" class="no-select">
+    <div class="overlay drawer-toggle"></div>
+    <dialog class="left no-padding">
+      <nav class="drawer">
+        <header>
+          <nav>
+            <img class="circle" draggable="false" src="icons/favicon-194x194.png">
+            <h6 class="max">@PlugFox</h6>
+            <button class=" circle transparent theme-toggle">
+              <i class="theme-icon">dark_mode</i>
+            </button>
+            <button class="transparent circle large drawer-toggle"">
+              <i>close</i>
+            </button>
+          </nav>
+        </header>
+              <!--
+              <a>
+                <i>inbox</i><span class=" max">Inbox</span><b>24</b>
+              </a>
+              -->
+              <a onclick="setPage('articles', 'Plague Fox')">
+                <i>feed</i>
+                <span>Articles</span>
+              </a>
+              <a onclick="setPage('contacts', 'Contacts')">
+                <i>contact_page</i>
+                <span>Contacts</span>
+              </a>
+              <a onclick="setPage('my-setup', 'My Setup')">
+                <i>devices</i>
+                <span>My Setup</span>
+              </a>
+              <!--
+              <a>
+                <i>send</i>
+                <span>Outbox</span>
+              </a>
+              <a>
+                <i>favorite</i>
+                <span>favorities</span>
+              </a>
+              <a>
+                <i>delete</i>
+                <span>Trash</span>
+              </a>
+              <div class="divider margin"></div>
+              <label>Labels</label>
+              <a>
+                <i>fiber_manual_record</i>
+                <span>Label</span>
+              </a>
+              <a>
+                <i>change_history</i>
+                <span>Label</span>
+              </a>
+              <a>
+                <i>stop</i>
+                <span>Label</span>
+              </a>
+              -->
+          </nav>
+    </dialog>
+  </div>
+
+  <script>
+    // Toggle theme
+    const btn = document.querySelector('.theme-icon');
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        document.body.classList.add('dark');
+        document.body.classList.remove('light');
+        btn.textContent = 'dark_mode'; // '🌜';
+      } else {
+        document.body.classList.add('light');
+        document.body.classList.remove('dark');
+        btn.textContent = 'light_mode'; // '🌞';
+      }
+    }
+
+    btn.addEventListener('click', function (e) {
+      const newTheme = document.body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(newTheme);
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // Set up initial theme
+    const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    setTheme(currentTheme);
+  </script>
+
+  <!-- Bottom bar -->
+  <!-- <nav class="bottom">
+    <a>
+      <i>home</i>
+      <div>Home</div>
+    </a>
+    <a>
+      <i>search</i>
+      <div>Search</div>
+    </a>
+    <a>
+      <i>share</i>
+      <div>share</div>
+    </a>
+  </nav> -->
+
+  <!--
+  <main id="articles" class="responsive">
+      <br />
+      <h3 class="center-align">Compact</h3>
+      <h5 class="center-align">The beer is ready!</h5>
+      <br />
+      <div class="divider"></div>
+      <br />
+  </main>
+  -->
+
+  <router />
+
+
+  <script src="scripts.js"></script>
+  <!--<script type="module" src="fake.js"></script>-->
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QRQMGXBGFZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-QRQMGXBGFZ');
+  </script>
+
+
+  <!-- Syntax highlighting -->
+  <!--
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/themes/prism-tomorrow.min.css"
+    integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-core.min.js"
+    integrity="sha512-9khQRAUBYEJDCDVP2yw3LRUQvjJ0Pjx0EShmaQjcHa6AXiOv6qHQu9lCAIR8O+/D8FtaCoJ2c0Tf9Xo7hYH01Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/plugins/autoloader/prism-autoloader.min.js"
+    integrity="sha512-fTl/qcO1VgvKtOMApX2PdZzkziyr2stM65GYPLGuYMnuMm1z2JLJG6XVU7C/mR+E7xBUqCivykuhlzfqxXBXbg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  -->
 </body>
+
 </html>

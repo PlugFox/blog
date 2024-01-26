@@ -1,0 +1,47 @@
+#global_options:
+#  build_web_compilers|ddc:
+#    options:
+#      environment:
+#        dev: true
+
+targets:
+  frontend:
+    sources:
+      - $package$
+      - web/**
+      - lib/**
+      - pubspec.yaml
+      - test/**
+    builders:
+      #sass_builder|sass_builder:
+      #  enabled: False
+      #angular_components|scss_builder:
+      #  enabled: True
+      #build_web_compilers|entrypoint:
+      #  generate_for:
+      #    - web/main.dart
+      #  options:
+      #    compiler: dart2js
+      #    dart2js_args:
+      #      - --define=env=prod
+      #      - --fast-startup
+      #      - --minify
+      #      - --trust-type-annotations
+      #      - --trust-primitives
+      #frontend|constant_builder:
+      #  options:
+      #    env: "prod"
+      #    api: "https://api.plugfox.io"
+      #  dev_options:
+      #    env: "dev"
+      #    api: "https://localhost:8080"
+      pubspec_generator:
+        options:
+          output: lib/src/common/config/pubspec.yaml.g.dart
+
+#builders:
+#  constant_builder:
+#    import: "package:frontend/src/common/config/builder.dart"
+#    builder_factories: ["constantBuilder"]
+#    build_extensions:
+#      "$lib$": ["constants.g.dart"]
