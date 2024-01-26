@@ -492,5 +492,4 @@ sealed class Pubspec {
     'dev_dependencies': devDependencies,
     'dependency_overrides': dependencyOverrides,
   };
-
 }

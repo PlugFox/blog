@@ -1,4 +1,3 @@
-
 /* final class ArticlesComponent extends Component {
   ArticlesComponent() : super(key: 'articles');
 
