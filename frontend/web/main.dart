@@ -40,7 +40,7 @@ void runApp() => Future<void>(() async {
       l.s('!!!!!!!!!!!!!!!!');
       // Wait for DOM to load
       if (html.document.readyState?.trim().toLowerCase() == 'loading') await html.window.onLoad.first;
-      f.router; // Init and run router
+      f.$router; // Init and run router
       //l.v('api: "${Config.api}"');
       //const dev = String.fromEnvironment('dev', defaultValue: '-');
       //l.v('dev: "$dev"');

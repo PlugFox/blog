@@ -5,9 +5,12 @@ import 'dart:js' as js;
 
 import 'package:frontend/src/common/router/router.dart' as r;
 import 'package:frontend/src/common/router/routes.dart' as r;
+import 'package:frontend/src/feature/articles/controller/articles_controller.dart';
+import 'package:frontend/src/feature/articles/data/articles_repository.dart';
+import 'package:http/browser_client.dart' as http;
 
 /// Router
-final r.Router router = () {
+final r.Router $router = () {
   // Add router element if not present
   if (html.document.getElementsByTagName('router').whereType<html.Element>().isEmpty) {
     html.document.body?.append(html.Element.tag('router'));
@@ -15,17 +18,8 @@ final r.Router router = () {
   return r.Router(r.onRoute);
 }();
 
-/// API URL
-final String api = config['api'] ?? (throw Exception('API not set'));
-
-/// Is development environment
-final bool development = config['environment']?.toLowerCase() == 'development';
-
-/// Is production environment
-final bool production = !development;
-
 /// Configuration
-final config = () {
+final $config = () {
   final jsConfig = js.context['config'];
   if (jsConfig == null) return <String, String>{};
   String? extractValue(String key) {
@@ -40,3 +34,20 @@ final config = () {
     'api': extractValue('api'),
   };
 }();
+
+/// API URL
+final String $api = $config['api'] ?? (throw Exception('API not set'));
+
+/// Is development environment
+final bool $development = $config['environment']?.toLowerCase() == 'development';
+
+/// Is production environment
+final bool $production = !$development;
+
+/// Articles controller
+final ArticlesController $articlesController = ArticlesController(
+  repository: ArticlesRepositoryImpl(
+    client: http.BrowserClient(),
+    baseUrl: $api,
+  ),
+);
