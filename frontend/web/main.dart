@@ -1,8 +1,10 @@
+// ignore_for_file: unnecessary_statements
+
 import 'dart:async';
 import 'dart:developer';
 import 'dart:html' as html;
 
-import 'package:frontend/src/common/router/router.dart';
+import 'package:frontend/frontend.dart' as f;
 import 'package:l/l.dart';
 
 void main() => l.capture(
@@ -18,7 +20,7 @@ void main() => l.capture(
       ),
       LogOptions(
         handlePrint: true,
-        outputInRelease: false,
+        outputInRelease: true,
         printColors: false,
         overrideOutput: _logPrinter(),
       ),
@@ -35,44 +37,18 @@ String? Function(LogMessage) _logPrinter() => (event) => '[${event.level.prefix}
 
 /// Run app
 void runApp() => Future<void>(() async {
+      l.s('!!!!!!!!!!!!!!!!');
       // Wait for DOM to load
-      if (html.document.readyState?.trim().toLowerCase() != 'complete') {
-        await html.window.onLoad.first;
-      }
-      // Add router element if not present
-      if (html.document.getElementsByTagName('router').whereType<html.Element>().isEmpty) {
-        html.document.body?.append(html.Element.tag('router'));
-      }
-      // Run router
-      Router(onRoute);
+      if (html.document.readyState?.trim().toLowerCase() == 'loading') await html.window.onLoad.first;
+      f.router; // Init and run router
+      //l.v('api: "${Config.api}"');
+      //const dev = String.fromEnvironment('dev', defaultValue: '-');
+      //l.v('dev: "$dev"');
+      //const env = String.fromEnvironment('env', defaultValue: '-');
+      //l.v('env: "$env"');
+      //html.window.alert('Hello, world!\n' 'API: ${Config.api}\n' 'dev: $dev\n' 'env: $env\n');
+      //html.querySelector('router')
+      //  ?..appendText('Hello, world! ')
+      //  ..appendText('development: ${f.development} ')
+      //  ..appendText('api: ${f.api} ');
     });
-
-/* Future<String?> getPage(String page) =>
-    html.HttpRequest.getString('pages/$page.html').then((value) => value.trim(), onError: (error) => null); */
-
-// Callback for route change
-FutureOr<void> onRoute(Route route, void Function(Object? content) emit) async {
-  final page = route.segments.firstOrNull;
-  final id = route.segments.elementAtOrNull(1);
-  switch (page) {
-    case 'article' || 'post' when id != null:
-      emit('<p>Article #$id</p>');
-    case 'contact' || 'contacts':
-      //await getPage('contacts').then(emit);
-      emit('<p>Contacts</p>');
-    case 'about' || 'cv' || 'me' || 'resume':
-      emit('<p>About</p>');
-    case null || '' || 'home' || '404':
-    default:
-      emit('<p>Home</p>');
-  }
-
-  /* emit('''
-  <div id="current-route" class="responsive center-align padding">
-    <p>Route: "${route.path}"</p>
-    <p>Key: "${route.key}"</p>
-    <p>Segments: [${route.segments.map((e) => '"$e"').join(', ')}]</p>
-    <p>Params: ${route.params.entries.map((e) => e.value.isEmpty ? e.key : '${e.key}: "${e.value}"').join(', ')}</p>
-  </div>
-  '''); */
-}

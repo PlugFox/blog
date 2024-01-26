@@ -1,6 +1,6 @@
-import 'dart:io' as io;
+import 'dart:html' as html;
 
-import 'package:backend/src/common/config/pubspec.yaml.g.dart';
+import 'package:frontend/src/common/config/pubspec.yaml.g.dart';
 import 'package:meta/meta.dart';
 
 /// {@template app_metadata}
@@ -9,13 +9,11 @@ import 'package:meta/meta.dart';
 @immutable
 final class AppMetadata {
   static final AppMetadata _internalSingleton = AppMetadata._internal(
-    debug: !const bool.fromEnvironment('dart.vm.product'),
     version: Pubspec.version,
     built: Pubspec.timestamp.toUtc(),
     name: Pubspec.name,
-    os: io.Platform.operatingSystem,
-    cpus: io.Platform.numberOfProcessors,
-    locale: io.Platform.localeName,
+    agent: html.window.navigator.userAgent,
+    language: html.window.navigator.language,
     launched: DateTime.now(),
   );
 
@@ -23,18 +21,13 @@ final class AppMetadata {
   factory AppMetadata() => _internalSingleton;
 
   const AppMetadata._internal({
-    required this.debug,
     required this.version,
     required this.built,
     required this.name,
-    required this.os,
-    required this.cpus,
-    required this.locale,
+    required this.agent,
+    required this.language,
     required this.launched,
   });
-
-  /// Is debug mode
-  final bool debug;
 
   /// App name
   final String name;
@@ -45,27 +38,22 @@ final class AppMetadata {
   /// App timestamp
   final DateTime built;
 
-  /// Operating system
-  final String os;
+  /// User agent string
+  final String agent;
 
-  /// Processors count
-  final int cpus;
-
-  /// Locale
-  final String locale;
+  /// Language
+  final String language;
 
   /// App launched timestamp
   final DateTime launched;
 
   /// Convert to headers
   Map<String, String> toHeaders() => <String, String>{
-        'X-Meta-Debug': debug ? 'true' : 'false',
         'X-Meta-Name': name,
         'X-Meta-Version': version.representation,
         'X-Meta-Built': built.toUtc().toIso8601String(),
-        'X-Meta-Operating-System': os,
-        'X-Meta-Processors-Count': cpus.toString(),
-        'X-Meta-Locale': locale,
+        'X-Meta-Agent': agent,
+        'X-Meta-Language': language,
         'X-Meta-Launched': launched.toUtc().toIso8601String(),
       };
 }

@@ -47,7 +47,7 @@
 
   <meta name="description"
     content="Dart &amp; Flutter Engineer, Team Lead, Full-Stack, Open Source contributor, and T-shaped person. Talks about #flutter &amp; #dart.">
-  <link rel="icon" href="https://plugfox.dev/content/images/size/w256h256/2022/07/squanch_fox-2.png" type="image/png">
+  <link rel="icon" href="icons/icon-256x256.png" type="image/png">
   <link rel="canonical" href="https://plugfox.dev/">
   <meta name="referrer" content="no-referrer-when-downgrade">
 
@@ -57,13 +57,13 @@
   <meta property="og:description"
     content="Dart &amp; Flutter Engineer, Team Lead, Full-Stack, Open Source contributor, and T-shaped person. Talks about #flutter &amp; #dart.">
   <meta property="og:url" content="https://plugfox.dev/">
-  <meta property="og:image" content="https://plugfox.dev/content/images/2022/10/twitter-image-1.png">
+  <meta property="og:image" content="https://plugfox.dev/icons/twitter-image.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Plague Fox: engineer by day, fox by night">
   <meta name="twitter:description"
     content="Dart &amp; Flutter Engineer, Team Lead, Full-Stack, Open Source contributor, and T-shaped person. Talks about #flutter &amp; #dart.">
   <meta name="twitter:url" content="https://plugfox.dev/">
-  <meta name="twitter:image" content="https://plugfox.dev/content/images/2022/10/twitter-image.png">
+  <meta name="twitter:image" content="https://plugfox.dev/icons/twitter-image.png">
   <meta name="twitter:site" content="@plugfox">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -76,6 +76,22 @@
   <script type="module"
     src="https://cdn.jsdelivr.net/npm/material-dynamic-colors@1.1.0/dist/cdn/material-dynamic-colors.min.js"></script>
   <script defer src="main.dart.js"></script>
+
+  <script id="config">
+    var config;
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      config = {
+        "environment": "development",
+        "api": "http://localhost:8080",
+      };
+    } else {
+      config = {
+        "environment": "production",
+        "api": "https://api.blog.plugfox.com",
+      };
+    }
+  </script>
 
   <script type="application/ld+json">
     {
