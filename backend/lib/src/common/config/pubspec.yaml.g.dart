@@ -124,13 +124,13 @@ sealed class Pubspec {
   /// Build date and time (UTC)
   static final DateTime timestamp = DateTime.utc(
     2024,
+    2,
     1,
-    22,
-    8,
-    31,
     19,
-    202,
-    975,
+    7,
+    36,
+    555,
+    428,
   );
 
   /// Name
@@ -441,12 +441,12 @@ sealed class Pubspec {
 
   /// Developer dependencies
   static const Map<String, Object> devDependencies = <String, Object>{
-    'analyzer': r'^6.3.0',
+    'analyzer': r'^6.4.1',
     'build_runner': r'^2.4.8',
     'pubspec_generator': r'^4.1.0-pre.1',
     'drift_dev': r'^2.15.0',
     'lints': r'^3.0.0',
-    'test': r'^1.25.1',
+    'test': r'^1.25.2',
     'mockito': r'^5.4.4',
   };
 

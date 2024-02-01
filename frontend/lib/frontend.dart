@@ -48,10 +48,12 @@ final bool $development = $config['environment']?.toLowerCase() == 'development'
 /// Is production environment
 final bool $production = !$development;
 
+final IArticlesRepository $articlesRepository = ArticlesRepositoryImpl(
+  client: http.BrowserClient(),
+  baseUrl: $api,
+);
+
 /// Articles controller
 final ArticlesController $articlesController = ArticlesController(
-  repository: ArticlesRepositoryImpl(
-    client: http.BrowserClient(),
-    baseUrl: $api,
-  ),
+  repository: $articlesRepository,
 );
