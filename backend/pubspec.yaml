@@ -48,7 +48,7 @@ dependencies:
   l: 5.0.0-pre.2
 
   # Database
-  drift: ^2.15.0
+  drift: ^2.16.0
 
   # Shared
   shared:
